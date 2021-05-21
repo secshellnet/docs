@@ -1,0 +1,71 @@
+site_name: Secure Shell Networks
+site_url: https://docs.secshell.net/
+repo_name: secshellnet/docs
+repo_url: https://github.com/secshellnet/docs
+site_description: "Secure Shell Networks Documentation"
+site_author: https://github.com/secshellnet
+remote_branch: cf-pages
+edit_uri: edit/master/docs
+
+theme:
+  name: 'material'
+  palette:
+    scheme: preference
+    primary: 'green'
+    accent: 'lime'
+
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+  language: en
+  direction: ltr
+  icon:
+    repo: fontawesome/brands/github
+
+  features:
+    - search.suggest
+    - search.highlight
+    - navigation.expand
+    - navigation.instant
+    - navigation.sections
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.tabbed
+  - attr_list
+  - pymdownx.arithmatex:
+      generic: true
+
+plugins:
+  - git-revision-date
+  - git-revision-date-localized
+  - search:
+      lang: en
+
+nav:
+  - 'Resources': resources.de.md
+  - 'Setup':
+    - 'Proxmox VE': setup/proxmox.de.md
+    - 'OPNsense': setup/opnsense.de.md
+  - 'Services':
+    - 'Monitoring': services/monitoring.de.md
+    - 'Syncthing': services/syncthing.de.md
+    - 'Privatebin': services/privatebin.de.md
+    
+extra_css:
+  # waiting for new version
+  #- https://cdnjs.cloudflare.com/ajax/libs/asciinema-player/2.4.1/asciinema-player.min.css
+  - css/asciinema-player.css
+
+extra_javascript:
+  - js/config.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.js
+  # waiting for new version
+  #- https://cdnjs.cloudflare.com/ajax/libs/asciinema-player/2.4.1/asciinema-player.min.js
+  - js/asciinema-player.js
