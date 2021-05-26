@@ -5,6 +5,9 @@ Auf dem dedizierten Server werden Virtuelle Maschienen und LXC Container mittels
 Die Installation von Proxmox kann über den Proxmox Installer, oder durch die [Installation der Proxmox Pakete auf einem Debian System](https://pve.proxmox.com/wiki/Install_Proxmox_VE_on_Debian_Buster) erfolgen.
 Für gewöhnlich wird das Betriebsystem bei Hetzner über [InstallImage](https://docs.hetzner.com/robot/dedicated-server/operating-systems/installimage/) im Rescue System installiert. Da ZFS vom InstallImage nicht unterstützt wird, haben wir uns für die Installation über eine Remote Konsole mit dem Proxmox Installer entschieden.
 
+![Proxmox_Setup_Mount_ISO.png](../img/setup/Proxmox_Setup_Mount_ISO.png?raw=true){: loading=lazy }
+![Proxmox_Setup_Disks.png](../img/setup/Proxmox_Setup_Disks.png?raw=true){: loading=lazy }
+
 Nach der Installation wurde die korrekten APT Repositories gesetzt, die Warnung über das nicht existierende Abonnement beim Login deaktiviert und weitere Pakete installiert:
 ```bash
 # disable enterprise repositories
