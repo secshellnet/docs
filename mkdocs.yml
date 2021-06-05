@@ -41,11 +41,11 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
 
-plugins:
-  - git-revision-date
-  - git-revision-date-localized
-  - search:
-      lang: en
+#plugins:
+#  - git-revision-date
+#  - git-revision-date-localized
+#  - search:
+#      lang: en
 
 nav:
   - 'Resources': resources.de.md
@@ -65,7 +65,7 @@ nav:
   #- css/asciinema-player.css
 
 extra_javascript:
-  - js/config.js
+  #- js/config.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.js
   # waiting for new version
