@@ -57,6 +57,7 @@ nav:
     - 'Monitoring': services/monitoring.de.md
     - 'Syncthing': services/syncthing.de.md
     - 'Privatebin': services/privatebin.de.md
+    - 'Bookstack': services/bookstack.de.md
     
 extra_css:
   # waiting for new version
