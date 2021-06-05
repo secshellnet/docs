@@ -41,11 +41,11 @@ markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
 
-#plugins:
-#  - git-revision-date
+plugins:
+  - git-revision-date
 #  - git-revision-date-localized
-#  - search:
-#      lang: en
+  - search:
+      lang: en
 
 nav:
   - 'Resources': resources.de.md
