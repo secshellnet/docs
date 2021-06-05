@@ -53,7 +53,7 @@ nav:
     - 'Proxmox VE': setup/proxmox.de.md
     - 'OPNsense': setup/opnsense.de.md
   - 'Services':
-    - 'services/general.md'
+    - 'General Information': services/general.de.md
     - 'Monitoring': services/monitoring.de.md
     - 'Syncthing': services/syncthing.de.md
     - 'Privatebin': services/privatebin.de.md
