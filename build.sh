@@ -1,5 +1,7 @@
 #!/bin/sh
 
+pip install -r requirements.txt
+
 mkdir site
 
 # build english
