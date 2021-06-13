@@ -13,3 +13,6 @@ rm -r docs
 cp -r docs_de docs
 mkdocs build --site-dir site/de
 rm -r docs
+
+# add _redirects to deployment
+mv _redirects site
