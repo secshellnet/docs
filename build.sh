@@ -4,6 +4,14 @@ pip install -r requirements.txt
 
 mkdir site
 
+# copy images to the site
+cp -r img docs_en
+cp -r img docs_de
+
+# add service scripts to service folders
+cp service_scripts/* docs_en/services
+cp service_scripts/* docs_de/services
+
 # build english
 cp -r docs_en docs
 mkdocs build --site-dir site/en
