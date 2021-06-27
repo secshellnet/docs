@@ -1,7 +1,7 @@
 # Syncthing (on Alpine 3.13)
 Die Installation kann über das [install_syncthing.sh](./syncthing.sh) Script erfolgen.
 
-Zuerst wird syncthing installiert, der Benutzer benötigt zur Erzeugung der Konfiguration eine shell. Desweiteren wird ein Passwort generiert. 
+Zuerst wird syncthing installiert und ein Passwort generiert welches später für den Admin genutzt wird. 
 ```shell
 echo > /etc/motd
 
