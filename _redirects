@@ -1,2 +1,3 @@
 # redirect / to /de
-/ /de 302
+/ /de/ 302
+/de /de/ 302
