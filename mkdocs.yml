@@ -5,7 +5,7 @@ repo_url: https://github.com/secshellnet/docs
 site_description: "Secure Shell Networks Documentation"
 site_author: https://github.com/secshellnet
 remote_branch: main
-edit_uri: edit/master/docs
+edit_uri: edit/main/docs
 
 theme:
   name: 'material'
