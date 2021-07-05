@@ -2,7 +2,7 @@
 
 echo > /etc/motd
 
-apk add php7-apache2 php-gd php-zlib
+apk add php7-apache2 php-gd php-zlib php-json
 rm -r /var/www/localhost/htdocs/*
 
 wget -O- https://github.com/PrivateBin/PrivateBin/archive/refs/tags/1.3.5.tar.gz | tar -xzC /var/www/localhost/htdocs/ --strip 1
