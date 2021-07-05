@@ -5,7 +5,7 @@ First install apache2 with php 7 support:
 ```shell
 echo > /etc/motd
 
-apk add php7-apache2 php-gd php-zlib
+apk add php7-apache2 php-gd php-zlib php-json
 rm -r /var/www/localhost/htdocs/*
 ```
 
