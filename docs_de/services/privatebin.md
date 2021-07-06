@@ -5,7 +5,7 @@ Installation des Webservers mit PHP 7:
 ```shell
 echo > /etc/motd
 
-apk add php7-apache2 php-gd php-zlib php-json
+apk add php7-apache2 php-gd php-zlib php7-json
 rm -r /var/www/localhost/htdocs/*
 ```
 
