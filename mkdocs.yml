@@ -57,6 +57,8 @@ nav:
     - 'Syncthing': services/syncthing.md
     - 'Privatebin': services/privatebin.md
     - 'Bookstack': services/bookstack.md
+  - 'FAQ':
+    - 'Direct Connected Internet': faq/direct_internet.md
     
 #extra_css:
   # waiting for new version
