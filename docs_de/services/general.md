@@ -1,3 +1,5 @@
+# Allgemeine Informationen
+
 !!! info ""
     In LXC Containern können keine weiteren Container (weder Docker, noch LXC) gestartet werden.
 
