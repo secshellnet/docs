@@ -57,32 +57,9 @@ plugins:
   - search:
       lang: en
 
-nav:
-  - 'Resources': resources.md
-  - 'Setup':
-    - 'Proxmox VE': setup/proxmox.md
-    - 'OPNsense': setup/opnsense.md
-  - 'Services':
-    - 'General Information': services/general.md
-    - 'Monitoring': services/monitoring.md
-    - 'Syncthing': services/syncthing.md
-    - 'Privatebin': services/privatebin.md
-    - 'Bookstack': services/bookstack.md
-  - 'FAQ':
-    - 'Direct Connected Internet': faq/direct_internet.md
-    
-#extra_css:
-  # waiting for new version
-  #- https://cdnjs.cloudflare.com/ajax/libs/asciinema-player/2.4.1/asciinema-player.min.css
-  #- css/asciinema-player.css
-
 extra_javascript:
-  #- js/config.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.js
-  # waiting for new version
-  #- https://cdnjs.cloudflare.com/ajax/libs/asciinema-player/2.4.1/asciinema-player.min.js
-  #- js/asciinema-player.js
 
 extra:
   alternate:

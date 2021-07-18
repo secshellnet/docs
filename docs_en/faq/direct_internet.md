@@ -1,3 +1,5 @@
+# Direct connected Internet
+
 There are two options to connect lxc containers and virtual machines (called vm in the further articel) to the internet (using a public ip address).
 1. [over OPNsense using a 1:1 NAT](../setup/opnsense.md)  
 2. connect directly to the vmbr0 interface.  

@@ -1,3 +1,5 @@
+# General Information
+
 !!! info ""
     You can't run containers (neighter docker nor lxc) in lxc containers.
 
