@@ -1,4 +1,4 @@
-# Syncthing (on Alpine 3.13)
+# Syncthing (Alpine 3.13)
 Die Installation kann über das [install_syncthing.sh](./syncthing.sh) Script erfolgen.
 
 Zuerst wird syncthing installiert und ein Passwort generiert welches später für den Admin genutzt wird. 

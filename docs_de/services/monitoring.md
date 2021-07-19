@@ -1,4 +1,4 @@
-# Monitoring (on Debian 10.7)
+# Monitoring (Debian 10.7)
 Die Installation kann über das [install_monitoring.sh](./monitoring.sh) Script erfolgen, ganz oben muss die Konfiguration (cloudflare token, domain, email) angepasst werden.
 
 Zuerst werden die apt Repositories von Hetzner Online hinzugefügt und die Zeitzone angepasst:

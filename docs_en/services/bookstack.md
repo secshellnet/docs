@@ -1,4 +1,4 @@
-# Bookstack (LXC: Ubuntu 21.04)
+# Bookstack (Ubuntu 21.04)
 You can simply execute the [install_bookstack.sh](./bookstack.sh) script. Make sure to adjust the configuration section (cloudflare token, domain, email).
 
 First install bookstack using the official ubuntu install script:

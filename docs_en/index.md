@@ -1,4 +1,4 @@
-# Secure Shell Networks: Documentation
+# Home
 
 The documentation is mostly written in German. We gladly accept pull requests with English translations and corrections.
 

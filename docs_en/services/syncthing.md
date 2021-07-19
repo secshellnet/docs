@@ -1,4 +1,4 @@
-# Syncthing (on Alpine 3.13)
+# Syncthing (Alpine 3.13)
 You can simply execute the [install_syncthing.sh](./syncthing.sh) script.
 
 First install syncthing and generate a password for the syncthing admin: 

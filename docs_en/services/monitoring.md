@@ -1,4 +1,4 @@
-# Monitoring (on Debian 10.7)
+# Monitoring (Debian 10.7)
 You can simply execute the [install_monitoring.sh](./monitoring.sh) script. Make sure to adjust the configuration section (cloudflare token, domain, email).
 
 

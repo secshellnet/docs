@@ -1,4 +1,4 @@
-# SFTP Share (on Alpine 3.13)
+# SFTP Share (Alpine 3.13)
 
 Zuerst wird `openssh-server` installiert:
 ```shell
@@ -37,4 +37,12 @@ Zuletzt wird der Service gestartet und zum Autostart hinzugefügt:
 ```shell
 rc-update add sshd
 service sshd start
+```
+
+## Gruppe mit Schreibrechten auf alle Verzeichnisse
+```shell
+addgroup creator
+adduser tom creator
+chgrp -R creator /home/*
+chmod -R g+w /home/*
 ```
