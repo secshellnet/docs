@@ -1,4 +1,5 @@
 # SFTP Share (Alpine 3.13)
+You can simply execute the [install_sftp_share.sh](./sftp_share.sh) script. Make sure to adjust the configuration section (list of users). Afterwards you can add new users using the [sftp_share_adduser.sh](./sftp_share_adduser.sh) script.
 
 Install `openssh-server`:
 ```shell
@@ -19,7 +20,7 @@ chmod o-r /home/tom
 Adjust the ssh configuration, you need to do the second step for every single user. You only need one `Match all` at the end of the file (you actually don't need it if you don't add something after your `Match User` blocks)
 ```shell
 # change location of authorized keys file (.ssh/authorized_keys is no longer required so it can be removed)
-sed -i 's|AuthorizedKeysFile.*|AuthorizedKeysFile /etc/ssh/authorized_keys/tom|g" /etc/ssh/sshd_config
+sed -i 's|AuthorizedKeysFile.*|AuthorizedKeysFile /etc/ssh/authorized_keys/%u|g' /etc/ssh/sshd_config
 # add configuration for user tom (you need to do this for every user that should access the sftp share)
 cat <<EOF >> /etc/ssh/sshd_config
 Match User tom
