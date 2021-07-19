@@ -1,4 +1,4 @@
-# Home
+# Startseite
 
 Die Dokumentation ist größtenteils auf Deutsch geschrieben. Gerne akzeptieren wir Pull Requests mit Englischen Übersetzungen.
 
