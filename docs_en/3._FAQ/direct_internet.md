@@ -13,4 +13,4 @@ Example configuration:
 - Netmask: 255.255.255.255 (/32 network)  
 - Gateway: 88.99.59.89  
 
-![Example configuration of a lxc](../img/faq/direct_internet.png?raw=true){: loading=lazy }
+![Example configuration of a lxc](../img/faq/direct_internet_lxc.png?raw=true){: loading=lazy }

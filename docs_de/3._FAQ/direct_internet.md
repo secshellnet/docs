@@ -13,4 +13,4 @@ Beispielkonfiguration:
 - Netzmaske: 255.255.255.255 (32er Netz)  
 - (Netzfremdes-) Gateway: 88.99.59.89  
 
-![Beispielkonfiguration eines LXC](../img/faq/direct_internet.png?raw=true){: loading=lazy }
+![Beispielkonfiguration eines LXC](../img/faq/direct_internet_lxc.png?raw=true){: loading=lazy }
