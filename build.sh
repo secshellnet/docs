@@ -9,8 +9,8 @@ cp -r img docs_en
 cp -r img docs_de
 
 # add service scripts to service folders
-cp service_scripts/* docs_en/services
-cp service_scripts/* docs_de/services
+cp service_scripts/* docs_en/2._Services
+cp service_scripts/* docs_de/2._Services
 
 # build english
 cp -r docs_en docs
