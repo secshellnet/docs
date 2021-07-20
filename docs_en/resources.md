@@ -12,14 +12,13 @@ The request only serves to check whether the desired subnet is already in use.
 ## Hosts
 `pve0` is only for testing purpose, `pve1` and `pve2` are rental servers from Hetzner Online GmbH.
 
-### pve1
 The IPv4 network `10.1.0.0/16` has been split into two `/17` networks.
 
 - The first network (`10.1.0.0/17`) will be further split (into /30 and /29 networks respectively), these will be used for connecting Virtual Machines and LXC Containers via VLANs.
 - The second network (`10.1.128.0/17`) is further split into /29 networks and then used for OpenVPN client specfic overrides. 
 
 ### pve2
-`pve2` is used by several partners so the resources have been divided:
+`pve2` is used by several partners so the first network have been divided furthermore:
 
 !!! info ""
     The listed ID's are valid for Proxmox VM/LXC as well as VLAN ID's
@@ -27,14 +26,16 @@ The IPv4 network `10.1.0.0/16` has been split into two `/17` networks.
 
 | Use Case / Partner                |      ID     |         IPv4 network          |     IPv6 network          |
 |:----------------------------------|:-----------:|:------------------------------|:--------------------------|
-| General useage (e. g. VPN)        | 100  -  109 | 10.2.0.0/24                   |                           |
+| DNS                               | 100         | 10.2.0.0/30                   |                           |
+| General usage                     | 101  -  109 | 10.2.0.4/30 - 10.2.0.252/30   |                           |
 |                                   |             | 88.99.59.71                   | 2a01:4f8:10a:b88::/66     |
 | A                                 | 110  -  139 | 10.2.1.0/24                   |                           |
-|                                   |             | 176.9.198.65 und 176.9.198.66 | 2a01:4f8:10a:b88::4000/66 |
+|                                   |             | 176.9.198.65 + 176.9.198.66   | 2a01:4f8:10a:b88::4000/66 |
 | B                                 | 140  -  169 | 10.2.2.0/24                   |                           |
-|                                   |             | 176.9.198.67 und 176.9.198.68 | 2a01:4f8:10a:b88::8000/66 |
+|                                   |             | 176.9.198.67 + 176.9.198.68   | 2a01:4f8:10a:b88::8000/66 |
 | C                                 | 170  -  199 | 10.2.3.0/24                   |                           |
-|                                   |             | 176.9.198.69 und 176.9.198.70 | 2a01:4f8:10a:b88::c000/66 |
+|                                   |             | 176.9.198.69 + 176.9.198.70   | 2a01:4f8:10a:b88::c000/66 |
+| VPN                               |             | 10.2.128.0/17                 |                           |
 
 The IPv4 address of the OPNsense (`88.99.59.71`) is available to each partner via port forwarding.
 For web protocols (`http`/`https`) the reverse proxy HAProxy is used.
