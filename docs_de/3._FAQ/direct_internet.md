@@ -1,6 +1,6 @@
 # Direkte Internetverbindung
 
-Es gibt zwei Wege LXC Container und Virtuelle Maschienen (Im Weiteren Vm Genannt) Direkt Mit Dem Internet Zu Verbinden (Public Ip).  
+Es gibt zwei Wege LXC Container und Virtuelle Maschienen (im weiteren VM genannt) direkt mit dem Internet zu verbinden (Public IP).  
 1. [Verbindung über OPNsense (1:1 NAT)](../setup/opnsense.md)  
 2. Direktes Anbinden der VM an das Internet über das Netzwerkinterface vmbr0.  
 

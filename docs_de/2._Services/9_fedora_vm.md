@@ -35,6 +35,8 @@ Anschließend kann die Installation gestartet werden
 
 ![Booted](../img/services/fedora_vm_booted.png?raw=true){: loading=lazy }
 
+## Webconsole
+
 ![Webconsole Login](../img/services/fedora_vm_webconsole_login.png?raw=true){: loading=lazy }
 
 ![Webconsole](../img/services/fedora_vm_webconsole.png?raw=true){: loading=lazy }
@@ -46,3 +48,17 @@ Anschließend kann die Installation gestartet werden
 ![Webconsole Storage](../img/services/fedora_vm_webconsole_storage.png?raw=true){: loading=lazy }
 
 ![Webconsole Networking](../img/services/fedora_vm_webconsole_networking.png?raw=true){: loading=lazy }
+
+
+## Docker
+```bash
+# install docker
+curl https://get.docker.com | sudo bash
+
+# adjust selinux policies
+sudo ausearch -c 'runc' --raw | audit2allow -M my-runc
+sudo semodule -X 300 -i my-runc.pp
+
+# enable autostart and start docker daemon
+sudo systemctl enable --now docker
+```
