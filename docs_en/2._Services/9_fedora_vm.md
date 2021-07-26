@@ -49,7 +49,23 @@ Start the installation.
 
 ![Webconsole Networking](../img/services/fedora_vm_webconsole_networking.png?raw=true){: loading=lazy }
 
+### Podman Plugin
+```shell
+sudo dnf install -y cockpit-podman
+sudo systemctl start --user podman
+```
+
+![Webconsole Podman](../img/services/fedora_vm_webconsole_podman.png?raw=true){: loading=lazy }
+
+### QEMU Plugin
+```shell
+sudo dnf install -y cockpit-machines
+```
+
+![Webconsole Machines](../img/services/fedora_vm_webconsole_machines.png?raw=true){: loading=lazy }
+
 ## Docker
+If you prefere docker over podman you can install it:
 ```bash
 # install docker
 curl https://get.docker.com | sudo bash
