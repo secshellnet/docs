@@ -23,19 +23,21 @@ The IPv4 network `10.1.0.0/16` has been split into two `/17` networks.
 !!! info ""
     The listed ID's are valid for Proxmox VM/LXC as well as VLAN ID's
 
+!!! warning ""
+    The ipv4 subnet 176.9.198.65/29 will be terminated at the end of the year 2021 due to a huge price change at Hetzner Online GmbH.
 
-| Use Case / Partner                |      ID     |         IPv4 network          |     IPv6 network          |
-|:----------------------------------|:-----------:|:------------------------------|:--------------------------|
-| DNS                               | 100         | 10.2.0.0/30                   |                           |
-| General usage                     | 101  -  109 | 10.2.0.4/30 - 10.2.0.252/30   |                           |
-|                                   |             | 88.99.59.71                   | 2a01:4f8:10a:b88::/66     |
-| A                                 | 110  -  139 | 10.2.1.0/24                   |                           |
-|                                   |             | 176.9.198.65 + 176.9.198.66   | 2a01:4f8:10a:b88::4000/66 |
-| B                                 | 140  -  169 | 10.2.2.0/24                   |                           |
-|                                   |             | 176.9.198.67 + 176.9.198.68   | 2a01:4f8:10a:b88::8000/66 |
-| C                                 | 170  -  199 | 10.2.3.0/24                   |                           |
-|                                   |             | 176.9.198.69 + 176.9.198.70   | 2a01:4f8:10a:b88::c000/66 |
-| VPN                               |             | 10.2.128.0/17                 |                           |
+| Use Case / Partner                |      ID     |         IPv4 network            |     IPv6 network          |
+|:----------------------------------|:-----------:|:--------------------------------|:--------------------------|
+| DNS                               | 100         | 10.2.0.0/30                     |                           |
+| General usage                     | 101  -  109 | 10.2.0.4/30 - 10.2.0.252/30     |                           |
+|                                   |             | 88.99.59.69 + 88.99.59.71       | 2a01:4f8:10a:b88::/66     |
+| A                                 | 110  -  139 | 10.2.1.0/24                     |                           |
+|                                   |             | ~~176.9.198.65 + 176.9.198.66~~ | 2a01:4f8:10a:b88::4000/66 |
+| B                                 | 140  -  169 | 10.2.2.0/24                     |                           |
+|                                   |             | ~~176.9.198.67 + 176.9.198.68~~ | 2a01:4f8:10a:b88::8000/66 |
+| C                                 | 170  -  199 | 10.2.3.0/24                     |                           |
+|                                   |             | ~~176.9.198.69 + 176.9.198.70~~ | 2a01:4f8:10a:b88::c000/66 |
+| VPN                               |             | 10.2.128.0/17                   |                           |
 
 The IPv4 address of the OPNsense (`88.99.59.71`) is available to each partner via port forwarding.
 For web protocols (`http`/`https`) the reverse proxy HAProxy is used.
