@@ -26,17 +26,18 @@ Da der Host `pve2` von mehreren Partnern genutzt wird, wurden die Netzresourcen 
 !!! warning ""
     Das IPv4 Subnetz 176.9.198.65/29 wird zum Ende des Jahres 2021 aufgrund einer enormen Preisänderung bei Hetzner gekündigt.
 
-| Verwendung / Partner   |     ID's    |         IPv4 Netzwerke          |     IPv6 Netzwerke        |
-| DNS                    | 100         | 10.2.0.0/30                     |                           |
-| Allgemeine Verwendung  | 101  -  109 | 10.2.0.4/30 - 10.2.0.252/30     |                           |
-|                        |             | 88.99.59.69 + 88.99.59.71       | 2a01:4f8:10a:b88::/66     |
-| A                      | 110  -  139 | 10.2.1.0/24                     |                           |
-|                        |             | ~~176.9.198.65 + 176.9.198.66~~ | 2a01:4f8:10a:b88::4000/66 |
-| B                      | 140  -  169 | 10.2.2.0/24                     |                           |
-|                        |             | ~~176.9.198.67 + 176.9.198.68~~ | 2a01:4f8:10a:b88::8000/66 |
-| C                      | 170  -  199 | 10.2.3.0/24                     |                           |
-|                        |             | ~~176.9.198.69 + 176.9.198.70~~ | 2a01:4f8:10a:b88::c000/66 |
-| VPN                    |             | 10.2.128.0/17                   |                           |
+| Verwendung / Partner   |     ID's    |         IPv4 Netzwerke                       |     IPv6 Netzwerke        |
+|:-----------------------|:-----------:|:---------------------------------------------|:--------------------------|
+| DNS                    | 100         | 10.2.0.0/30                                  |                           |
+| Allgemeine Verwendung  | 101  -  109 | 10.2.0.4/30 - 10.2.0.252/30                  |                           |
+|                        |             | 88.99.59.69 + 88.99.59.71                    | 2a01:4f8:10a:b88::/66     |
+| A                      | 110  -  139 | 10.2.1.0/24                                  |                           |
+|                        |             | <strike>176.9.198.65 + 176.9.198.66</strike> | 2a01:4f8:10a:b88::4000/66 |
+| B                      | 140  -  169 | 10.2.2.0/24                                  |                           |
+|                        |             | <strike>176.9.198.67 + 176.9.198.68</strike> | 2a01:4f8:10a:b88::8000/66 |
+| C                      | 170  -  199 | 10.2.3.0/24                                  |                           |
+|                        |             | <strike>176.9.198.69 + 176.9.198.70</strike> | 2a01:4f8:10a:b88::c000/66 |
+| VPN                    |             | 10.2.128.0/17                                |                           |
 
 Die IPv4 Adresse der OPNsense (`88.99.59.71`) steht mittels Port Forwarding jedem Partner zur Verfügung.
 Für Web-Protokolle (`http`/`https`) kommt hierbei der Reverse Proxy HAProxy zum Einsatz.
