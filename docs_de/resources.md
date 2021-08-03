@@ -21,10 +21,7 @@ Das IPv4 Netzwerk `10.1.0.0/16` wird auf beiden Hosts in zwei 17er Netzwerke auf
 Da der Host `pve2` von mehreren Partnern genutzt wird, wurden die Netzresourcen aus dem ersten Netz sowie die öffentlichen Addressen gemäß der folgenden Tabelle verteilt.
 
 !!! info ""
-    Die aufgelisteten ID's gelten für Proxmox VM/LXC, VLAN ID's, sowie IPv6 Adressen: <code>2a01:4f8:10a:b88:0:ID::/96</code>
-
-!!! warning ""
-    Das IPv4 Subnetz 176.9.198.65/29 wird zum Ende des Jahres 2021 aufgrund einer enormen Preisänderung bei Hetzner gekündigt.
+    Die aufgelisteten ID's gelten für Proxmox VM/LXC, VLAN ID's, sowie IPv6 Adressen: <code>2a01:4f8:10a:b88:ID::/80</code>
 
 | Verwendung / Partner   |     ID's    | IPv4 Netzwerke                               |
 |:-----------------------|:-----------:|:---------------------------------------------|
@@ -32,11 +29,8 @@ Da der Host `pve2` von mehreren Partnern genutzt wird, wurden die Netzresourcen 
 | Allgemeine Verwendung  | 101  -  109 | 10.2.0.4/30 - 10.2.0.252/30                  |
 |                        |             | 88.99.59.69/32 + 88.99.59.71/32              |
 | A                      | 110  -  139 | 10.2.1.0/24                                  |
-|                        |             | <strike>176.9.198.65 + 176.9.198.66</strike> |
 | B                      | 140  -  169 | 10.2.2.0/24                                  |
-|                        |             | <strike>176.9.198.67 + 176.9.198.68</strike> |
 | C                      | 170  -  199 | 10.2.3.0/24                                  |
-|                        |             | <strike>176.9.198.69 + 176.9.198.70</strike> |
 | VPN                    |             | 10.2.128.0/17                                |
 
 Die IPv4 Adresse der OPNsense (`88.99.59.71`) steht mittels Port Forwarding jedem Partner zur Verfügung.

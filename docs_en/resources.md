@@ -21,11 +21,8 @@ The IPv4 network `10.1.0.0/16` has been split into two `/17` networks.
 `pve2` is used by several partners so the first network have been divided furthermore:
 
 !!! info ""
-    The listed ID's are valid for Proxmox VM/LXC, VLAN ID's and ipv6 addresses: <code>2a01:4f8:10a:b88:0:ID::/96</code>
+    The listed ID's are valid for Proxmox VM/LXC, VLAN ID's and ipv6 addresses: <code>2a01:4f8:10a:b88:ID::/80</code>
 
-
-!!! warning ""
-    The ipv4 subnet 176.9.198.65/29 will be terminated at the end of the year 2021 due to a huge price change at Hetzner Online GmbH.
 
 | Use Case / Partner                |      ID     | IPv4 network                                 |
 |:----------------------------------|:-----------:|:---------------------------------------------|
@@ -33,11 +30,8 @@ The IPv4 network `10.1.0.0/16` has been split into two `/17` networks.
 | General usage                     | 101  -  109 | 10.2.0.4/30 - 10.2.0.252/30                  |
 |                                   |             | 88.99.59.69/32 + 88.99.59.71/32              |
 | A                                 | 110  -  139 | 10.2.1.0/24                                  |
-|                                   |             | <strike>176.9.198.65 + 176.9.198.66</strike> |
 | B                                 | 140  -  169 | 10.2.2.0/24                                  |
-|                                   |             | <strike>176.9.198.67 + 176.9.198.68</strike> |
 | C                                 | 170  -  199 | 10.2.3.0/24                                  |
-|                                   |             | <strike>176.9.198.69 + 176.9.198.70</strike> |
 | VPN                               |             | 10.2.128.0/17                                |
 
 The IPv4 address of the OPNsense (`88.99.59.71`) is available to each partner via port forwarding.
