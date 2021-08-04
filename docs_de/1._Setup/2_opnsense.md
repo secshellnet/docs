@@ -90,6 +90,49 @@ DNS Wildcard Einträge müssen gemäß der [erweiterten Konfiguration des DNS Se
 address=/hostname.secshell.net/10.2.1.2
 ```
 
+## IPv6
+Die Einrichtung von IPv6 erfolgt anhand dieses [Blogeintrags](https://dominicpratt.de/hetzner-und-proxmox-ipv6-mit-router-vm-nutzen/).
+
+Zuerst muss die Datei `/etc/network/interfaces` auf dem Host angepasst (Route für fe80::1 und IPv6 Forwarding) werden:
+```shell
+auto lo
+iface lo inet loopback
+
+iface enp41s0 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+	address X.X.X.X/27
+	gateway X.X.X.X
+	bridge-ports enp41s0
+	bridge-stp off
+	bridge-fd 0
+
+    # AB HIER
+    up ip -6 route add default via fe80::1 dev vmbr0
+	up sysctl -w net.ipv6.conf.all.forwarding=1
+    # BIS HIER
+
+allow-ovs vmbr1
+iface vmbr1 inet manual
+	ovs_type OVSBridge
+
+```
+
+Anschließend wird das WAN Interface der OPNsense per DHCPv6 konfiguriert, dadurch erhält man eine Local Link Adresse auf diesem Interface.  
+![WAN Interface IPv6 Configuration](../img/setup/OPNsense_IPv6_Interfaces.png?raw=true){: loading=lazy }
+
+Die ersten vier Blöcke der IPv6 Adresse werden bei einem 64er IPv6 Netzwerk durch den Hoster vorgegeben, in den fünften Block wird die ID der Proxmox VM bzw des LXC Containers eingetragen, die letzten drei Block der IPv6 Adresse werden dem Host zugewiesen. In den vlan Interfaces der OPNsense wird die Static IPv6 `XXXX:XXXX:XXXX:XXXX:ID::1/80` eingetragen.
+
+![VLAN Interface IPv6 Configuration](../img/setup/OPNsense_IPv6_Interfaces.png?raw=true){: loading=lazy }
+
+Zuletzt muss das IPv6 Gateway als Default Gateway eingetragen werden:  
+![IPv6 Default Gateway](../img/setup/OPNsense_IPv6_Gateway.png?raw=true){: loading=lazy }
+
+Auf dem Dashboard sollte es dann so aussehen:  
+![IPv6 Interface Overview](../img/setup/OPNsense_IPv6_Overview.png?raw=true){: loading=lazy }
+
+
 # Knowledge Base
 ### DNS Auflösung funktioniert über OpenVPN nicht
 Wenn man mit dem VPN verbunden ist, und interne DNS Anfragen nicht korrekt aufgelöst werden, muss die DNS Search Domain hinzugefügt werden. Unter Linux funktioniert das mit dem Network Manager mithilfe des folgenden Kommandos:
