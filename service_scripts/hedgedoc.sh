@@ -23,7 +23,7 @@ cat <<EOF >config.json
       "storage": "./db.hedgedoc.sqlite"
     },
     "host": "127.0.0.1",
-    "domain": "md.secshell.net"
+    "domain": "${domain}"
   }
 }
 EOF
@@ -35,12 +35,12 @@ apk add --update --no-cache \
   rust cargo
 
 pip3 install certbot-nginx
-/usr/bin/certbot --nginx --non-interactive --agree-tos -d ${domain} -m certificates@secshell.net
+/usr/bin/certbot --nginx --non-interactive --agree-tos -d ${domain} -m ${email}
 
 
 # adjust nginx config
 cat <<EOF >/etc/nginx/conf.d/default.conf
-map $http_upgrade $connection_upgrade {
+map \$http_upgrade \$connection_upgrade {
         default upgrade;
         ''      close;
 }
@@ -48,38 +48,39 @@ map $http_upgrade $connection_upgrade {
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
-   
+
     server_name md.secshell.net;
 
-    ssl_certificate /etc/letsencrypt/live/md.secshell.net/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/md.secshell.net/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/${domain}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${domain}/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
-        proxy_set_header Host $host; 
-        proxy_set_header X-Real-IP $remote_addr; 
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
     }
+
     location /socket.io/ {
         proxy_pass http://127.0.0.1:3000;
-        proxy_set_header Host $host; 
-        proxy_set_header X-Real-IP $remote_addr; 
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection \$connection_upgrade;
     }
 }
 
 server {
     listen 80;
     listen [::]:80;
-    return 301 https://$host$request_uri;
+    return 301 https://\$host\$request_uri;
 }
-
+EOF
 
 # create hedgedoc service
 cat <<EOF > /etc/init.d/hedgedoc
