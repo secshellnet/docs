@@ -102,6 +102,7 @@ server {
     listen [::]:80;
     return 301 https://\$host\$request_uri;
 }
+EOF
 ```
 
 Zuletzt wird der Service gestartet und zum Autostart hinzugefügt:
