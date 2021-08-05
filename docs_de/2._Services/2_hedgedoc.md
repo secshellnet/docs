@@ -1,4 +1,7 @@
 # HedgeDoc (Alpine 3.13)
+
+![](../img/services/hedgedoc.png?raw=true){: loading=lazy }
+
 Die Installation kann über das [install_hedgedoc.sh](./hedgedoc.sh) Script erfolgen. Diese nutzt die ACME HTTP Challenge, ganz oben muss die Konfiguration (domain, email) angepasst werden.
 
 ```shell
