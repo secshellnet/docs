@@ -93,6 +93,11 @@ function start {
 EOF
 chmod +x /etc/init.d/hedgedoc
 
+cat <<EOF >> /etc/crontabs/root
+# regenerate lets encrypt certificates every 15 days
+0 3 */15 * * /usr/bin/certbot renew >/dev/null 2>&1
+EOF 
+
 # configure autostart
 rc-update add nginx
 rc-update add hedgedoc
