@@ -31,6 +31,9 @@ echo "deb [signed-by=/etc/apt/trusted.gpg.d/influxdb.gpg] https://repos.influxda
 
 apt-get update
 apt-get -y install grafana influxdb prometheus
+
+# set capability to bind to port 443
+setcap 'cap_net_bind_service=+ep' /usr/sbin/grafana-server
 ```
 
 Afterwards, the Certbot and the current version of the Cloudflare Libary are installed. This allows you to use the Cloudflare API tokens instead of the Global API Key for the ACME DNS-01 challenge. After the installation, the desired certificate is requested:
@@ -63,6 +66,7 @@ The configuration of Grafana is adjusted accordingly (enable HTTPS, set path to 
 # enable https in grafana
 admin_password=$(cat /dev/urandom | tr -dc A-Za-z0-9 | fold -w 24 | head -n 1)
 echo "Grafana Credentials: admin / ${admin_password}"
+sed -i "s|;http_port.*|http_port = 443|g" /etc/grafana/grafana.ini
 sed -i "s|;protocol.*|protocol = https|g" /etc/grafana/grafana.ini
 sed -i "s|;cert_file.*|cert_file = /etc/letsencrypt/live/${domain}/cert.pem|g" /etc/grafana/grafana.ini
 sed -i "s|;cert_key.*|cert_key = /etc/letsencrypt/live/${domain}/privkey.pem|g" /etc/grafana/grafana.ini
