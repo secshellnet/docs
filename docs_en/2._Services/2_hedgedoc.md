@@ -105,6 +105,14 @@ server {
 EOF
 ```
 
+Automatic certificate renewal:
+```shell
+cat <<EOF >> /etc/crontabs/root
+# regenerate lets encrypt certificates every 15 days
+0 3 */15 * * /usr/bin/certbot renew >/dev/null 2>&1
+EOF
+```
+
 Handle autostart and start services.
 ```shell
 # create hedgedoc service
