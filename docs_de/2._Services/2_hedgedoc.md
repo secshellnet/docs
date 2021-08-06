@@ -106,10 +106,11 @@ EOF
 ```
 
 Automatische Zertifikaterneuerung:
-```
+```shell
+cat <<EOF >> /etc/crontabs/root
 # regenerate lets encrypt certificates every 15 days
 0 3 */15 * * /usr/bin/certbot renew >/dev/null 2>&1
-EOF cat <<EOF >> /etc/crontabs/root
+EOF
 ```
 
 Zuletzt wird der Service gestartet und zum Autostart hinzugefügt:
