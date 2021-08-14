@@ -48,10 +48,13 @@ net1: virtio=FF:EE:DD:CC:BB:AA,bridge=vmbr1,firewall=1,queues=8,trunks=1-4095
 ```
 
 The configuration of the OPNsense is explained in a separate chapter.  
-The additional booked IPv4 addresses / subnets - which are outside the network of the main IPv4 addresses - must be routed via the host adapter, for this the WAN bridge in `/etc/network/interfaces` is extended as follows:
+The additional booked IPv4 addresses / subnets - which are outside the network of the main IPv4 addresses - must be routed via the host adapter, for this the WAN bridge in `/etc/network/interfaces` is extended as follows.
+Also you need to configure the route to the ipv6 gateway (`fe80::1`) using the device `vmbr0` to prevent that packages to the gateway would be send to fe80::1 using the device `vmbr1`.
 ```bash
 # ...
 	up ip route add 176.9.198.64/29 dev vmbr0
+
+        up ip -6 route add default via fe80::1 dev vmbr0
 
 	up sysctl -w net.ipv4.ip_forward=1
 	up sysctl -w net.ipv6.conf.all.forwarding=1

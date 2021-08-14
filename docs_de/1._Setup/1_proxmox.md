@@ -48,16 +48,18 @@ net1: virtio=FF:EE:DD:CC:BB:AA,bridge=vmbr1,firewall=1,queues=8,trunks=1-4095
 ```
 
 Die Konfiguration der OPNsense wird in einem eigenen Kapitel erläutert.  
-Die zusätzliche gebuchten IPv4 Adressen / Subnetze - die sich außerhalb des Netzwerkes der Haupt IPv4 Adressen befinden - müssen über den Host Adapter geroutet werden, dafür wird die WAN Bridge in `/etc/network/interfaces` wie folgt erweitert:
+Die zusätzliche gebuchten IPv4 Adressen / Subnetze - die sich außerhalb des Netzwerkes der Haupt IPv4 Adressen befinden - müssen über den Host Adapter geroutet werden, dafür wird die WAN Bridge in `/etc/network/interfaces` wie folgt erweitert. Außerdem wird die default Route für das IPv6 Gateway (`fe80::1`) über `vmbr0` hinzugefügt, da Pakete zum Gateway sonst über `vmbr1` gerouted wird:
 ```bash
 # ...
 	up ip route add 176.9.198.64/29 dev vmbr0
+
+        up ip -6 route add default via fe80::1 dev vmbr0
 
 	up sysctl -w net.ipv4.ip_forward=1
 	up sysctl -w net.ipv6.conf.all.forwarding=1
 # ...
 ```
-Da sich die zusätzlich gebuchte IPv4 Adresse für die Firewall im Gleichen Subnetz wie die Haupt IPv4-Adresse befindet, muss hier nur das Subnetz gerouted werden.
+Da sich die zusätzlich gebuchte IPv4 Adresse für die Firewall im gleichen Subnetz wie die Haupt IPv4-Adresse befindet, muss hier nur das Subnetz gerouted werden.
 
 ## Kostenlose Stroagebox BX10
 Im Hetzner Robot kann man zu einem dedicated Server eine kostenlose BX10 Storage Box bestellen.
