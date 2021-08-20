@@ -5,12 +5,16 @@ Die Installation gestaltet sich sehr einfach, aus Sicherheitsgründen wird die V
 apk add postgresql
 
 # use scram-sha-256 instead of md5
-sed -i '/^#password_encryption.* /s/^#//' /etc/postgresql/postgresql.conf
-sed -i -e '/password_encryption/s/md5/scram-sha-256/' /etc/postgresql/postgresql.conf
+sed -i '/^#password_encryption.* /{
+  s/#//
+  s/md5/scram-sha-256/
+}' /etc/postgresql/postgresql.conf
 
 # listen on all addresses 
-sed -i '/^#listen_address.* /s/^#//' /etc/postgresql/postgresql.conf
-sed -i -e '/listen_address/s/localhost/*/' /etc/postgresql/postgresql.conf
+sed -i '/^#listen_address.* /{
+  s/#//
+  s/localhost/*/
+}' /etc/postgresql/postgresql.conf
 
 # allow logins from anywhere using scram-sha-256 authentication method
 echo -e "host\tall\t\tall\t\t0.0.0.0/0\t\tscram-sha-256" >> /etc/postgresql/pg_hba.conf
