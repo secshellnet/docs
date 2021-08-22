@@ -29,6 +29,7 @@ acme.sh --issue --dns dns_cf -d ${DOMAIN}
 
 # adjust nginx config
 cat <<EOF >/etc/nginx/conf.d/default.conf
+# https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
 map \$http_upgrade \$connection_upgrade {
         default upgrade;
         ''      close;
@@ -72,12 +73,6 @@ server {
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection \$connection_upgrade;
     }
-}
-
-server {
-    listen 80;
-    listen [::]:80;
-    return 301 https://\$host\$request_uri;
 }
 EOF
 
