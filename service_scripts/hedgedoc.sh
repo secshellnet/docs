@@ -2,7 +2,6 @@
 
 ### configuration
 domain="md.secshell.net"
-email="certificates@secshell.net"
 ### end of configuration
 
 echo >/etc/motd
