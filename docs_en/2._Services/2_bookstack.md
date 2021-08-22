@@ -5,5 +5,5 @@ export DOMAIN="docs.secshell.net"
 export EMAIL="certificates@secshell.net"
 export CF_API_TOKEN="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
-curl -fsSL https://docs.secshell.net/script/bookstack.sh | sh
+curl -fsSL https://docs.secshell.net/scripts/bookstack.sh | sh
 ```

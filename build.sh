@@ -22,4 +22,4 @@ rm -r docs
 mv _redirects site
 
 # add service setup scripts to deployment
-mv service_scripts site/scripts
+mv scripts site/scripts

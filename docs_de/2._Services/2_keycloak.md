@@ -6,5 +6,5 @@ export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 export CF_Account_ID="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 export CF_Zone_ID="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
-curl -fsSL https://docs.secshell.net/script/keycloak.sh | sh
+curl -fsSL https://docs.secshell.net/scripts/keycloak.sh | sh
 ```
