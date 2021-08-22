@@ -8,10 +8,6 @@ mkdir site
 cp -r img docs_en
 cp -r img docs_de
 
-# add service scripts to service folders
-cp service_scripts/* docs_en/2._Services
-cp service_scripts/* docs_de/2._Services
-
 # build english
 cp -r docs_en docs
 mkdocs build --site-dir site/en
@@ -24,3 +20,6 @@ rm -r docs
 
 # add _redirects to deployment
 mv _redirects site
+
+# add service setup scripts to deployment
+mv service_scripts site/scripts

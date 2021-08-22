@@ -5,7 +5,7 @@
 if [ -z $1 ]; then
   echo "Usage: ./$0 <username>"
   exit
-fi 
+fi
 
 # create user without password and shell
 adduser --shell=/bin/false --disabled-password $1
@@ -33,4 +33,3 @@ Match User $1
    AllowTCPForwarding no
    X11Forwarding no
 EOF
-

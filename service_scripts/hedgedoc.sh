@@ -1,13 +1,13 @@
 #!/bin/sh
 
 ### configuration
-domain="md.secshell.net"
+DOMAIN="md.secshell.net"
 ### end of configuration
 
 echo >/etc/motd
 
 # install hedgedoc
-apk add nodejs npm sqlite git nginx
+apk add nodejs npm sqlite git nginx acme.sh socat
 npm i -g node-gyp yarn
 wget -O- https://github.com/hedgedoc/hedgedoc/releases/download/1.8.2/hedgedoc-1.8.2.tar.gz | tar xzC /opt/
 cd /opt/hedgedoc
@@ -22,20 +22,14 @@ cat <<EOF >config.json
       "storage": "./db.hedgedoc.sqlite"
     },
     "host": "127.0.0.1",
-    "domain": "${domain}"
+    "domain": "${DOMAIN}"
   }
 }
 EOF
 
-# install requirements for python-cryptography (requirement for certbot)
-apk add --update --no-cache \
-  g++ make python3 python3-dev py3-pip \
-  libffi-dev libressl-dev libxslt-dev \
-  rust cargo
-
-pip3 install certbot-nginx
-/usr/bin/certbot --nginx --non-interactive --agree-tos -d ${domain} -m ${email}
-
+# get certificate
+acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-ca
+acme.sh --issue --dns dns_cf -d ${DOMAIN}
 
 # adjust nginx config
 cat <<EOF >/etc/nginx/conf.d/default.conf
@@ -45,15 +39,25 @@ map \$http_upgrade \$connection_upgrade {
 }
 
 server {
-    listen 443 ssl;
-    listen [::]:443 ssl;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
 
-    server_name md.secshell.net;
+    ssl_certificate /root/.acme.sh/${DOMAIN}/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/${DOMAIN}/${DOMAIN}.key;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
+    ssl_session_tickets off;
 
-    ssl_certificate /etc/letsencrypt/live/${domain}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${domain}/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    # modern configuration
+    ssl_protocols TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    # HSTS (ngx_http_headers_module is required) (63072000 seconds)
+    add_header Strict-Transport-Security "max-age=63072000" always;
+
+    # OCSP stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
@@ -91,11 +95,6 @@ function start {
 }
 EOF
 chmod +x /etc/init.d/hedgedoc
-
-cat <<EOF >> /etc/crontabs/root
-# regenerate lets encrypt certificates every 15 days
-0 3 */15 * * /usr/bin/certbot renew >/dev/null 2>&1
-EOF 
 
 # configure autostart
 rc-update add nginx

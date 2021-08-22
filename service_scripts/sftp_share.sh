@@ -1,11 +1,8 @@
 #!/bin/sh
 
-## configuration section
-
+# configuration
 users=('tom' 'mike')
-
-## end of configuration
-
+# end of configuration
 
 echo > /etc/motd
 
@@ -18,11 +15,11 @@ sed -i 's|AuthorizedKeysFile.*|AuthorizedKeysFile /etc/ssh/authorized_keys/%u|g'
 
 # get adduser script if not already there
 if [ ! -f sftp_share_adduser.sh ]; then
-  wget https://github.com/secshellnet/docs/blob/main/service_scripts/sftp_share_adduser.sh
+  wget https://docs.secshell.net/scripts/sftp_share_adduser.sh
 fi
 
-for user in ${users[@]}; do
-  sh ./sftp_share_adduser.sh $user  
+for user in ${USERS[@]}; do
+  sh ./sftp_share_adduser.sh $user
 done
 
 # create Match all entry

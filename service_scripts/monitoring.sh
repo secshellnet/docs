@@ -1,11 +1,5 @@
 #!/bin/bash
 
-### config
-CF_API_TOKEN=""
-domain="grafana.secshell.net"
-email="certificates@secshell.net"
-### end of config
-
 echo > /etc/motd
 
 # enable hetzner apt repositories
@@ -51,8 +45,8 @@ chmod 400 /root/.cloudflare.ini
   --agree-tos \
   --dns-cloudflare \
   --dns-cloudflare-credentials /root/.cloudflare.ini \
-  -d ${domain} \
-  -m ${email} \
+  -d ${DOMAIN} \
+  -m ${EMAIL} \
   --preferred-challenges dns-01
 
 # enable https in grafana
@@ -60,8 +54,8 @@ admin_password=$(cat /dev/urandom | tr -dc A-Za-z0-9 | fold -w 24 | head -n 1)
 echo "Grafana Credentials: admin / ${admin_password}"
 sed -i "s|;http_port.*|http_port = 443|g" /etc/grafana/grafana.ini
 sed -i "s|;protocol.*|protocol = https|g" /etc/grafana/grafana.ini
-sed -i "s|;cert_file.*|cert_file = /etc/letsencrypt/live/${domain}/cert.pem|g" /etc/grafana/grafana.ini
-sed -i "s|;cert_key.*|cert_key = /etc/letsencrypt/live/${domain}/privkey.pem|g" /etc/grafana/grafana.ini
+sed -i "s|;cert_file.*|cert_file = /etc/letsencrypt/live/${DOMAIN}/cert.pem|g" /etc/grafana/grafana.ini
+sed -i "s|;cert_key.*|cert_key = /etc/letsencrypt/live/${DOMAIN}/privkey.pem|g" /etc/grafana/grafana.ini
 sed -i "s|;admin_password.*|admin_password = ${admin_password}|g" /etc/grafana/grafana.ini
 
 chown -R root:grafana /etc/letsencrypt

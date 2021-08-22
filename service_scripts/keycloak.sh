@@ -1,13 +1,5 @@
 #!/bin/sh
 
-### configuration
-domain="id.secshell.net"
-
-export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-export CF_Account_ID="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-export CF_Zone_ID="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-### end of configuration
-
 echo > /etc/motd
 
 # install keycloak
@@ -17,8 +9,7 @@ cd /opt/keycloak-15.0.1
 
 # get certificate
 acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-ca
-acme.sh --issue --dns dns_cf -d ${domain}
-
+acme.sh --issue --dns dns_cf -d ${DOMAIN}
 
 # configure nginx
 cat << EOF > /etc/nginx/conf.d/default.conf
@@ -27,8 +18,8 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
-    ssl_certificate /root/.acme.sh/${domain}/fullchain.cer;
-    ssl_certificate_key /root/.acme.sh/${domain}/${domain}.key;
+    ssl_certificate /root/.acme.sh/${DOMAIN}/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/${DOMAIN}/${DOMAIN}.key;
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;
@@ -59,19 +50,18 @@ EOF
 
 
 # fix UnknownHostException
-echo -e "127.0.0.1\tkeycloak" >> /etc/hosts
-
+echo -e "127.0.0.1\t$(hostname)" >> /etc/hosts
 
 # create keycloak service and configure autostart
 cat <<EOF > /etc/init.d/keycloak
 #!/sbin/openrc-run
- 
+
 function start {
   sh /opt/keycloak-15.0.1/bin/standalone.sh & 2>&1 >/dev/null
 }
 EOF
 chmod +x /etc/init.d/keycloak
- 
+
 rc-update add nginx
 rc-service nginx restart
 rc-update add keycloak
