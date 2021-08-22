@@ -29,3 +29,9 @@ Start the webserver and enable autostart:
 rc-update add syncthing
 service syncthing start
 ```
+
+If you prefere having syncthing on port 443 (for example to run it behind cloudflare proxy), you need to set the net bind service capability:
+```shell
+apk add libcap
+setcap CAP_NET_BIND_SERVICE=+eip /usr/bin/syncthing
+```

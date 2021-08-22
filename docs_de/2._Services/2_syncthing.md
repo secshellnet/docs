@@ -29,3 +29,9 @@ Zuletzt wird der Service gestartet und zum Autostart hinzugefügt:
 rc-update add syncthing
 service syncthing start
 ```
+
+Falls Sie `syncthing` auf port 443 betrieben wollen (um es zum Beispiel hinter Cloudflare Proxy laufen zu lassen), müssen sie die net bind service capability setzen:
+```shell
+apk add libcap
+setcap CAP_NET_BIND_SERVICE=+eip /usr/bin/syncthing
+```
