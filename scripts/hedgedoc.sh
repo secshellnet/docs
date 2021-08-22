@@ -1,13 +1,9 @@
 #!/bin/sh
 
-### configuration
-DOMAIN="md.secshell.net"
-### end of configuration
-
 echo >/etc/motd
 
 # install hedgedoc
-apk add nodejs npm sqlite git nginx acme.sh socat
+apk add --no-cache --update nodejs npm sqlite git nginx acme.sh socat
 npm i -g node-gyp yarn
 wget -O- https://github.com/hedgedoc/hedgedoc/releases/download/1.8.2/hedgedoc-1.8.2.tar.gz | tar xzC /opt/
 cd /opt/hedgedoc

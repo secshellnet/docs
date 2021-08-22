@@ -7,7 +7,7 @@ users=('tom' 'mike')
 echo > /etc/motd
 
 # install openssh-server
-apk add --update --no-cache openssh-server
+apk add --no-cache --update openssh-server
 mkdir -p /etc/ssh/authorized_keys
 
 # change location of authorized keys file (.ssh/authorized_keys is no longer required so it can be removed)

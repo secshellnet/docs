@@ -1,6 +1,8 @@
 #!/bin/sh
 
-apk add postgresql
+echo >/etc/motd
+
+apk add --no-cache --update postgresql
 
 # use scram-sha-256 instead of md5
 sed -i '/^#password_encryption.* /{

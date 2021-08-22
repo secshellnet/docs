@@ -3,6 +3,8 @@
 ![](../img/services/hedgedoc.png?raw=true){: loading=lazy }
 
 ```shell
+apk add --update --no-cache curl
+
 export DOMAIN="md.secshell.net"
 export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 export CF_Account_ID="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"

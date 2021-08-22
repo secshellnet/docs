@@ -1,6 +1,8 @@
 # Monitoring (Debian 10.7)
 
 ```shell
+apk add --update --no-cache curl
+
 export DOMAIN="grafana.secshell.net"
 export EMAIL="certificates@secshell.net"
 export CF_API_TOKEN="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"

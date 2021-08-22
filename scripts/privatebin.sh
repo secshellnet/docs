@@ -3,7 +3,7 @@
 echo > /etc/motd
 
 # install nginx, php8 fpm and acme.sh
-apk add nginx php8-fpm acme.sh socat
+apk add --no-cache --update nginx php8-fpm acme.sh socat
 addgroup -S appgroup
 adduser -S appuser -G appgroup
 

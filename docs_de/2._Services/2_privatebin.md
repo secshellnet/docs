@@ -1,6 +1,8 @@
 # PrivateBin (Alpine 3.13)
 
 ```shell
+apk add --update --no-cache curl
+
 export DOMAIN="bin.secshell.net"
 export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 export CF_Account_ID="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
