@@ -86,10 +86,27 @@ EOF
 ln -s /etc/nginx/sites-available/${AUTH_DOMAIN}.conf /etc/nginx/sites-enabled/${AUTH_DOMAIN}.conf
 
 # set tokenAuthUrl in jitsi config
-sed -ie "s|tokenAuthUrl|*/\n     tokenAuthUrl: \"https://${AUTH_DOMAIN}/room/{room}\",\n     /*|g" /etc/jitsi/meet/jitsi.the-morpheus.de-config.js
+sed -ie "s|tokenAuthUrl|*/\n     tokenAuthUrl: \"https://${AUTH_DOMAIN}/room/{room}\",\n     /*|g" /etc/jitsi/meet/${DOMAIN}-config.js
 
 # enable token authentication in prosody
 debconf-set-selections <<< "jitsi-meet-tokens  jitsi-meet-tokens/appid	    string    ${DOMAIN}"
 debconf-set-selections <<< "jitsi-meet-tokens  jitsi-meet-tokens/appsecret  password  ${jitsi_secret}"
 apt-get install -y liblua5.2-dev jitsi-meet-tokens
 
+# adjust token issuer and audiences
+sed -i '/app_secret.*/a \    asap_accepted_issuers = { "jitsi" }\n    asap_accepted_audiences = { "jitsi" }' /etc/prosody/conf.d/${DOMAIN}.cfg.lua
+
+# allow guests joining existing rooms
+cat <<EOF >> /etc/prosody/conf.d/${DOMAIN}.cfg.lua
+VirtualHost "guest.${DOMAIN}"
+    authentication = "anonymous"
+    c2s_require_encryption = false
+EOF
+
+echo -e "org.jitsi.jicofo.auth.URL=EXT_JWT:${DOMAIN}" >> /etc/jitsi/jicofo/sip-communicator.properties
+
+# adjust anonymousdomain in jitsi config
+sed -e "/anonymousdomain.* /{
+  s|// ||
+  s|guest.example.com|guest.${DOMAIN}|
+}" /etc/jitsi/meet/${DOMAIN}-config.js
