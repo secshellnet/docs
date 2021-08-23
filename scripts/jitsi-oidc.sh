@@ -41,12 +41,6 @@ systemctl daemon-reload
 systemctl enable --now jitsi-oidc
 
 
-# install certbot to get tls certificate using acme dns-01 challenge
-apt-get install -y python3-pip
-python3 -m pip install certbot certbot-dns-cloudflare
-
-echo "dns_cloudflare_api_token = ${CF_API_TOKEN}" > /root/.cloudflare.ini
-chmod 400 /root/.cloudflare.ini
 /usr/local/bin/certbot certonly \
   --non-interactive \
   --agree-tos \
@@ -97,6 +91,7 @@ apt-get install -y liblua5.2-dev jitsi-meet-tokens
 sed -i '/app_secret.*/a \    asap_accepted_issuers = { "jitsi" }\n    asap_accepted_audiences = { "jitsi" }' /etc/prosody/conf.d/${DOMAIN}.cfg.lua
 
 # allow guests joining existing rooms
+# https://jitsi.github.io/handbook/docs/devops-guide/secure-domain
 cat <<EOF >> /etc/prosody/conf.d/${DOMAIN}.cfg.lua
 VirtualHost "guest.${DOMAIN}"
     authentication = "anonymous"
