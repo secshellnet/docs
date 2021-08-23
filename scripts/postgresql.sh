@@ -1,8 +1,15 @@
 #!/bin/sh
 
+if [[ $(/usr/bin/id -u) != "0" ]]; then
+  echo "Please run the script as root!"
+  exit 1
+fi
+
 echo >/etc/motd
 
 apk add --no-cache --update postgresql
+
+rc-service postgresql start
 
 # use scram-sha-256 instead of md5
 sed -i '/^#password_encryption.* /{
@@ -22,4 +29,4 @@ echo -e "host\tall\t\tall\t\t::0/0\t\t\tscram-sha-256" >> /etc/postgresql/pg_hba
 
 # enable autostart and start postgresql
 rc-update add postgresql
-rc-service postgresql start
+rc-service postgresql restart

@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [[ $(/usr/bin/id -u) != "0" ]]; then
+  echo "Please run the script as root!"
+  exit 1
+fi
+
 nickname=$(cat /dev/urandom | tr -dcA-Za-z0-9 | fold -w 50 | head -n 1)
 contact_info="Name <example@domain.tld>"
 

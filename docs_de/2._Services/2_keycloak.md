@@ -10,3 +10,29 @@ export CF_Zone_ID="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 curl -fsSL https://docs.secshell.net/scripts/keycloak.sh | sh
 ```
+
+## PostgreSQL database
+```json
+    "db": {
+      "dialect": "postgres",
+      "username": "hedgedoc",
+      "password": "$(cat /dev/urandom | tr -dcA-Za-z0-9 | fold -w24 | head -n1)",
+      "database": "hedgedoc",
+      "host": "postgres.secshell.net"
+    },
+```
+
+## Keycloak OIDC
+```json
+    "oauth2": {
+      "providerName": "Keycloak",
+      "userProfileURL": "https://id.secshell.net/auth/realms/main/protocol/openid-connect/userinfo",
+      "userProfileUsernameAttr": "preferred_username",
+      "userProfileDisplayNameAttr": "name",
+      "userProfileEmailAttr": "email",
+      "tokenURL": "https://id.secshell.net/auth/realms/main/protocol/openid-connect/token",
+      "authorizationURL": "https://id.secshell.net/auth/realms/main/protocol/openid-connect/auth",
+      "clientID": "md.secshell.net",
+      "clientSecret": "912bc300-561c-4ba6-939f-5fdc00cf13a0"
+    },
+```

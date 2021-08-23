@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [[ $(/usr/bin/id -u) != "0" ]]; then
+  echo "Please run the script as root!"
+  exit 1
+fi
+
 echo > /etc/motd
 
 # install keycloak

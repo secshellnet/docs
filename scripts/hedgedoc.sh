@@ -1,5 +1,10 @@
 #!/bin/sh
 
+if [[ $(/usr/bin/id -u) != "0" ]]; then
+  echo "Please run the script as root!"
+  exit 1
+fi
+
 echo >/etc/motd
 
 # install hedgedoc
@@ -19,6 +24,13 @@ cat <<EOF >config.json
     },
     "host": "127.0.0.1",
     "domain": "${DOMAIN}"
+    "protocolUseSSL": true,                                                                                            
+    "sessionSecret": "$(cat /dev/urandom | tr -dcA-Za-z0-9 | fold -w32 | head -n1)",                                            
+    "allowAnonymous": false,
+    "allowAnonymousEdits": true,
+    "email": false,              
+    "allowEmailRegister": false, 
+    "defaultPermission": "locked"
   }
 }
 EOF

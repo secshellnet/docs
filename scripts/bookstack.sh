@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $(/usr/bin/id -u) != "0" ]]; then
+  echo "Please run the script as root!"
+  exit 1
+fi
+
 apt-get install -y curl
 
 # install bookstack using install script
