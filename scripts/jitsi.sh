@@ -37,7 +37,7 @@ chmod 400 /root/.cloudflare.ini
   --preferred-challenges dns-01
 
 # add cronjob for certificate renewal
-cat <<EOF /var/spool/cron/crontabs/root
+cat <<EOF > /var/spool/cron/crontabs/root
 # regenerate lets encrypt certificates every 15 days
 0 3 */15 * * /usr/bin/certbot renew >/dev/null 2>&1
 EOF
@@ -53,3 +53,4 @@ apt-get install -y jitsi-meet
 cat <<EOF >> /etc/jitsi/jicofo/sip-communicator.properties
 org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS=$(ip -4 a sh ens18 | grep -v inet6 | awk '{print $2}' | cut -d "/" -f1)
 org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS=${PUBLIC_IPv4}
+EOF
