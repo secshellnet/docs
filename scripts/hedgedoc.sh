@@ -24,12 +24,12 @@ cat <<EOF >config.json
     },
     "host": "127.0.0.1",
     "domain": "${DOMAIN}"
-    "protocolUseSSL": true,                                                                                            
-    "sessionSecret": "$(cat /dev/urandom | tr -dcA-Za-z0-9 | fold -w32 | head -n1)",                                            
+    "protocolUseSSL": true,
+    "sessionSecret": "$(cat /dev/urandom | tr -dcA-Za-z0-9 | fold -w32 | head -n1)",
     "allowAnonymous": false,
     "allowAnonymousEdits": true,
-    "email": false,              
-    "allowEmailRegister": false, 
+    "email": false,
+    "allowEmailRegister": false,
     "defaultPermission": "locked"
   }
 }

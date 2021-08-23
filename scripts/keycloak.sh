@@ -45,7 +45,7 @@ server {
             proxy_http_version 1.1;
             proxy_set_header Upgrade \$http_upgrade;
             proxy_set_header Connection 'upgrade';
-            proxy_set_header X-Forwarded-For \$proxy_protocol_addr;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto \$schema;
             proxy_set_header Host \$host;
             proxy_cache_bypass \$http_upgrade;
@@ -53,6 +53,8 @@ server {
 }
 EOF
 
+# adjust config
+xmlstarlet ed --inplace --subnode "/server/profile/subsystem[@default-server='default-server']/server/http-listener" --type attr --name proxy-address-forwarding --value true /opt/keycloak-15.0.1/standalone/configuration/standalone.xml
 
 # fix UnknownHostException
 echo -e "127.0.0.1\t$(hostname)" >> /etc/hosts
@@ -71,4 +73,3 @@ rc-update add nginx
 rc-service nginx restart
 rc-update add keycloak
 rc-service keycloak start
-
