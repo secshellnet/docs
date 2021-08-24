@@ -4,7 +4,7 @@ Die automatische Speicherkonfiguration legt ein LVM mit XFS Dateisystemen an:
 Alternativ kann man die Partitionierung manuell durchführen (Advanced Custom (Blivet-GUI) ist dafür zu empfehlen!)
 
 <video width="100%" height="240" controls>
-  <source src="../../video/services/debian11_vm.mp4" type="video/mp4">
+  <source src="../../video/services/fedora34_vm.mp4" type="video/mp4">
 </video>
 
 ![Booted](../img/services/fedora_vm_booted.png?raw=true){: loading=lazy }

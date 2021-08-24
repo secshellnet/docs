@@ -4,7 +4,7 @@ The automatic storage configuration is going to create a lvm with xfs as root fi
 Alternativly you can do the partitioning yourself (choose: Advanced Custom (Blivet-GUI))
 
 <video width="100%" height="240" controls>
-  <source src="../../video/services/debian11_vm.mp4" type="video/mp4">
+  <source src="../../video/services/fedora34_vm.mp4" type="video/mp4">
 </video>
 
 ![Booted](../img/services/fedora_vm_booted.png?raw=true){: loading=lazy }
