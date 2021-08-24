@@ -1,11 +1,12 @@
 # Jitsi VM (Debian 11)
 
-<video width="320" height="240" controls>
+<video width="100%" height="240" controls>
   <source src="../../video/services/debian11_vm.mp4" type="video/mp4">
 </video>
 
 ```shell
-apt-get install -y curl
+apt-get install -y curl sudo
+sudo -s
 
 export DOMAIN="jitsi.secshell.net"
 export EMAIL="certificates@secshell.net"
