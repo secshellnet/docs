@@ -15,6 +15,9 @@ cd /opt/hedgedoc
 sh bin/setup
 yarn install
 yarn build
+
+# configure hedgedoc
+session_secret=$(cat /dev/urandom | tr -dc A-Za-z0-9 | fold -w32 | head -n1)
 cat <<EOF >config.json
 {
   "production": {
@@ -23,9 +26,9 @@ cat <<EOF >config.json
       "storage": "./db.hedgedoc.sqlite"
     },
     "host": "127.0.0.1",
-    "domain": "${DOMAIN}"
+    "domain": "${DOMAIN}",
     "protocolUseSSL": true,
-    "sessionSecret": "$(cat /dev/urandom | tr -dcA-Za-z0-9 | fold -w32 | head -n1)",
+    "sessionSecret": "${session_secret}",
     "allowAnonymous": false,
     "allowAnonymousEdits": true,
     "email": false,
@@ -35,16 +38,17 @@ cat <<EOF >config.json
 }
 EOF
 
-# get certificate
+# get certificate using acme dns-01 challenge
+mkdir /root/.acme.sh
 acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-ca
 acme.sh --issue --dns dns_cf -d ${DOMAIN}
 
 # adjust nginx config
-cat <<EOF >/etc/nginx/conf.d/default.conf
+cat <<EOF > /etc/nginx/conf.d/default.conf
 # https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
 map \$http_upgrade \$connection_upgrade {
-        default upgrade;
-        ''      close;
+    default upgrade;
+    '' close;
 }
 
 server {
