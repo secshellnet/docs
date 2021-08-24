@@ -5,11 +5,17 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+echo >/etc/motd
+
+# reconfigure timezone
 ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 dpkg-reconfigure --frontend noninteractive tzdata
 
+# comment out cdrom apt repositories
+sed -e '/deb cdrom.*/ s/^#*/#/' /etc/apt/sources.list
+
 apt-get update
-apt-get install -y nginx-full gnupg apt-transport-https curl lsb-release python3-pip python3-certbot-dns-cloudflare
+apt-get install -y nginx-full gnupg apt-transport-https curl lsb-release python3-certbot-dns-cloudflare
 
 # adjust package sources
 curl https://download.jitsi.org/jitsi-key.gpg.key | sh -c 'gpg --dearmor > /usr/share/keyrings/jitsi-keyring.gpg'

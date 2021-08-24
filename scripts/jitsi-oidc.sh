@@ -41,7 +41,7 @@ systemctl daemon-reload
 systemctl enable --now jitsi-oidc
 
 
-/usr/local/bin/certbot certonly \
+certbot certonly \
   --non-interactive \
   --agree-tos \
   --dns-cloudflare \
@@ -83,8 +83,8 @@ ln -s /etc/nginx/sites-available/${AUTH_DOMAIN}.conf /etc/nginx/sites-enabled/${
 sed -ie "s|tokenAuthUrl|*/\n     tokenAuthUrl: \"https://${AUTH_DOMAIN}/room/{room}\",\n     /*|g" /etc/jitsi/meet/${DOMAIN}-config.js
 
 # enable token authentication in prosody
-debconf-set-selections <<< "jitsi-meet-tokens  jitsi-meet-tokens/appid	    string    ${DOMAIN}"
-debconf-set-selections <<< "jitsi-meet-tokens  jitsi-meet-tokens/appsecret  password  ${jitsi_secret}"
+debconf-set-selections <<< "jitsi-meet-tokens  jitsi-meet-tokens/appid	    string	${DOMAIN}"
+debconf-set-selections <<< "jitsi-meet-tokens  jitsi-meet-tokens/appsecret  password	${jitsi_secret}"
 apt-get install -y liblua5.2-dev jitsi-meet-tokens
 
 # adjust token issuer and audiences
@@ -101,7 +101,9 @@ EOF
 echo -e "org.jitsi.jicofo.auth.URL=EXT_JWT:${DOMAIN}" >> /etc/jitsi/jicofo/sip-communicator.properties
 
 # adjust anonymousdomain in jitsi config
-sed -e "/anonymousdomain.* /{
+sed -i -e "/anonymousdomain.* /{
   s|// ||
   s|guest.example.com|guest.${DOMAIN}|
 }" /etc/jitsi/meet/${DOMAIN}-config.js
+
+systemctl restart nginx
