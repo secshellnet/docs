@@ -120,3 +120,10 @@ systemctl restart prosody
 systemctl restart nginx
 systemctl restart jicofo
 systemctl restart jitsi-videobridge2
+
+
+# check dns
+if [ ${CHECK_DNS} -eq 1 ]; then
+  export ${DOMAIN}=${AUTH_DOMAIN}
+  curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
+fi

@@ -146,3 +146,11 @@ ln -s /etc/nginx/sites-{available,enabled}/${SYNAPSE_DOMAIN}.conf
 
 systemctl enable --now nginx
 systemctl enable --now matrix-synapse
+
+# check dns
+if [ ${CHECK_DNS} -eq 1 ]; then
+    export DOMAIN=${SYNAPSE_DOMAIN}
+    curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
+    export DOMAIN=${MATRIX_DOMAIN}
+    curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
+fi

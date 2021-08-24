@@ -61,3 +61,8 @@ cat <<EOF >> /etc/jitsi/jicofo/sip-communicator.properties
 org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS=$(ip -4 a sh ens18 | grep inet | grep -v inet6 | awk '{print $2}' | cut -d "/" -f1)
 org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS=${PUBLIC_IPv4}
 EOF
+
+# check dns
+if [ ${CHECK_DNS} -eq 1 ]; then
+  curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
+fi
