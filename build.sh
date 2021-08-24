@@ -8,6 +8,10 @@ mkdir site
 cp -r img docs_en
 cp -r img docs_de
 
+# copy videos to the site
+cp -r video docs_en
+cp -r video docs_de
+
 # build english
 cp -r docs_en docs
 mkdocs build --site-dir site/en

@@ -12,7 +12,7 @@ ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 dpkg-reconfigure --frontend noninteractive tzdata
 
 # comment out cdrom apt repositories
-sed -e '/deb cdrom.*/ s/^#*/#/' /etc/apt/sources.list
+sed -i -e '/deb cdrom.*/ s/^#*/#/' /etc/apt/sources.list
 
 apt-get update
 apt-get install -y nginx-full gnupg apt-transport-https curl lsb-release python3-certbot-dns-cloudflare
