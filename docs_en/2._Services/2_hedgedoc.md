@@ -2,6 +2,8 @@
 
 ![](../img/services/hedgedoc.png?raw=true){: loading=lazy }
 
+You need at least 2 gb of ram to install hedgedoc, for productive usage 512 mb are sufficient.
+
 ```shell
 apk add --update --no-cache curl
 
