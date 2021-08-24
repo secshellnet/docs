@@ -6,7 +6,7 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
 fi
 
 # require environment variables
-if [[ -z ${SYNAPSE_DOMAIN} || -z ${MATRIX_DOMAIN} || -z ${ELEMENT_DOMAIN} || -z ${CF_Token} || -z ${CF_Account_ID} || -z ${CF_Zone_ID} ]]; then
+if [[ -z ${SYNAPSE_DOMAIN} || -z ${MATRIX_DOMAIN} || -z ${ELEMENT_DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} ]]; then
   echo "Missing environemnt variables, check docs!"
   exit 1
 fi
@@ -122,6 +122,10 @@ server {
     # OCSP stapling
     ssl_stapling on;
     ssl_stapling_verify on;
+
+    location / {
+        return 301 https://${ELEMENT_DOMAIN}\$request_uri;
+    }
 
     location ~* ^(\/_matrix|\/_synapse\/client) {
         proxy_pass http://localhost:8008;
