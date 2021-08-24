@@ -112,4 +112,5 @@ sed -i -e "/anonymousdomain.* /{
 
 systemctl restart prosody
 systemctl restart nginx
-
+systemctl restart jicofo
+systemctl restart jitsi-videobridge2
