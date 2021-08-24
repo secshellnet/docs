@@ -7,6 +7,9 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# stop execution on failure
+set -e
+
 # install nodejs and jitsi-openid
 curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 apt install -y nodejs
@@ -40,7 +43,7 @@ EOF
 systemctl daemon-reload
 systemctl enable --now jitsi-oidc
 
-
+# get tls certificates over acme dns-01 challenge
 certbot certonly \
   --non-interactive \
   --agree-tos \
@@ -82,17 +85,18 @@ ln -s /etc/nginx/sites-available/${AUTH_DOMAIN}.conf /etc/nginx/sites-enabled/${
 # set tokenAuthUrl in jitsi config
 sed -ie "s|tokenAuthUrl|*/\n     tokenAuthUrl: \"https://${AUTH_DOMAIN}/room/{room}\",\n     /*|g" /etc/jitsi/meet/${DOMAIN}-config.js
 
-# enable token authentication in prosody
-debconf-set-selections <<< "jitsi-meet-tokens  jitsi-meet-tokens/appid	    string	${DOMAIN}"
-debconf-set-selections <<< "jitsi-meet-tokens  jitsi-meet-tokens/appsecret  password	${jitsi_secret}"
+# enable token authentication in prosody TODO
+debconf-set-selections <<< "jitsi-meet-tokens jitsi-meet-tokens/appid string ${DOMAIN}"
+debconf-set-selections <<< "jitsi-meet-tokens jitsi-meet-tokens/appsecret password ${jitsi_secret}"
 apt-get install -y liblua5.2-dev jitsi-meet-tokens
 
 # adjust token issuer and audiences
 sed -i '/app_secret.*/a \    asap_accepted_issuers = { "jitsi" }\n    asap_accepted_audiences = { "jitsi" }' /etc/prosody/conf.d/${DOMAIN}.cfg.lua
 
 # allow guests joining existing rooms
-# https://jitsi.github.io/handbook/docs/devops-guide/secure-domain
 cat <<EOF >> /etc/prosody/conf.d/${DOMAIN}.cfg.lua
+
+-- https://jitsi.github.io/handbook/docs/devops-guide/secure-domain
 VirtualHost "guest.${DOMAIN}"
     authentication = "anonymous"
     c2s_require_encryption = false
@@ -104,6 +108,8 @@ echo -e "org.jitsi.jicofo.auth.URL=EXT_JWT:${DOMAIN}" >> /etc/jitsi/jicofo/sip-c
 sed -i -e "/anonymousdomain.* /{
   s|// ||
   s|guest.example.com|guest.${DOMAIN}|
-}" /etc/jitsi/meet/${DOMAIN}-config.js
+	}" /etc/jitsi/meet/${DOMAIN}-config.js
 
+systemctl restart prosody
 systemctl restart nginx
+
