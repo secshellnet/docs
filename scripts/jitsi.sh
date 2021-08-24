@@ -7,6 +7,9 @@ fi
 
 echo >/etc/motd
 
+# stop execution on failure
+set -e
+
 # reconfigure timezone
 ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 dpkg-reconfigure --frontend noninteractive tzdata
