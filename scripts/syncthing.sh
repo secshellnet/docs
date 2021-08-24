@@ -9,10 +9,8 @@ echo > /etc/motd
 
 apk add --update --no-cache syncthing xmlstarlet apache2-utils
 
-# generate password: if this step takes longer than a second, simply set a password manually
-password=$(cat /dev/urandom | tr -dc A-Za-z0-9 | fold -w 24 | head -n 1)
-hash=$(htpasswd -bnBC 10 "" ${password})
-echo "Syncthing Credentials: admin / ${password}"
+# generate password hash
+hash=$(htpasswd -bnBC 10 "" ${PASSWORD})
 
 # configure syncthing
 syncthing_cfg="/var/lib/syncthing/.config/syncthing/config.xml"

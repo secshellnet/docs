@@ -17,7 +17,6 @@ yarn install
 yarn build
 
 # configure hedgedoc
-session_secret=$(cat /dev/urandom | tr -dc A-Za-z0-9 | fold -w32 | head -n1)
 cat <<EOF >config.json
 {
   "production": {
@@ -28,7 +27,7 @@ cat <<EOF >config.json
     "host": "127.0.0.1",
     "domain": "${DOMAIN}",
     "protocolUseSSL": true,
-    "sessionSecret": "${session_secret}",
+    "sessionSecret": "$(openssl rand -hex 32)",
     "allowAnonymous": false,
     "allowAnonymousEdits": true,
     "email": false,

@@ -5,9 +5,6 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
-nickname=$(cat /dev/urandom | tr -dcA-Za-z0-9 | fold -w 50 | head -n 1)
-contact_info="Name <example@domain.tld>"
-
 echo >/etc/motd
 apk add --no-cache --update tor
 
@@ -15,12 +12,12 @@ apk add --no-cache --update tor
 cat <<EOF >/etc/tor/torrc
 ControlPort 9051
 ORPort 9001
-Nickname ${nickname}
+Nickname ${NICKNAME}
 RelayBandwidthRate 1 MB
 RelayBandwidthBurst 1 MB
 AccountingMax 10 GBytes
 AccountingStart day 00:00
-ContactInfo ${contact_info}
+ContactInfo ${CONTACT_INFO}
 ExitPolicy reject *:*
 BridgeRelay 0
 DisableDebuggerAttachment 0
