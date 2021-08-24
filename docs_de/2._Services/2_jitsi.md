@@ -5,6 +5,7 @@
 </video>
 
 ```shell
+apt-get update
 apt-get install -y curl sudo
 sudo -s
 

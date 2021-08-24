@@ -7,6 +7,9 @@ fi
 
 echo >/etc/motd
 
+# stop execution on failure
+set -e
+
 apk add --no-cache --update postgresql
 
 rc-service postgresql start

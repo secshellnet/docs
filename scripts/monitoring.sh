@@ -5,7 +5,16 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# require environment variables
+if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} ]]; then
+  echo "Missing environemnt variables, check docs!"
+  exit 1
+fi
+
 echo > /etc/motd
+
+# stop execution on failure
+set -e
 
 # enable hetzner apt repositories
 sed -i '1 i\deb http://mirror.hetzner.de/debian/packages buster main contrib non-free' /etc/apt/sources.list

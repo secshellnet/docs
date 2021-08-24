@@ -7,6 +7,12 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# require environment variables
+if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${PUBLIC_IPv4} || -z ${AUTH_DOMAIN} || -z ${ISSUER_BASE_URL} || -z ${CLIENT_SECRET} ]]; then
+  echo "Missing environemnt variables, check docs!"
+  exit 1
+fi
+
 # stop execution on failure
 set -e
 

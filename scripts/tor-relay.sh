@@ -6,6 +6,10 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
 fi
 
 echo >/etc/motd
+
+# stop execution on failure
+set -e
+
 apk add --no-cache --update tor
 
 # configuration

@@ -5,10 +5,19 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# require environment variables
+if [[ -z ${DOMAIN} || -z ${CF_Token} || -z ${CF_Account_ID} || -z ${CF_Zone_ID} ]]; then
+  echo "Missing environemnt variables, check docs!"
+  exit 1
+fi
+
 echo >/etc/motd
 
+# stop execution on failure
+set -e
+
 # install hedgedoc
-apk add --no-cache --update nodejs npm sqlite git nginx acme.sh socat
+apk add --no-cache --update nodejs npm sqlite git nginx acme.sh socat openssl
 npm i -g node-gyp yarn
 wget -O- https://github.com/hedgedoc/hedgedoc/releases/download/1.8.2/hedgedoc-1.8.2.tar.gz | tar xzC /opt/
 cd /opt/hedgedoc

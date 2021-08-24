@@ -1,7 +1,7 @@
 # Syncthing (Alpine 3.13)
 
 ```shell
-apk add --update --no-cache curl
+apk add --update --no-cache curl openssl
 
 export PASSWORD=$(openssl rand -hex 24)
 

@@ -5,18 +5,26 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# require environment variables
+if [[ -z ${SYNAPSE_DOMAIN} || -z ${MATRIX_DOMAIN} || -z ${ELEMENT_DOMAIN} || -z ${CF_Token} || -z ${CF_Account_ID} || -z ${CF_Zone_ID} ]]; then
+  echo "Missing environemnt variables, check docs!"
+  exit 1
+fi
+
 echo > /etc/motd
 
-apt-get install -y lsb-release wget apt-transport-https nginx
+# stop execution on failure
+set -e
+
+apt-get install -y lsb-release wget apt-transport-https nginx python3-certbot-dns-cloudflare
 wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release -cs) main" >> /etc/apt/sources.list.d/matrix-org.list
 apt-get update
 
 # install synapse
-debconf-set-selection <<< "matrix-synapse-py3      matrix-synapse/report-stats     boolean false"
-debconf-set-selection <<< "matrix-synapse-py3      matrix-synapse/server-name      string  ${DOMAIN}"
+debconf-set-selection <<< "matrix-synapse-py3 matrix-synapse/report-stats booolean false"
+debconf-set-selection <<< "matrix-synapse-py3 matrix-synapse/server-name string ${MATRIX_DOMAIN}"
 apt-get install matrix-synapse-py3
-
 
 # get tls certificate using acme dns-01 challenge
 echo "dns_cloudflare_api_token = ${CF_API_TOKEN}" > /root/.cloudflare.ini
@@ -78,7 +86,7 @@ server {
         add_header access-control-allow-headers "Origin, X-Requested-With, Content-Type, Accept, Authorization";
         add_header access-control-allow-methods "GET, POST, PUT, DELETE, OPTIONS";
         add_header access-control-allow-origin *;
-        return 200 '{"m.server":"synapse.the-morpheus.de:443"}';
+        return 200 '{"m.server":"${SYNAPSE_DOMAIN}:443"}';
     }
 
     location /.well-known/matrix/client {
@@ -86,7 +94,7 @@ server {
         add_header access-control-allow-headers "Origin, X-Requested-With, Content-Type, Accept, Authorization";
         add_header access-control-allow-methods "GET, POST, PUT, DELETE, OPTIONS";
         add_header access-control-allow-origin *;
-        return 200 '{"m.homeserver":{"base_url":"https://synapse.the-morpheus.de"},"m.identity_server":{"base_url":"https://vector.im"}}';
+        return 200 '{"m.homeserver":{"base_url":"https://${SYNAPSE_DOMAIN}"},"m.identity_server":{"base_url":"https://vector.im"}}';
     }
 }
 EOF
@@ -128,7 +136,9 @@ server {
 }
 EOF
 
-# adjust /etc/matrix-synapse/homeserver.yaml
+# enable created sites
+ln -s /etc/nginx/sites-{available,enabled}/${MATRIX_DOMAIN}.conf
+ln -s /etc/nginx/sites-{available,enabled}/${SYNAPSE_DOMAIN}.conf
 
 systemctl enable --now nginx
 systemctl enable --now matrix-synapse

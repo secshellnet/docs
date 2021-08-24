@@ -5,7 +5,16 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# require environment variables
+if [[ -z ${DOMAIN} || -z ${CF_Token} || -z ${CF_Account_ID} || -z ${CF_Zone_ID} ]]; then
+  echo "Missing environemnt variables, check docs!"
+  exit 1
+fi
+
 echo > /etc/motd
+
+# stop execution on failure
+set -e
 
 # install nginx, php8 fpm and acme.sh
 apk add --no-cache --update nginx php8-fpm acme.sh socat

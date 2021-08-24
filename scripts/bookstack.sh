@@ -5,6 +5,15 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# require environment variables
+if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} ]]; then
+  echo "Missing environemnt variables, check docs!"
+  exit 1
+fi
+
+# stop execution on failure
+set -e
+
 apt-get install -y curl
 
 # install bookstack using install script

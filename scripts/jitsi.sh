@@ -5,6 +5,12 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# require environment variables
+if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${PUBLIC_IPv4} ]]; then
+  echo "Missing environemnt variables, check docs!"
+  exit 1
+fi
+
 echo >/etc/motd
 
 # stop execution on failure
@@ -44,10 +50,10 @@ cat <<EOF >> /var/spool/cron/crontabs/root
 EOF
 
 # predefine certificate paths
-debconf-set-selections <<< "jitsi-meet-web-config	jitsi-meet/cert-choice	            select	I want to use my own certificate"
-debconf-set-selections <<< "jitsi-meet-web-config	jitsi-meet/cert-path-key	    string	/etc/letsencrypt/live/${DOMAIN}/privkey.pem"
-debconf-set-selections <<< "jitsi-meet-web-config	jitsi-meet/cert-path-crt	    string	/etc/letsencrypt/live/${DOMAIN}/fullchain.pem"
-debconf-set-selections <<< "jitsi-meet-web-config	jitsi-videobridge/jvb-hostname	    string	${DOMAIN}"
+debconf-set-selections <<< "jitsi-meet-web-config jitsi-meet/cert-choice select I want to use my own certificate"
+debconf-set-selections <<< "jitsi-meet-web-config jitsi-meet/cert-path-key string /etc/letsencrypt/live/${DOMAIN}/privkey.pem"
+debconf-set-selections <<< "jitsi-meet-web-config jitsi-meet/cert-path-crt string /etc/letsencrypt/live/${DOMAIN}/fullchain.pem"
+debconf-set-selections <<< "jitsi-meet-web-config jitsi-videobridge/jvb-hostname string ${DOMAIN}"
 
 apt-get install -y jitsi-meet
 

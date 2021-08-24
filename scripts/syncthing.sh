@@ -5,7 +5,16 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# require environment variables
+if [[ -z ${PASSWORD} ]]; then
+  echo "Missing environemnt variables, check docs!"
+  exit 1
+fi
+
 echo > /etc/motd
+
+# stop execution on failure
+set -e
 
 apk add --update --no-cache syncthing xmlstarlet apache2-utils
 

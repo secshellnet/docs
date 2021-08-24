@@ -11,6 +11,9 @@ fi
 
 echo > /etc/motd
 
+# stop execution on failure
+set -e
+
 # install openssh-server
 apk add --no-cache --update openssh-server
 mkdir -p /etc/ssh/authorized_keys
