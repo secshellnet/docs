@@ -108,6 +108,11 @@ function start {
   cd /opt/hedgedoc
   NODE_ENV=production yarn start & 2>&1 >/dev/null
 }
+
+function stop {
+  killall -9 node
+}
+
 EOF
 chmod +x /etc/init.d/hedgedoc
 

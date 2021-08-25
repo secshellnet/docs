@@ -75,6 +75,11 @@ cat <<EOF > /etc/init.d/keycloak
 function start {
   sh /opt/keycloak-15.0.1/bin/standalone.sh & 2>&1 >/dev/null
 }
+
+function stop {
+  killall -9 java
+}
+
 EOF
 chmod +x /etc/init.d/keycloak
 
