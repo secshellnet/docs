@@ -6,7 +6,7 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
 fi
 
 # require environment variables
-if [[ -z ${SYNAPSE_DOMAIN} || -z ${MATRIX_DOMAIN} || -z ${ELEMENT_DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} ]]; then
+if [[ -z ${SYNAPSE_DOMAIN} || -z ${MATRIX_DOMAIN} || -z ${ELEMENT_DOMAIN} || -z ${JITSI_DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} ]]; then
   echo "Missing environemnt variables, check docs!"
   exit 1
 fi
@@ -94,7 +94,7 @@ server {
         add_header access-control-allow-headers "Origin, X-Requested-With, Content-Type, Accept, Authorization";
         add_header access-control-allow-methods "GET, POST, PUT, DELETE, OPTIONS";
         add_header access-control-allow-origin *;
-        return 200 '{"m.homeserver":{"base_url":"https://${SYNAPSE_DOMAIN}"},"m.identity_server":{"base_url":"https://vector.im"}}';
+        return 200 '{"m.homeserver":{"base_url":"https://${SYNAPSE_DOMAIN}"},"m.identity_server":{"base_url":"https://vector.im"},"im.vector.riot.jitsi": {"preferredDomain": "${JITSI_DOMAIN}"}}';
     }
 }
 EOF

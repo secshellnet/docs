@@ -8,6 +8,7 @@ sudo -s
 export SYNAPSE_DOMAIN="synapse.secshell.net"
 export MATRIX_DOMAIN="matrix.secshell.net"
 export ELEMENT_DOMAIN="element.secshell.net"
+export JITSI_DOMAIN="meet.jit.si"
 export EMAIL="certificates@secshell.net"
 export CF_API_TOKEN="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
