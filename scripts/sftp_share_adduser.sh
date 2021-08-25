@@ -14,7 +14,7 @@ adduser --shell=/bin/false --disabled-password $1
 passwd -u $1
 
 # ssh keys
-if [ ! -z $2 && -f $2 ]; then
+if [ ! -z $2 ] && [ -f $2 ]; then
   cat $2 >> /etc/ssh/authorized_keys/$1
 else
   touch /etc/ssh/authorized_keys/$1
@@ -29,7 +29,6 @@ cat <<EOF >> /etc/ssh/sshd_config
 Match User $1
    ChrootDirectory /home
    ForceCommand internal-sftp -d /$1
-   AllowTTY no
    AllowTCPForwarding no
    X11Forwarding no
 EOF
