@@ -132,6 +132,9 @@ Adjust the ipv6 gateway
 Your interface overview on the dashboard should look like this:  
 ![IPv6 Interface Overview](../img/setup/OPNsense_IPv6_Overview.png?raw=true){: loading=lazy }
 
+Due to the fact that the opnsense can't access the ipv6 network, you should set the following option:
+![Prefer IPv4 over IPv6](../img/setup/OPNsense_PreferIPv4.png?raw=true){: loading=lazy}
+
 # Knowledge Base
 ### DNS resolution does not work over OpenVPN
 If you are connected to the VPN and internal DNS queries do not resolve correctly, you need to add the DNS search domain. On Linux this works with the Network Manager using the following command:

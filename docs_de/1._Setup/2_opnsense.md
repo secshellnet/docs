@@ -132,6 +132,8 @@ Zuletzt muss das IPv6 Gateway als Default Gateway eingetragen werden:
 Auf dem Dashboard sollte es dann so aussehen:  
 ![IPv6 Interface Overview](../img/setup/OPNsense_IPv6_Overview.png?raw=true){: loading=lazy }
 
+Die OPNsense selbst kommt weder über das Default, noch über das WAN Interface ins IPv6 Netz, daher sollte umbedingt folgende Einstellung getroffen werden:
+![Prefer IPv4 over IPv6](../img/setup/OPNsense_PreferIPv4.png?raw=true){: loading=lazy}
 
 # Knowledge Base
 ### DNS Auflösung funktioniert über OpenVPN nicht
