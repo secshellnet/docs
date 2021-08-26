@@ -61,9 +61,9 @@ EOF
 # create script which create a backup of the postgresql database in /home/exporter
 cat <<EOF > /root/backup.sh
 #!/bin/sh
-DATE=$(date +"%Y-%m-%d_%H")-$(echo "$(date +%M) - ($(date +%M)%15)" | bc)
+DATE=\$(date +"%Y-%m-%d_%H")-$(echo "$(date +%M) - ($(date +%M)%15)" | bc)
 pg_dumpall --username="postgres" --file="/home/exporter/\${DATE}.sql"
-ln /home/exporter/\$DATE.sql /home/exporter/postgres.sql
+ln -f /home/exporter/\$DATE.sql /home/exporter/postgres.sql
 EOF
 
 chmod +x /root/backup.sh

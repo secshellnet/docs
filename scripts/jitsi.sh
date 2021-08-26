@@ -62,6 +62,17 @@ org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS=$(ip -4 a sh ens18 | grep inet
 org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS=${PUBLIC_IPv4}
 EOF
 
+# specific basic configuration (mute audio / camera on startup)
+# TODO broken due to https://github.com/jitsi/jitsi-meet/issues/8144
+sed -i -e "/startWithAudioMuted.* /{
+  s|// ||
+  s|false|true|
+}" /etc/jitsi/meet/${DOMAIN}-config.js
+sed -i -e "/startWithVideoMuted.* /{
+  s|// ||
+  s|false|true|
+}" /etc/jitsi/meet/${DOMAIN}-config.js
+
 # check dns
 if [ ${CHECK_DNS} -eq 1 ]; then
   curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash

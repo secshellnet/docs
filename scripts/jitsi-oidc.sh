@@ -114,7 +114,7 @@ echo -e "org.jitsi.jicofo.auth.URL=EXT_JWT:${DOMAIN}" >> /etc/jitsi/jicofo/sip-c
 sed -i -e "/anonymousdomain.* /{
   s|// ||
   s|guest.example.com|guest.${DOMAIN}|
-	}" /etc/jitsi/meet/${DOMAIN}-config.js
+}" /etc/jitsi/meet/${DOMAIN}-config.js
 
 systemctl restart prosody
 systemctl restart nginx
