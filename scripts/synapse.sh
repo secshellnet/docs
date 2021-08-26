@@ -6,7 +6,7 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
 fi
 
 # require environment variables
-if [[ -z ${SYNAPSE_DOMAIN} || -z ${MATRIX_DOMAIN} || -z ${ELEMENT_DOMAIN} || -z ${JITSI_DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} ]]; then
+if [[ -z ${SYNAPSE_DOMAIN} || -z ${MATRIX_DOMAIN} || -z ${ELEMENT_DOMAIN} || -z ${JITSI_DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
   echo "Missing environemnt variables, check docs!"
   exit 1
 fi

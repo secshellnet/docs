@@ -8,7 +8,7 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
 fi
 
 # require environment variables
-if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${PUBLIC_IPv4} || -z ${AUTH_DOMAIN} || -z ${ISSUER_BASE_URL} || -z ${CLIENT_SECRET} ]]; then
+if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${PUBLIC_IPv4} || -z ${AUTH_DOMAIN} || -z ${ISSUER_BASE_URL} || -z ${CLIENT_SECRET} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
   echo "Missing environemnt variables, check docs!"
   exit 1
 fi
@@ -120,7 +120,6 @@ systemctl restart prosody
 systemctl restart nginx
 systemctl restart jicofo
 systemctl restart jitsi-videobridge2
-
 
 # check dns
 if [ ${CHECK_DNS} -eq 1 ]; then

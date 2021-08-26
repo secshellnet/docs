@@ -19,9 +19,8 @@ fi
 record_name=${DOMAIN}
 # strip subdomains from domain
 zone_name=${record_name}
-while [[ $(echo ${zone_name} | grep -o "\." | wc -l) -gt 2 ]]; do
+while [[ $(echo ${zone_name} | grep -o "\." | wc -l) -gt 1 ]]; do
     zone_name=${zone_name#*.}
-    echo $zone_name
 done
 
 # get dns zone
