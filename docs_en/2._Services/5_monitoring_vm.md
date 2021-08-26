@@ -1,4 +1,4 @@
-# Monitoring VM (Debian 10.7)
+# Monitoring VM (Debian 11)
 
 ```shell
 apt-get update
