@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# install curk if not already installed
-if [ -z $(which curl) ]; then
-    apt-get -y install curl
-fi
-
 # install jq if not already installed
 if [ -z $(which jq) ]; then
     apt-get -y install jq
+fi
+
+# use CF_Token if acme.sh has been used before
+if [[ -z ${CF_API_TOKEN} ]] && [[ -n ${CF_Token} ]]; then
+    export CF_API_TOKEN=${CF_Token}
 fi
 
 # require environment variables
@@ -46,11 +46,11 @@ for record_id in ${records_ids}; do
     record_type=$(echo ${record} | jq -r '.type')
 
     case ${record_type} in
-        'AAAA')
-            [ -n ${ipv6_addr} ] && record_content=${ipv6_addr}
-            ;;
         'A')
             [ -n ${ipv4_addr} ] && record_content=${ipv4_addr}
+            ;;
+        'AAAA')
+            [ -n ${ipv6_addr} ] && record_content=${ipv6_addr}
             ;;
         *)
             echo "[DNS] Unsupported record type!"
@@ -60,14 +60,11 @@ for record_id in ${records_ids}; do
 
     if [ "${old_record_content}" != "${record_content}" ]; then
         if [ ${UPDATE_DNS} -eq 1 ]; then
-            read -p "[DNS] Updating: ${record_name}=${addr} (current: ${old_record_content}) (Type: YES): " confirm
-            if [ "${confirm}" == "YES" ]; then
-                # update dns record
-                curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$(echo ${record} | jq -r '.id')" \
-                    -H "Authorization: Bearer ${CF_API_TOKEN}" -H "Content-Type: application/json" \
-                    --data '{"type":"'${record_type}'","name":"'${record_name}'","content":"'${record_content}'","ttl":1,"proxied":'${CF_PROXIED}'}' | jq
-                echo "[DNS] Update was successful"
-            fi
+            # update dns record
+            curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$(echo ${record} | jq -r '.id')" \
+                -H "Authorization: Bearer ${CF_API_TOKEN}" -H "Content-Type: application/json" \
+                --data '{"type":"'${record_type}'","name":"'${record_name}'","content":"'${record_content}'","ttl":1,"proxied":'${CF_PROXIED}'}' | jq
+            echo "[DNS] Update was successful"
         else
             echo "[DNS] Invalid record for ${record_name} (is ${old_record_content} but should be ${record_content})"
         fi
@@ -79,17 +76,14 @@ done
 # dns record does not eixst
 if [ -z "${records_ids}" ]; then
     if [ ${UPDATE_DNS} -eq 1 ]; then
-        [ -n ${ipv6_addr} ] && record_content=${ipv6_addr} record_type='aaaa'
         [ -n ${ipv4_addr} ] && record_content=${ipv4_addr} record_type='a'
+        [ -n ${ipv6_addr} ] && record_content=${ipv6_addr} record_type='aaaa'
 
-        read -p "[DNS] Create: ${record_name}=${record_content} (Type: YES): " confirm
-        if [ "${confirm}" == "YES" ]; then
-            # create dns record
-            curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records" \
-                -H "Authorization: Bearer ${CF_API_TOKEN}" -H "Content-Type: application/json" \
-                --data '{"type":"'${record_type}'","name":"'${record_name}'","content":"'${record_content}'","ttl":1,"proxied":'${CF_PROXIED}'}' | jq
-            echo "[DNS] Update was successful"
-        fi
+        # create dns record
+        curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records" \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" -H "Content-Type: application/json" \
+            --data '{"type":"'${record_type}'","name":"'${record_name}'","content":"'${record_content}'","ttl":1,"proxied":'${CF_PROXIED}'}' | jq
+        echo "[DNS] Update was successful"
     else
         echo "[DNS] Missing record for ${record_name}"
     fi

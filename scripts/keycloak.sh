@@ -34,7 +34,7 @@ fi
 echo > /etc/motd
 
 # install keycloak
-apk add --update --no-cache openjdk11-jre nginx acme.sh socat
+apk add --update --no-cache openjdk11-jre nginx acme.sh socat xmlstarlet
 wget -O- https://github.com/keycloak/keycloak/releases/download/15.0.1/keycloak-15.0.1.tar.gz | tar xzC /opt/
 cd /opt/keycloak-15.0.1
 
@@ -72,14 +72,14 @@ server {
             proxy_set_header Upgrade \$http_upgrade;
             proxy_set_header Connection 'upgrade';
             proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto \$schema;
+            proxy_set_header X-Forwarded-Proto \$scheme;
             proxy_set_header Host \$host;
             proxy_cache_bypass \$http_upgrade;
     }
 }
 EOF
 
-# adjust config
+# adjust config - TODO not working
 xmlstarlet ed --inplace --subnode "/server/profile/subsystem[@default-server='default-server']/server/http-listener" --type attr --name proxy-address-forwarding --value true /opt/keycloak-15.0.1/standalone/configuration/standalone.xml
 
 # fix UnknownHostException

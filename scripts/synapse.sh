@@ -5,6 +5,8 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
     exit 1
 fi
 
+export DEBIAN_FRONTEND=noninteractive
+
 # stop execution on failure
 set -e
 
@@ -23,9 +25,9 @@ echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https:/
 apt-get update
 
 # install synapse
-debconf-set-selection <<< "matrix-synapse-py3 matrix-synapse/report-stats booolean false"
-debconf-set-selection <<< "matrix-synapse-py3 matrix-synapse/server-name string ${MATRIX_DOMAIN}"
-apt-get install matrix-synapse-py3
+debconf-set-selections <<< "matrix-synapse-py3 matrix-synapse/report-stats booolean false"
+debconf-set-selections <<< "matrix-synapse-py3 matrix-synapse/server-name string ${MATRIX_DOMAIN}"
+apt-get install -y matrix-synapse-py3
 
 # get tls certificate using acme dns-01 challenge
 echo "dns_cloudflare_api_token = ${CF_API_TOKEN}" > /root/.cloudflare.ini

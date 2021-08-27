@@ -17,7 +17,7 @@ export CHECK_DNS=1
 export UPDATE_DNS=1
 export CF_PROXIED='true'
 
-curl -fsSL https://docs.secshell.net/scripts/synapse.sh | sh
+curl -fsSL https://docs.secshell.net/scripts/synapse.sh | bash
 ```
 
 Konfiguration: `/etc/matrix-synapse/homeserver.yaml`
