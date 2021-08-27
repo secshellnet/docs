@@ -17,27 +17,30 @@ You can get information about the ipv6 configuration in [General Information](ht
 Regardless of what you set up (lxc or a virtual machine) the OPNsense will be set up:
 
 Interfaces --> Other Types --> VLAN --> +  
-* Description: vlanID (in this case: vlan116)  
-* Parent Interface: vtnet1  
-* VLAN tag: Proxmox ID (in this case: 116)  
 
-Interfaces --> Assignments  
-* choose `vlan 116 on vtnet1`, and add using `+`  
+* Description: vlanID (in this case: vlan116)
+* Parent Interface: vtnet1
+* VLAN tag: Proxmox ID (in this case: 116)
 
-Interfaces --> OPTx  
-* Check Enable interface  
-* Check Prevent interface removal.  
-* Set IPv4 Configuration Type to `Static IPv4`.  
-* Set IPv6 Configuration Type to `Static IPv6`.  
-* IPv4 Address: `10.2.0.1` `30` (first address from the ipv4 subnet)  
-* IPv6 Address: `2a01:4f8:10a:b88:116::1` `80`  
+Interfaces --> Assignments
 
-Services --> DHCPv4 -> vlan116  
-* Check Enable.  
-* Range: Set addresses (from: `10.2.0.2`, to `10.2.0.2`)  
+* choose `vlan 116 on vtnet1`, and add using `+`
 
-Firewall --> Rules --> Floating  
-* add the interface vlanID for each entry in this list.  
+Interfaces --> OPTx
 
-Firewall --> Rules --> vlanID  
-* If nessesary, create more firewall rules for this network.  
+* Check Enable interface
+* Check Prevent interface removal.
+* Set IPv4 Configuration Type to `Static IPv4`.
+* Set IPv6 Configuration Type to `Static IPv6`.
+* IPv4 Address: `10.2.0.1` `30` (first address from the ipv4 subnet)
+* IPv6 Address: `2a01:4f8:10a:b88:116::1` `80`
+
+Services --> DHCPv4 -> vlan116
+* Check Enable.
+* Range: Set addresses (from: `10.2.0.2`, to `10.2.0.2`)
+
+Firewall --> Rules --> Floating
+* add the interface vlanID for each entry in this list.
+
+Firewall --> Rules --> vlanID
+* If nessesary, create more firewall rules for this network.
