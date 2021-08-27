@@ -19,6 +19,9 @@ fi
 if [[ -z ${VERSION} ]]; then
     VERSION="15.0.1"
 fi
+if [[ -z ${CONFIGURATOR_VERSION} ]]; then
+    CONFIGURATOR_VERSION="1.0.3"
+fi
 
 if [[ -z ${CF_Account_ID} ]] || [[ -z ${CF_Zone_ID} ]]; then
     apk add --no-cache --update curl jq
@@ -87,8 +90,11 @@ server {
 }
 EOF
 
-# adjust config - TODO not working
-xmlstarlet ed --inplace --subnode "/server/profile/subsystem[@default-server='default-server']/server/http-listener" --type attr --name proxy-address-forwarding --value true /opt/keycloak-${VERSION}/standalone/configuration/standalone.xml
+# adjust config using keycloak-configurator
+wget https://github.com/secshellnet/keycloak-configurator/releases/download/v${CONFIGURATOR_VERSION}/keycloak-configurator-1.0-SNAPSHOT-all.jar -O /root/keycloak-configurator.jar
+
+# enable reverse proxy
+java -jar /root/keycloak-configurator.jar /opt/keycloak-${VERSION}/standalone/configuration/standalone.xml
 
 # fix UnknownHostException
 echo -e "127.0.0.1\t$(hostname)" >> /etc/hosts

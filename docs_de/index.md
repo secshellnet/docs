@@ -4,6 +4,4 @@ Die Secure Shell Networks Dokumentation beschreibt die Installation von Proxmox 
 
 ## TODO
 - Windows VM aufsetzen (IDE statt SCSI Harddrive, E1000 Network Interface, ...)
-- Keycloak PostgreSQL einrichtung beschreiben (XML Migrations; Treiber laden)
-- Keycloak Script `xmlstarlet` fixen
 - OPNsense kein IPv6 für WAN/Default Interface
