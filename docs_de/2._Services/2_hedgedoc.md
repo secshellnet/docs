@@ -15,7 +15,7 @@ export CF_Zone_ID="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 curl -fsSL https://docs.secshell.net/scripts/hedgedoc.sh | sh
 ```
 
-## PostgreSQL database
+## PostgreSQL Datenbank
 ```json
     "db": {
       "dialect": "postgres",
