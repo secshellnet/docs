@@ -1,8 +1,8 @@
 #!/bin/sh
 
 if [[ $(/usr/bin/id -u) != "0" ]]; then
-  echo "Please run the script as root!"
-  exit 1
+    echo "Please run the script as root!"
+    exit 1
 fi
 
 echo >/etc/motd
@@ -17,14 +17,14 @@ rc-service postgresql restart
 
 # use scram-sha-256 instead of md5
 sed -i '/^#password_encryption.* /{
-  s/#//
-  s/md5/scram-sha-256/
+    s/#//
+    s/md5/scram-sha-256/
 }' /etc/postgresql/postgresql.conf
 
 # listen on all addresses
 sed -i '/^#listen_address.* /{
-  s/#//
-  s/localhost/*/
+    s/#//
+    s/localhost/*/
 }' /etc/postgresql/postgresql.conf
 
 # allow logins from anywhere using scram-sha-256 authentication method

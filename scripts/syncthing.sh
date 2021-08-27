@@ -1,14 +1,14 @@
 #!/bin/sh
 
 if [[ $(/usr/bin/id -u) != "0" ]]; then
-  echo "Please run the script as root!"
-  exit 1
+    echo "Please run the script as root!"
+    exit 1
 fi
 
 # require environment variables
 if [[ -z ${PASSWORD} ]]; then
-  echo "Missing environemnt variables, check docs!"
-  exit 1
+    echo "Missing environemnt variables, check docs!"
+    exit 1
 fi
 
 echo > /etc/motd

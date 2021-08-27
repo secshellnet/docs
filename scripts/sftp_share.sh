@@ -5,8 +5,8 @@ users=('tom' 'mike')
 # end of configuration
 
 if [[ $(/usr/bin/id -u) != "0" ]]; then
-  echo "Please run the script as root!"
-  exit 1
+    echo "Please run the script as root!"
+    exit 1
 fi
 
 echo > /etc/motd
@@ -23,11 +23,11 @@ sed -i 's|AuthorizedKeysFile.*|AuthorizedKeysFile /etc/ssh/authorized_keys/%u|g'
 
 # get adduser script if not already there
 if [ ! -f sftp_share_adduser.sh ]; then
-  wget https://docs.secshell.net/scripts/sftp_share_adduser.sh
+    wget https://docs.secshell.net/scripts/sftp_share_adduser.sh
 fi
 
 for user in ${USERS[@]}; do
-  sh ./sftp_share_adduser.sh $user
+    sh ./sftp_share_adduser.sh $user
 done
 
 # create Match all entry

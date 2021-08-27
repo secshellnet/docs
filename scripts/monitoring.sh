@@ -1,14 +1,14 @@
 #!/bin/bash
 
 if [[ $(/usr/bin/id -u) != "0" ]]; then
-  echo "Please run the script as root!"
-  exit 1
+    echo "Please run the script as root!"
+    exit 1
 fi
 
 # require environment variables
 if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${ADMIN_PASSWD} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
-  echo "Missing environemnt variables, check docs!"
-  exit 1
+    echo "Missing environemnt variables, check docs!"
+    exit 1
 fi
 
 echo > /etc/motd
@@ -44,13 +44,13 @@ setcap 'cap_net_bind_service=+ep' /usr/sbin/grafana-server
 echo "dns_cloudflare_api_token = ${CF_API_TOKEN}" > /root/.cloudflare.ini
 chmod 400 /root/.cloudflare.ini
 certbot certonly \
-  --non-interactive \
-  --agree-tos \
-  --dns-cloudflare \
-  --dns-cloudflare-credentials /root/.cloudflare.ini \
-  -d ${DOMAIN} \
-  -m ${EMAIL} \
-  --preferred-challenges dns-01
+    --non-interactive \
+    --agree-tos \
+    --dns-cloudflare \
+    --dns-cloudflare-credentials /root/.cloudflare.ini \
+    -d ${DOMAIN} \
+    -m ${EMAIL} \
+    --preferred-challenges dns-01
 
 # enable https in grafana
 sed -i "s|;http_port.*|http_port = 443|g" /etc/grafana/grafana.ini
@@ -72,5 +72,5 @@ echo "Grafana Credentials: admin / ${admin_password}"
 
 # check dns
 if [ ${CHECK_DNS} -eq 1 ]; then
-  curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
+    curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
 fi

@@ -1,20 +1,23 @@
 #!/bin/bash
 
 if [[ $(/usr/bin/id -u) != "0" ]]; then
-  echo "Please run the script as root!"
-  exit 1
+    echo "Please run the script as root!"
+    exit 1
 fi
 
 # require environment variables
 if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} ]]; then
-  echo "Missing environemnt variables, check docs!"
-  exit 1
+    echo "Missing environemnt variables, check docs!"
+    exit 1
 fi
 
 # stop execution on failure
 set -e
 
-apt-get install -y curl
+# install curk if not already installed
+if [ -z $(which curl) ]; then
+    apt-get -y install curl
+fi
 
 # install bookstack using install script
 curl -fsSL https://raw.githubusercontent.com/BookStackApp/devops/master/scripts/installation-ubuntu-20.04.sh | bash
@@ -27,13 +30,13 @@ apt install python3-certbot-apache python3-certbot-dns-cloudflare
 echo "dns_cloudflare_api_token = ${CF_API_TOKEN}" > /root/.cloudflare.ini
 chmod 400 /root/.cloudflare.ini
 certbot certonly \
-  --non-interactive \
-  --agree-tos \
-  --dns-cloudflare \
-  --dns-cloudflare-credentials /root/.cloudflare.ini \
-  -d ${DOMAIN} \
-  -e ${EMAIL}
-  --preferred-challenges dns-01
+    --non-interactive \
+    --agree-tos \
+    --dns-cloudflare \
+    --dns-cloudflare-credentials /root/.cloudflare.ini \
+    -d ${DOMAIN} \
+    -e ${EMAIL}
+    --preferred-challenges dns-01
 
 # configure apache2 for https
 sed -i '1 i\<IfModule mod_ssl.c>' /etc/apache2/sites-available/bookstack.conf

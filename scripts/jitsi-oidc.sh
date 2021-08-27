@@ -3,14 +3,14 @@
 # setup jitsi openid connect authentication: https://github.com/marcelcoding/jitsi-openid
 
 if [[ $(/usr/bin/id -u) != "0" ]]; then
-  echo "Please run the script as root!"
-  exit 1
+    echo "Please run the script as root!"
+    exit 1
 fi
 
 # require environment variables
 if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${PUBLIC_IPv4} || -z ${AUTH_DOMAIN} || -z ${ISSUER_BASE_URL} || -z ${CLIENT_SECRET} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
-  echo "Missing environemnt variables, check docs!"
-  exit 1
+    echo "Missing environemnt variables, check docs!"
+    exit 1
 fi
 
 # stop execution on failure
@@ -51,13 +51,13 @@ systemctl enable --now jitsi-oidc
 
 # get tls certificates over acme dns-01 challenge
 certbot certonly \
-  --non-interactive \
-  --agree-tos \
-  --dns-cloudflare \
-  --dns-cloudflare-credentials /root/.cloudflare.ini \
-  -d ${AUTH_DOMAIN} \
-  -m ${EMAIL} \
-  --preferred-challenges dns-01
+    --non-interactive \
+    --agree-tos \
+    --dns-cloudflare \
+    --dns-cloudflare-credentials /root/.cloudflare.ini \
+    -d ${AUTH_DOMAIN} \
+    -m ${EMAIL} \
+    --preferred-challenges dns-01
 
 cat <<EOF > /etc/nginx/sites-available/${AUTH_DOMAIN}.conf
 server {
@@ -127,6 +127,6 @@ systemctl restart jitsi-videobridge2
 
 # check dns
 if [ ${CHECK_DNS} -eq 1 ]; then
-  export ${DOMAIN}=${AUTH_DOMAIN}
-  curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
+    export ${DOMAIN}=${AUTH_DOMAIN}
+    curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
 fi

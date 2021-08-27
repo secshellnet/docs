@@ -1,14 +1,14 @@
 #!/bin/sh
 
 if [[ $(/usr/bin/id -u) != "0" ]]; then
-  echo "Please run the script as root!"
-  exit 1
+    echo "Please run the script as root!"
+    exit 1
 fi
 
 # require environment variables
 if [[ -z ${SYNAPSE_DOMAIN} || -z ${MATRIX_DOMAIN} || -z ${ELEMENT_DOMAIN} || -z ${JITSI_DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
-  echo "Missing environemnt variables, check docs!"
-  exit 1
+    echo "Missing environemnt variables, check docs!"
+    exit 1
 fi
 
 echo > /etc/motd
@@ -30,22 +30,22 @@ apt-get install matrix-synapse-py3
 echo "dns_cloudflare_api_token = ${CF_API_TOKEN}" > /root/.cloudflare.ini
 chmod 400 /root/.cloudflare.ini
 certbot certonly \
-  --non-interactive \
-  --agree-tos \
-  --dns-cloudflare \
-  --dns-cloudflare-credentials /root/.cloudflare.ini \
-  -d ${MATRIX_DOMAIN} \
-  -m ${EMAIL} \
-  --preferred-challenges dns-01
+    --non-interactive \
+    --agree-tos \
+    --dns-cloudflare \
+    --dns-cloudflare-credentials /root/.cloudflare.ini \
+    -d ${MATRIX_DOMAIN} \
+    -m ${EMAIL} \
+    --preferred-challenges dns-01
 
 certbot certonly \
-  --non-interactive \
-  --agree-tos \
-  --dns-cloudflare \
-  --dns-cloudflare-credentials /root/.cloudflare.ini \
-  -d ${SYNAPSE_DOMAIN} \
-  -m ${EMAIL} \
-  --preferred-challenges dns-01
+    --non-interactive \
+    --agree-tos \
+    --dns-cloudflare \
+    --dns-cloudflare-credentials /root/.cloudflare.ini \
+    -d ${SYNAPSE_DOMAIN} \
+    -m ${EMAIL} \
+    --preferred-challenges dns-01
 
 # add cronjob for certificate renewal
 cat <<EOF > /var/spool/cron/crontabs/root

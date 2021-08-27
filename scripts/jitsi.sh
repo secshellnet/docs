@@ -1,14 +1,14 @@
 #!/bin/sh
 
 if [[ $(/usr/bin/id -u) != "0" ]]; then
-  echo "Please run the script as root!"
-  exit 1
+    echo "Please run the script as root!"
+    exit 1
 fi
 
 # require environment variables
 if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${PUBLIC_IPv4} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
-  echo "Missing environemnt variables, check docs!"
-  exit 1
+    echo "Missing environemnt variables, check docs!"
+    exit 1
 fi
 
 echo >/etc/motd
@@ -35,13 +35,13 @@ apt-get update
 echo "dns_cloudflare_api_token = ${CF_API_TOKEN}" > /root/.cloudflare.ini
 chmod 400 /root/.cloudflare.ini
 certbot certonly \
-  --non-interactive \
-  --agree-tos \
-  --dns-cloudflare \
-  --dns-cloudflare-credentials /root/.cloudflare.ini \
-  -d ${DOMAIN} \
-  -m ${EMAIL} \
-  --preferred-challenges dns-01
+    --non-interactive \
+    --agree-tos \
+    --dns-cloudflare \
+    --dns-cloudflare-credentials /root/.cloudflare.ini \
+    -d ${DOMAIN} \
+    -m ${EMAIL} \
+    --preferred-challenges dns-01
 
 # add cronjob for certificate renewal
 cat <<EOF >> /var/spool/cron/crontabs/root
@@ -65,15 +65,15 @@ EOF
 # specific basic configuration (mute audio / camera on startup)
 # TODO broken due to https://github.com/jitsi/jitsi-meet/issues/8144
 sed -i -e "/startWithAudioMuted.* /{
-  s|// ||
-  s|false|true|
+    s|// ||
+    s|false|true|
 }" /etc/jitsi/meet/${DOMAIN}-config.js
 sed -i -e "/startWithVideoMuted.* /{
-  s|// ||
-  s|false|true|
+    s|// ||
+    s|false|true|
 }" /etc/jitsi/meet/${DOMAIN}-config.js
 
 # check dns
 if [ ${CHECK_DNS} -eq 1 ]; then
-  curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
+    curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
 fi
