@@ -5,16 +5,17 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
     exit 1
 fi
 
+# stop execution on failure
+set -e
+
 # require environment variables
-if [[ -z ${SYNAPSE_DOMAIN} || -z ${MATRIX_DOMAIN} || -z ${ELEMENT_DOMAIN} || -z ${JITSI_DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
+if [[ -z ${SYNAPSE_DOMAIN} ]] || [[ -z ${MATRIX_DOMAIN} ]] || [[ -z ${ELEMENT_DOMAIN} ]] || [[ -z ${JITSI_DOMAIN} ]] || \
+   [[ -z ${EMAIL} ]] || [[ -z ${CF_API_TOKEN} ]] || [[ -z ${CHECK_DNS} ]] || [[ -z ${UPDATE_DNS} ]] || [[ -z ${CF_PROXIED} ]]; then
     echo "Missing environemnt variables, check docs!"
     exit 1
 fi
 
 echo > /etc/motd
-
-# stop execution on failure
-set -e
 
 apt-get install -y lsb-release wget apt-transport-https nginx python3-certbot-dns-cloudflare
 wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg

@@ -5,14 +5,17 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
   exit 1
 fi
 
+# stop execution on failure
+set -e
+
 # require environment variables
-if [[ -z ${DOMAIN} || -z ${CF_Token} ]]; then
+if [[ -z ${DOMAIN} ]] || [[ -z ${CF_Token} ]]; then
   echo "Missing environemnt variables, check docs!"
   exit 1
 fi
 
 # optional environment variables
-if [[ -z ${CF_Account_ID} || -z ${CF_Zone_ID} ]]; then
+if [[ -z ${CF_Account_ID} ]] || [[ -z ${CF_Zone_ID} ]]; then
     apk add --no-cache --update curl jq
 
     zone_name=${DOMAIN}
@@ -29,9 +32,6 @@ if [[ -z ${CF_Account_ID} || -z ${CF_Zone_ID} ]]; then
 fi
 
 echo > /etc/motd
-
-# stop execution on failure
-set -e
 
 # install nginx, php8 fpm and acme.sh
 apk add --no-cache --update nginx php8-fpm acme.sh socat

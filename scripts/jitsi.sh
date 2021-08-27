@@ -5,16 +5,16 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
     exit 1
 fi
 
+# stop execution on failure
+set -e
+
 # require environment variables
-if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${PUBLIC_IPv4} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
+if [[ -z ${DOMAIN} ]] || [[ -z ${EMAIL} ]] || [[ -z ${CF_API_TOKEN} ]] || [[ -z ${PUBLIC_IPv4} ]] || [[ -z ${CHECK_DNS} ]] || [[ -z ${UPDATE_DNS} ]] || [[ -z ${CF_PROXIED} ]]; then
     echo "Missing environemnt variables, check docs!"
     exit 1
 fi
 
 echo >/etc/motd
-
-# stop execution on failure
-set -e
 
 # reconfigure timezone
 ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
