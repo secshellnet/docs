@@ -47,6 +47,8 @@ rm -r output docker-image-extract
 # get certificate using acme dns-01 challenge
 apk add --no-cache --update acme.sh socat
 mkdir /root/.acme.sh
+ln -s /usr/bin/acme.sh /root/.acme.sh/acme.sh
+acme.sh --install-cronjob
 acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-ca
 acme.sh --issue --dns dns_cf -d ${DOMAIN}
 
