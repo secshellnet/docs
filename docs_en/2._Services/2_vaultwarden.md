@@ -13,10 +13,5 @@ curl -fsSL https://docs.secshell.net/scripts/vaultwarden.sh | sh
 
 ## PostgreSQL database
 ```env
-DATABASE_URL=postgresql://user:password@host[:port]/database_name
-```
-
-## MariaDB database
-```env
-DATABASE_URL=mysql://user:password@host[:port]/database_name
+DATABASE_URL=postgresql://vaultwarden:password@postgres.secshell.net/vaultwarden
 ```

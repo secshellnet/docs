@@ -51,6 +51,8 @@ WEB_VAULT_ENABLED=true
 # LOG_LEVEL=debug
 EOF
 
+mkdir ./data
+
 # create vaultwarden service
 cat <<EOF > /etc/init.d/vaultwarden
 #!/sbin/openrc-run
