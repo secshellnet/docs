@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# TODO web-vault doesn't get served yet but you may use the browser extensions:
-# - https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/
-# - https://chrome.google.com/webstore/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb?hl=de
-
 if [[ $(/usr/bin/id -u) != "0" ]]; then
   echo "Please run the script as root!"
   exit 1
