@@ -16,6 +16,10 @@ if [[ -z ${DOMAIN} ]] || [[ -z ${CF_Token} ]] || \
 fi
 
 # optional environment variables
+if [[ -z ${VERSION} ]]; then
+    VERSION="15.0.1"
+fi
+
 if [[ -z ${CF_Account_ID} ]] || [[ -z ${CF_Zone_ID} ]]; then
     apk add --no-cache --update curl jq
 
@@ -36,8 +40,8 @@ echo > /etc/motd
 
 # install keycloak
 apk add --update --no-cache openjdk11-jre nginx acme.sh socat xmlstarlet
-wget -O- https://github.com/keycloak/keycloak/releases/download/15.0.1/keycloak-15.0.1.tar.gz | tar xzC /opt/
-cd /opt/keycloak-15.0.1
+wget -O- https://github.com/keycloak/keycloak/releases/download/${VERSION}/keycloak-${VERSION}.tar.gz | tar xzC /opt/
+cd /opt/keycloak-${VERSION}
 
 # get certificate
 acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-ca
@@ -81,7 +85,7 @@ server {
 EOF
 
 # adjust config - TODO not working
-xmlstarlet ed --inplace --subnode "/server/profile/subsystem[@default-server='default-server']/server/http-listener" --type attr --name proxy-address-forwarding --value true /opt/keycloak-15.0.1/standalone/configuration/standalone.xml
+xmlstarlet ed --inplace --subnode "/server/profile/subsystem[@default-server='default-server']/server/http-listener" --type attr --name proxy-address-forwarding --value true /opt/keycloak-${VERSION}/standalone/configuration/standalone.xml
 
 # fix UnknownHostException
 echo -e "127.0.0.1\t$(hostname)" >> /etc/hosts
@@ -91,7 +95,7 @@ cat <<EOF > /etc/init.d/keycloak
 #!/sbin/openrc-run
 
 function start {
-    sh /opt/keycloak-15.0.1/bin/standalone.sh & 2>&1 >/dev/null
+    sh /opt/keycloak-${VERSION}/bin/standalone.sh & 2>&1 >/dev/null
 }
 
 function stop {

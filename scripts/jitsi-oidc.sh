@@ -17,10 +17,15 @@ if [[ -z ${DOMAIN} ]] || [[ -z ${EMAIL} ]] || [[ -z ${CF_API_TOKEN} ]] || [[ -z 
     exit 1
 fi
 
+# optional environment variables
+if [[ -z ${VERSION} ]]; then
+    VERSION="1.0.6"
+fi
+
 # install nodejs and jitsi-openid
 curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 apt install -y nodejs
-curl -Lo /opt/jitsi-oidc/index.js --create-dirs https://github.com/MarcelCoding/jitsi-openid/releases/download/v1.0.6/index.js
+curl -Lo /opt/jitsi-oidc/index.js --create-dirs https://github.com/MarcelCoding/jitsi-openid/releases/download/v${VERSION}/index.js
 
 # generate secret
 jitsi_secret=$(node -e "console.log(require('crypto').randomBytes(24).toString('base64'));")

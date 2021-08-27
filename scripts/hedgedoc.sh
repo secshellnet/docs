@@ -16,6 +16,10 @@ if [[ -z ${DOMAIN} ]] || [[ -z ${CF_Token} ]] || \
 fi
 
 # optional environment variables
+if [[ -z ${VERSION} ]]; then
+    VERSION="1.8.2"
+fi
+
 if [[ -z ${CF_Account_ID} ]] || [[ -z ${CF_Zone_ID} ]]; then
     apk add --no-cache --update curl jq
 
@@ -37,7 +41,7 @@ echo >/etc/motd
 # install hedgedoc
 apk add --no-cache --update nodejs npm sqlite git nginx acme.sh socat openssl
 npm i -g node-gyp yarn
-wget -O- https://github.com/hedgedoc/hedgedoc/releases/download/1.8.2/hedgedoc-1.8.2.tar.gz | tar xzC /opt/
+wget -O- https://github.com/hedgedoc/hedgedoc/releases/download/${VERSION}/hedgedoc-${VERSION}.tar.gz | tar xzC /opt/
 cd /opt/hedgedoc
 sh bin/setup
 yarn install

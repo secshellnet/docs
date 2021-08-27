@@ -16,6 +16,10 @@ if [[ -z ${DOMAIN} ]] || [[ -z ${CF_Token} ]] || \
 fi
 
 # optional environment variables
+if [[ -z ${VERSION} ]]; then
+    VERSION="1.3.5"
+fi
+
 if [[ -z ${CF_Account_ID} ]] || [[ -z ${CF_Zone_ID} ]]; then
     apk add --no-cache --update curl jq
 
@@ -103,7 +107,7 @@ server {
 EOF
 
 mkdir /var/www/privatebin
-wget -O- https://github.com/PrivateBin/PrivateBin/archive/refs/tags/1.3.5.tar.gz | tar -xzC /var/www/privatebin/ --strip 1
+wget -O- https://github.com/PrivateBin/PrivateBin/archive/refs/tags/${VERSION}.tar.gz | tar -xzC /var/www/privatebin/ --strip 1
 cp /var/www/privatebin/cfg/conf.sample.php /var/www/privatebin/cfg/conf.php
 chown -R appuser:appgroup /var/www/privatebin/
 
