@@ -14,11 +14,13 @@ cp -r video docs_de
 
 # build english
 cp -r docs_en docs
+sed -i 's|edit_uri.*|edit_uri: https://github.dev/secshellnet/docs/blob/main/docs_en/|g' mkdocs.yml
 mkdocs build --site-dir site/en
 rm -r docs
 
 # build german
 cp -r docs_de docs
+sed -i 's|edit_uri.*|edit_uri: https://github.dev/secshellnet/docs/blob/main/docs_de/|g' mkdocs.yml
 mkdocs build --site-dir site/de
 rm -r docs
 
