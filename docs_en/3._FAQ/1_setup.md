@@ -16,7 +16,7 @@ You can get information about the ipv6 configuration in [General Information](ht
 ## OPNsense
 Regardless of what you set up (lxc or a virtual machine) the OPNsense will be set up:
 
-Interfaces --> Other Types --> VLAN --> +  
+Interfaces --> Other Types --> VLAN --> +
 
 * Description: vlanID (in this case: vlan116)
 * Parent Interface: vtnet1
@@ -36,11 +36,14 @@ Interfaces --> OPTx
 * IPv6 Address: `2a01:4f8:10a:b88:116::1` `80`
 
 Services --> DHCPv4 -> vlan116
+
 * Check Enable.
 * Range: Set addresses (from: `10.2.0.2`, to `10.2.0.2`)
 
 Firewall --> Rules --> Floating
+
 * add the interface vlanID for each entry in this list.
 
 Firewall --> Rules --> vlanID
+
 * If nessesary, create more firewall rules for this network.
