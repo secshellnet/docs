@@ -6,7 +6,7 @@ if [[ $(/usr/bin/id -u) != "0" ]]; then
 fi
 
 # require environment variables
-if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
+if [[ -z ${DOMAIN} || -z ${EMAIL} || -z ${CF_API_TOKEN} || -z ${ADMIN_PASSWD} || -z ${CHECK_DNS} || -z ${UPDATE_DNS} || -z ${CF_PROXIED} ]]; then
   echo "Missing environemnt variables, check docs!"
   exit 1
 fi
@@ -53,12 +53,11 @@ certbot certonly \
   --preferred-challenges dns-01
 
 # enable https in grafana
-admin_password=$(cat /dev/urandom | tr -dc A-Za-z0-9 | fold -w 24 | head -n 1)
 sed -i "s|;http_port.*|http_port = 443|g" /etc/grafana/grafana.ini
 sed -i "s|;protocol.*|protocol = https|g" /etc/grafana/grafana.ini
 sed -i "s|;cert_file.*|cert_file = /etc/letsencrypt/live/${DOMAIN}/cert.pem|g" /etc/grafana/grafana.ini
 sed -i "s|;cert_key.*|cert_key = /etc/letsencrypt/live/${DOMAIN}/privkey.pem|g" /etc/grafana/grafana.ini
-sed -i "s|;admin_password.*|admin_password = ${admin_password}|g" /etc/grafana/grafana.ini
+sed -i "s|;admin_password.*|admin_password = ${ADMIN_PASSWD}|g" /etc/grafana/grafana.ini
 
 # grant grafana access to certificate files
 chown -R root:grafana /etc/letsencrypt
