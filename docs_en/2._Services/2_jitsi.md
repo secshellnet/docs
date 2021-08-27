@@ -1,5 +1,6 @@
-# Jitsi VM (Debian 11)
+# Jitsi (Debian 11)
 
+If you setup jitsi in a debian 11 vm, you can use this installation instructions:
 <video width="100%" height="240" controls>
   <source src="../../video/services/debian11_vm.mp4" type="video/mp4">
 </video>
@@ -29,8 +30,8 @@ export CLIENT_SECRET="784e7868-777d-4476-9a66-aa59bc2aaf1e"
 curl -fsSL https://docs.secshell.net/scripts/jitsi-oidc.sh | bash
 ```
 
-Konfiguration: `/etc/jitsi/meet/jitsi.secshell.net-config.js` und `/usr/share/jitsi-meet/interface_config.js` 
+Configuration: `/etc/jitsi/meet/jitsi.secshell.net-config.js` and `/usr/share/jitsi-meet/interface_config.js` 
 
-Die Ports [10000/udp und 4443/tcp müssen über IPv4 erreichbar sein](https://jitsi.github.io/handbook/docs/devops-guide/devops-guide-docker#external-ports), daher werden sie über die IPv4 Adresse der OPNsense geforwarded:  
+You need nat the ports [10000/udp and 4443/tcp](https://jitsi.github.io/handbook/docs/devops-guide/devops-guide-docker#external-ports) over the ipv4 address of the firwall:  
 ![](../img/services/jitsi_opnsense_nat.png?raw=true){: loading=lazy }
 ![](../img/services/jitsi_opnsense_wan.png?raw=true){: loading=lazy }

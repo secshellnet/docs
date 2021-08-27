@@ -1,5 +1,6 @@
-# Monitoring VM (Debian 11)
+# Monitoring (Debian 11)
 
+Recommendation: Install the monitoring in a virtual maschine, in our tests influxdb often crashed in a lxc.
 ```shell
 apt-get update
 apt-get install -y curl sudo

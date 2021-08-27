@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # install jq if not already installed
 if [ -z $(which jq) ]; then
@@ -46,6 +46,7 @@ for record_id in ${records_ids}; do
     record_type=$(echo ${record} | jq -r '.type')
 
     case ${record_type} in
+        # prefere ipv6
         'A')
             [ -n ${ipv4_addr} ] && record_content=${ipv4_addr}
             ;;
@@ -76,6 +77,7 @@ done
 # dns record does not eixst
 if [ -z "${records_ids}" ]; then
     if [ ${UPDATE_DNS} -eq 1 ]; then
+        # prefere ipv6
         [ -n ${ipv4_addr} ] && record_content=${ipv4_addr} record_type='a'
         [ -n ${ipv6_addr} ] && record_content=${ipv6_addr} record_type='aaaa'
 

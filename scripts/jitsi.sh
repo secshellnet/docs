@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [[ $(/usr/bin/id -u) != "0" ]]; then
     echo "Please run the script as root!"
@@ -9,7 +9,8 @@ fi
 set -e
 
 # require environment variables
-if [[ -z ${DOMAIN} ]] || [[ -z ${EMAIL} ]] || [[ -z ${CF_API_TOKEN} ]] || [[ -z ${PUBLIC_IPv4} ]] || [[ -z ${CHECK_DNS} ]] || [[ -z ${UPDATE_DNS} ]] || [[ -z ${CF_PROXIED} ]]; then
+if [[ -z ${DOMAIN} ]] || [[ -z ${EMAIL} ]] || [[ -z ${CF_API_TOKEN} ]] || [[ -z ${PUBLIC_IPv4} ]] || \
+   [[ -z ${CHECK_DNS} ]] || [[ -z ${UPDATE_DNS} ]] || [[ -z ${CF_PROXIED} ]]; then
     echo "Missing environemnt variables, check docs!"
     exit 1
 fi
@@ -58,7 +59,7 @@ debconf-set-selections <<< "jitsi-meet-web-config jitsi-videobridge/jvb-hostname
 apt-get install -y jitsi-meet
 
 cat <<EOF >> /etc/jitsi/jicofo/sip-communicator.properties
-org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS=$(ip -4 a sh ens18 | grep inet | grep -v inet6 | awk '{print $2}' | cut -d "/" -f1)
+org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS=$(ip route get 1.2.3.4 | awk '{print $7}')
 org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS=${PUBLIC_IPv4}
 EOF
 

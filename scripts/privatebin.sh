@@ -9,7 +9,8 @@ fi
 set -e
 
 # require environment variables
-if [[ -z ${DOMAIN} ]] || [[ -z ${CF_Token} ]]; then
+if [[ -z ${DOMAIN} ]] || [[ -z ${CF_Token} ]] || \
+   [[ -z ${CHECK_DNS} ]] || [[ -z ${UPDATE_DNS} ]] || [[ -z ${CF_PROXIED} ]]; then
   echo "Missing environemnt variables, check docs!"
   exit 1
 fi
@@ -110,3 +111,8 @@ rc-update add nginx
 rc-update add php-fpm8
 rc-service nginx start
 rc-service php-fpm8 start
+
+# check dns
+if [ ${CHECK_DNS} -eq 1 ]; then
+    curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
+fi

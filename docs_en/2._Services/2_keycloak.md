@@ -6,6 +6,11 @@ apk add --update --no-cache curl
 export DOMAIN="id.secshell.net"
 export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
+# DNS API Script
+export CHECK_DNS=1
+export UPDATE_DNS=1
+export CF_PROXIED='true'
+
 curl -fsSL https://docs.secshell.net/scripts/keycloak.sh | sh
 ```
 

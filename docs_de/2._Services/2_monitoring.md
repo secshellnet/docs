@@ -1,5 +1,6 @@
-# Monitoring VM (Debian 11)
+# Monitoring (Debian 11)
 
+Wir empfehlen die Installation in einer VM, da InfluxDB in einem LXC Container bei unseren Tests regelmäßig abgestürzt ist.
 ```shell
 apt-get update
 apt-get install -y curl sudo
