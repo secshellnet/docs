@@ -25,7 +25,7 @@ if [[ -z ${CF_Account_ID} ]] || [[ -z ${CF_Zone_ID} ]]; then
 
     # get CF_Account_ID and CF_Zone_ID using CF_Token
     data=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=${zone_name}&status=active" \
-        -H "Authorization: Bearer ${CF_API_TOKEN}" -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0]')
+        -H "Authorization: Bearer ${CF_Token}" -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0]')
 
     export CF_Zone_ID=$(echo ${data} | jq -r '.id')
     export CF_Account_ID=$(echo ${data} | jq -r '.account.id')
