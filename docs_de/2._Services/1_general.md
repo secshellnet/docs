@@ -44,11 +44,6 @@ ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 dpkg-reconfigure --frontend noninteractive tzdata
 ```
 
-### Fedora Server
-```shell
-timedatectl set-timezone Europe/Berlin
-```
-
 ## VM IPv6 Konfiguration
 ### Debian
 ```shell
@@ -62,16 +57,3 @@ iface ens18 inet6 static
     gateway 2a01:4f8:10a:b88:${VLAN_ID}::1
 EOF
 ```
-
-### Fedora Server
-```shell
-VLAN_ID=101
-sudo -s
-cat <<EOF >> /etc/sysconfig/network-scripts/ifcfg-ens18
-IPV6INIT=yes
-IPV6_AUTOCONF=yes
-IPV6ADDR=2a01:4f8:10a:b88:${VLAN_ID}::2/80
-IPV6_DEFAULTGW=2a01:4f8:10a:b88:${VLAN_ID}::1
-EOF
-```
-
