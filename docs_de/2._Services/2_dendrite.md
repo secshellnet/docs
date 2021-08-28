@@ -1,6 +1,7 @@
 # Dendrite (Alpine 3.13)
 
 ## PostgreSQL Databank vorbereiten:
+Falls Sie eine PostgreSQL Datenbank verwenden möchten, sollten sie diese direkt bei der Installation konfigurieren:
 ```shell
 # create databases
 for db in mscs userapi_accounts userapi_devices mediaapi syncapi roomserver signingkeyserver keyserver federationsender appservice naffka; do
@@ -26,7 +27,7 @@ export ELEMENT_DOMAIN="element.secshell.net"
 export JITSI_DOMAIN="meet.jit.si"
 export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
-# PostgreSQL configuration
+# PostgreSQL configuration (comment out to setup using sqlite database)
 export PG_HOST=postgres.secshell.net
 export PG_USER=dendrite
 export PG_PASSWD=s3cret_p4ssw0rd

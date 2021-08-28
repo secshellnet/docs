@@ -50,9 +50,6 @@ git checkout ${VERSION}
 cp dendrite-config.yaml ../dendrite.yaml
 cd ..
 
-# generate matrix key
-./dendrite/bin/generate-keys --private-key matrix_key.pem
-
 # get certificate
 mkdir /root/.acme.sh
 ln -s /usr/bin/acme.sh /root/.acme.sh/acme.sh
@@ -66,23 +63,24 @@ sed -i "/server_name.* /{
     s|localhost|${MATRIX_DOMAIN}|
 }" /root/dendrite.yaml
 
-sed -i "/connection_string.* /{
-    s|file:|postgresql://${PG_USER}:${PG_PASSWD}@${PG_HOST}/|
-    s|.db|?sslmode=disable|
+# adjust path to private key
+./dendrite/bin/generate-keys --private-key matrix_key.pem
+sed -i "/private_key.* /{
+    s|matrix_key.pem|/root/matrix_key.pem|
 }" /root/dendrite.yaml
 
-#sed -i "/real_ip_header.* /{
-#    s|# ||
-#    s|X-Real-IP|Cf-Connecting-Ip|
-#}" /root/dendrite.yaml
-
+# disable element registrations
 sed -i "/registration_disabled.* /{
     s|false|true|
 }" /root/dendrite.yaml
 
-sed -i "/private_key.* /{
-    s|matrix_key.pem|/root/matrix_key.pem|
-}" /root/dendrite.yaml
+# if postgres is configured, adjust database configuration
+if [[ ! -z ${PG_HOST} ]]; then
+    sed -i "/connection_string.* /{
+        s|file:|postgresql://${PG_USER}:${PG_PASSWD}@${PG_HOST}/|
+        s|.db|?sslmode=disable|
+    }" /root/dendrite.yaml
+fi
 
 # configure nginx
 cat <<EOF > /etc/nginx/conf.d/${MATRIX_DOMAIN}.conf
