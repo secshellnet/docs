@@ -35,11 +35,11 @@ Falls nach einem Update das Dark Theme weg sein sollte, wird `bash PVEDiscordDar
 Im Anschluss kann man über die Proxmox WebGUI, die OVS Bridge für das Interne Netzwerk anlegen (Standartwerte belassen).
 ![Proxmox_Networks.png](../img/setup/Proxmox_Networks.png?raw=true){: loading=lazy }
 
-Anschließend werden die Virtuellen Maschienen anlegen. Virtuelle Maschienen und Container die hinter der OPNsense liegen sollen, werden auf das Netzwerkinterface vmbr1 mit einer entsprechenden VLAN ID konfiguriert.
+Anschließend werden die Virtuellen Maschienen angelegt. Virtuelle Maschienen und Container, welche im Internen Netzwerk sein sollen, werden auf das Netzwerkinterface `vmbr1` mit einer entsprechenden VLAN ID konfiguriert.
 ![Proxmox_LXC_Network.png](../img/setup/Proxmox_LXC_Network.png?raw=true){: loading=lazy }
 
 ### OPNsense VM anlegen
-Bei der OPNsense Netzwerkschnittstelle, die für das Interne Netzwerk verwendet werden soll, sollte einen Multiplier von 8 verwendet werden. Über die Konsole wird anschließend (in der Datei `/etc/pve/qemu-server/100.conf`) der VLAN Trunk konfiguriert:
+Bei der OPNsense Netzwerkschnittstelle, welche für das Interne Netzwerk verwendet werden soll, sollte einen Multiplier von 8 verwendet werden. Über die Konsole wird anschließend (in der Datei `/etc/pve/qemu-server/100.conf`) der VLAN Trunk konfiguriert:
 ```bash
 # ...
 net0: virtio=AA:BB:CC:DD:EE:FF,bridge=vmbr0,firewall=1

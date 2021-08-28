@@ -5,7 +5,7 @@ Durch das Vorgeben der IP Range werden spätere Probleme z. B. bei den IPsec Tun
 
 Für den ersten Host entsteht somit der FQDN `pve0.secshell.net`, für den die Interne IP Range 10.0.0.0/16 verwendet wird.
 
-Die verbleibenden Subnetze, die während der Planung nicht für die Hosts vorgesehen wurden, können beantragt und bei Zustimmung frei Verwendet werden.
+Die verbleibenden Subnetze, die während der Planung nicht für die Hosts vorgesehen wurden, können beantragt und bei Zustimmung frei verwendet werden.
 Die Beantragung dient lediglich zur Prüfung ob das gewünschte Subnetz bereits verwendet wird.
 
 ## Hosts
