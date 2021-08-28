@@ -29,19 +29,19 @@ Nach der Installation muss das Plugin im Webinterface unter Services -> QEMU Gue
     Bei der Einrichtung dieser Regel, sollte man umbedingt darauf Achten, als Source IP <code>any</code> und nicht <code>WAN&nbsp;Net</code> zu wählen.  
     <code>WAN&nbsp;Net</code> beinhaltet lediglich das Netzwerk aus dem die Öffentliche IP Adresse kommt, nicht das gesamte Internet!
 
-![OPNsense_WebGUI_WAN_Rules.png](../img/setup/OPNsense_WebGUI_WAN_Rules.png?raw=true){: loading=lazy }
+![OPNsense_WebGUI_WAN_Rules.png](../img/setup/opnsense/OPNsense_WebGUI_WAN_Rules.png?raw=true){: loading=lazy }
 
 ## Einrichtung des Internen Netzwerkes
 Das Interne Netzwerk, in welchem die VM's erreichbar sind, wird über VLAN's abgebildet. Dadurch besitzt die OPNsense unabhängig von der Anzahl an Netzwerken nur das eine Interface (`vmbr1`), und das Anlegen von neuen Netzwerken erfordert keinen Neustart der OPNsense.  
 
 Zuerst wird das LAN Interface entfernt (Interfaces -> Assignments -> `vtnet1` löschen). Anschließend wird auf das Physikalische Interface ein VLAN angelegt (Interfaces -> Other Types -> VLAN).
-![OPNsense_VLAN.png](../img/setup/OPNsense_VLAN.png?raw=true){: loading=lazy }
+![OPNsense_VLAN.png](../img/setup/opnsense/OPNsense_VLAN.png?raw=true){: loading=lazy }
 
 Im Anschluss wird ein neues Interfaces auf dem soeben erstellten "VLAN Port" erstellt (Interfaces -> Assignments -> `vtnet1_vlanX`).
-![OPNsense_AssignVLAN.png](../img/setup/OPNsense_AssignVLAN.png?raw=true){: loading=lazy }
+![OPNsense_AssignVLAN.png](../img/setup/opnsense/OPNsense_AssignVLAN.png?raw=true){: loading=lazy }
 
 Zuletzt muss das erste Interface konfiguriert werden (Enabled, Description: `vlanX` und IPv4 Konfiguration, ggf IPv6 Konfiguration)
-![OPNsense_VLAN_Interface.png](../img/setup/OPNsense_VLAN_Interface.png?raw=true){: loading=lazy }
+![OPNsense_VLAN_Interface.png](../img/setup/opnsense/OPNsense_VLAN_Interface.png?raw=true){: loading=lazy }
 
 !!! info ""  
     Firewall Rules konfigurieren!
@@ -51,22 +51,22 @@ Nun ist es möglich eine Interne Adresse auf eine Externe Adresse zu mappen. Anf
 Dazu muss die gewünschte WAN IP Adresse auf dem Host gerouted werden (siehe Serverdokumentation des Dedizierten Servers).
 
 Die WAN IP's welche Intern verwendet werden sollen, werden als Virtuelle IP Adresse in der OPNsense eingetragen (System -> Virtual IPs). Solange das 1:1 NAT für diese IP noch nicht konfiguriert wurde, sollte diese IP Adresse jetzt direkt auf die Firewall zeigen.  
-![OPNsense_VirtualIPs.png](../img/setup/OPNsense_VirtualIPs.png?raw=true){: loading=lazy }
+![OPNsense_VirtualIPs.png](../img/setup/opnsense/OPNsense_VirtualIPs.png?raw=true){: loading=lazy }
 
 Anschließend kann die IP Adresse gemapped werden (Firewall -> NAT -> One-to-One).  
-![OPNsense_1-1_NAT.png](../img/setup/OPNsense_1-1_NAT.png?raw=true){: loading=lazy }
+![OPNsense_1-1_NAT.png](../img/setup/opnsense/OPNsense_1-1_NAT.png?raw=true){: loading=lazy }
 Zuletzt müssen die Firewall Rules bei WAN gesetzt werden. Hierbei ist zu beachten, dass als Zieladresse die Interne IP verwendet wird.
 
 !!! warning ""  
     Die gesetzte Firewall Regel erlaubt alles und sollte entsprechend angepasst werden.
 
-![OPNsense_1-1_NAT_Rules.png](../img/setup/OPNsense_1-1_NAT_Rules.png?raw=true){: loading=lazy }
+![OPNsense_1-1_NAT_Rules.png](../img/setup/opnsense/OPNsense_1-1_NAT_Rules.png?raw=true){: loading=lazy }
 
 ## OpenVPN
 Der OpenVPN Server wird über den Wizard eingerichtet.
 
 Die lokalen IPv4 Netze, die von jedem Teilnehmer erreicht werden sollen, werden direkt in den Tunnel Settings des OpenVPN Server gerouted. Dies ist lediglich das Interne Netzwerk, über das man den DNS Server erreicht. Auch der DNS Eintrag `opnsense.secshell.net` verweist auf die IP Adresse der Firewall in diesem Netzwerk.
-![OPNsense_OpenVPN_TunnelSettings.png](../img/setup/OPNsense_OpenVPN_TunnelSettings.png?raw=true){: loading=lazy }
+![OPNsense_OpenVPN_TunnelSettings.png](../img/setup/opnsense/OPNsense_OpenVPN_TunnelSettings.png?raw=true){: loading=lazy }
 
 In den Client Specific Overwrites, können weitere Netzwerke (z.B. die IP Adresse des Hosts) über den Tunnel gerouted werden gerouted werden.
 Das Tunnel Netzwerk kann verwendet werden um den Clients nur ihre eigenen Netze zu erlauben.
@@ -74,11 +74,11 @@ Das Tunnel Netzwerk kann verwendet werden um den Clients nur ihre eigenen Netze 
 !!! info ""  
     Das Tunnel Netzwerk des Clients muss ein Subnetz des OpenVPN Server Tunnel Netzwerks sein.
 
-![OPNsense_OpenVPN_CSO_Overview.png](../img/setup/OPNsense_OpenVPN_CSO_Overview.png?raw=true){: loading=lazy }
+![OPNsense_OpenVPN_CSO_Overview.png](../img/setup/opnsense/OPNsense_OpenVPN_CSO_Overview.png?raw=true){: loading=lazy }
 
-![OPNsense_OpenVPN_CSO_Edit.png](../img/setup/OPNsense_OpenVPN_CSO_Edit.png?raw=true){: loading=lazy }
+![OPNsense_OpenVPN_CSO_Edit.png](../img/setup/opnsense/OPNsense_OpenVPN_CSO_Edit.png?raw=true){: loading=lazy }
 
-![OPNsense_OpenVPN_Rules.png](../img/setup/OPNsense_OpenVPN_Rules.png?raw=true){: loading=lazy }
+![OPNsense_OpenVPN_Rules.png](../img/setup/opnsense/OPNsense_OpenVPN_Rules.png?raw=true){: loading=lazy }
 
 ## IPsec
 Die Einrichtung eines Site to Site IPsec Tunnels gestaltet sich unkompliziert, als Informationquelle kann [dieses Video](https://www.youtube.com/watch?v=KmoCfa0IxBk) genutzt werden, der einzige Unterschied besteht in der Verwendung von pfSense.
@@ -89,51 +89,6 @@ DNS Wildcard Einträge müssen gemäß der [erweiterten Konfiguration des DNS Se
 # /usr/local/etc/dnsmasq.conf.d/dns.conf
 address=/hostname.secshell.net/10.2.1.2
 ```
-
-## IPv6
-Die Einrichtung von IPv6 erfolgt anhand dieses [Blogeintrags](https://dominicpratt.de/hetzner-und-proxmox-ipv6-mit-router-vm-nutzen/).
-
-Zuerst muss die Datei `/etc/network/interfaces` auf dem Host angepasst (Route für fe80::1 und IPv6 Forwarding) werden:
-```shell
-auto lo
-iface lo inet loopback
-
-iface enp41s0 inet manual
-
-auto vmbr0
-iface vmbr0 inet static
-	address X.X.X.X/27
-	gateway X.X.X.X
-	bridge-ports enp41s0
-	bridge-stp off
-	bridge-fd 0
-
-    # AB HIER
-    up ip -6 route add default via fe80::1 dev vmbr0
-	up sysctl -w net.ipv6.conf.all.forwarding=1
-    # BIS HIER
-
-allow-ovs vmbr1
-iface vmbr1 inet manual
-	ovs_type OVSBridge
-
-```
-
-Anschließend wird das WAN Interface der OPNsense per DHCPv6 konfiguriert, dadurch erhält man eine Local Link Adresse auf diesem Interface.  
-![WAN Interface IPv6 Configuration](../img/setup/OPNsense_IPv6_Interfaces.png?raw=true){: loading=lazy }
-
-Die ersten vier Blöcke der IPv6 Adresse werden bei einem 64er IPv6 Netzwerk durch den Hoster vorgegeben, in den fünften Block wird die ID der Proxmox VM bzw des LXC Containers eingetragen, die letzten drei Block der IPv6 Adresse werden dem Host zugewiesen. In den vlan Interfaces der OPNsense wird die Static IPv6 `XXXX:XXXX:XXXX:XXXX:ID::1/80` eingetragen.
-
-![VLAN Interface IPv6 Configuration](../img/setup/OPNsense_IPv6_Interfaces.png?raw=true){: loading=lazy }
-
-Zuletzt muss das IPv6 Gateway als Default Gateway eingetragen werden:  
-![IPv6 Default Gateway](../img/setup/OPNsense_IPv6_Gateway.png?raw=true){: loading=lazy }
-
-Auf dem Dashboard sollte es dann so aussehen:  
-![IPv6 Interface Overview](../img/setup/OPNsense_IPv6_Overview.png?raw=true){: loading=lazy }
-
-Die OPNsense selbst kommt weder über das Default, noch über das WAN Interface ins IPv6 Netz, daher sollte umbedingt folgende Einstellung getroffen werden:
-![Prefer IPv4 over IPv6](../img/setup/OPNsense_PreferIPv4.png?raw=true){: loading=lazy}
 
 # Knowledge Base
 ### DNS Auflösung funktioniert über OpenVPN nicht
