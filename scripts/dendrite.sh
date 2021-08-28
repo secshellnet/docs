@@ -40,7 +40,7 @@ fi
 echo > /etc/motd
 
 # download dendrite
-apk add --update --no-cache go git acme.sh socat
+apk add --update --no-cache go git acme.sh socat nginx
 git clone https://github.com/matrix-org/dendrite.git
 
 # build dendrite
@@ -52,7 +52,6 @@ cd ..
 
 # generate matrix key
 ./dendrite/bin/generate-keys --private-key matrix_key.pem
-
 
 # get certificate
 mkdir /root/.acme.sh
@@ -77,24 +76,24 @@ sed -i "/connection_string.* /{
 #    s|X-Real-IP|Cf-Connecting-Ip|
 #}" /root/dendrite.yaml
 
-sed -i "/private_key.* /{
+sed -i "/registration_disabled.* /{
     s|false|true|
 }" /root/dendrite.yaml
 
-sed -i "/registration_disabled.* /{
+sed -i "/private_key.* /{
     s|matrix_key.pem|/root/matrix_key.pem|
 }" /root/dendrite.yaml
 
 # configure nginx
-cat <<EOF > /etc/nginx/sites-available/${MATRIX_DOMAIN}.conf
+cat <<EOF > /etc/nginx/conf.d/${MATRIX_DOMAIN}.conf
 # https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
 server {
     server_name ${MATRIX_DOMAIN}
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
-    ssl_certificate /etc/letsencrypt/live/${MATRIX_DOMAIN}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${MATRIX_DOMAIN}/privkey.pem;
+    ssl_certificate /root/.acme.sh/${MATRIX_DOMAIN}/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/${MATRIX_DOMAIN}/${MATRIX_DOMAIN}.key;
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;
@@ -127,15 +126,15 @@ server {
 }
 EOF
 
-cat <<EOF > /etc/nginx/sites-available/${DENDRITE_DOMAIN}.conf
+cat <<EOF > /etc/nginx/conf.d/${DENDRITE_DOMAIN}.conf
 # https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
 server {
     server_name ${DENDRITE_DOMAIN};
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
-    ssl_certificate /etc/letsencrypt/live/${DENDRITE_DOMAIN}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${DENDRITE_DOMAIN}/privkey.pem;
+    ssl_certificate /root/.acme.sh/${DENDRITE_DOMAIN}/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/${DENDRITE_DOMAIN}/${DENDRITE_DOMAIN}.key;
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;
@@ -156,7 +155,7 @@ server {
     }
 
     location /_matrix {
-        proxy_pass http://localhost:8008;
+        proxy_pass http://localhost:8080;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$remote_addr;
         proxy_set_header X-Forwarded-Proto \$scheme;
@@ -180,14 +179,16 @@ function start {
 }
 
 function stop {
-    killall -9 java
+    killall -9 dendrite-monolith-server
 }
 
 EOF
 chmod +x /etc/init.d/dendrite
 
 rc-update add dendrite
+rc-update add nginx
 rc-service dendrite start
+rc-service nginx start
 
 # check dns
 if [ ${CHECK_DNS} -eq 1 ]; then
