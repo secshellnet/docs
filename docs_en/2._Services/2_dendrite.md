@@ -20,7 +20,8 @@ done
 ```shell
 apk add --update --no-cache curl
 
-export DOMAIN="id.secshell.net"
+export DENDRITE_DOMAIN="dendrite.secshell.net"
+export MATRIX_DOMAIN="matrix.secshell.net"
 export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 # PostgreSQL configuration
@@ -33,7 +34,7 @@ export CHECK_DNS=1
 export UPDATE_DNS=1
 export CF_PROXIED='true'
 
-curl -fsSL https://docs.secshell.net/scripts/keycloak.sh | sh
+curl -fsSL https://docs.secshell.net/scripts/dendrite.sh | sh
 ```
 
 ## Create Dendrite User
