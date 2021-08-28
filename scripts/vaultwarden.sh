@@ -91,5 +91,5 @@ rc-service vaultwarden start
 
 # check dns
 if [ ${CHECK_DNS} -eq 1 ]; then
-    curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | bash
+    curl -fsSL https://docs.secshell.net/scripts/dns-api.sh | sh
 fi
