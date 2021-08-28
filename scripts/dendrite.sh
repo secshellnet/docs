@@ -10,7 +10,7 @@ set -e
 
 # require environment variables
 if [[ -z ${DENDRITE_DOMAIN} ]] || [[ -z ${MATRIX_DOMAIN} ]] || [[ -z ${CF_Token} ]] || \
-   [[ -z ${PG_USER} ]] || [[ -z ${PG_PASSWD} ]] || [[ -z ${PG_HOST} ]] \
+   [[ -z ${PG_USER} ]] || [[ -z ${PG_PASSWD} ]] || [[ -z ${PG_HOST} ]] || \
    [[ -z ${CHECK_DNS} ]] || [[ -z ${UPDATE_DNS} ]] || [[ -z ${CF_PROXIED} ]]; then
     echo "Missing environemnt variables, check docs!"
     exit 1
