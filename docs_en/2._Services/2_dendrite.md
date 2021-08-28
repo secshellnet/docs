@@ -22,6 +22,8 @@ apk add --update --no-cache curl
 
 export DENDRITE_DOMAIN="dendrite.secshell.net"
 export MATRIX_DOMAIN="matrix.secshell.net"
+export ELEMENT_DOMAIN="element.secshell.net"
+export JITSI_DOMAIN="meet.jit.si"
 export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 # PostgreSQL configuration
