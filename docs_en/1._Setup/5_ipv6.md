@@ -16,10 +16,13 @@ iface vmbr0 inet static
 	bridge-stp off
 	bridge-fd 0
 
-    # ADD FROM HERE
-    up ip -6 route add default via fe80::1 dev vmbr0
+        up ip route add 176.9.198.64/29 dev vmbr0
+        up sysctl -w net.ipv4.ip_forward=1
+
+	# ADD FROM HERE
+	up ip -6 route add default via fe80::1 dev vmbr0
 	up sysctl -w net.ipv6.conf.all.forwarding=1
-    # TO HERE
+	# TO HERE
 
 allow-ovs vmbr1
 iface vmbr1 inet manual

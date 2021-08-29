@@ -30,6 +30,7 @@ Im Anschluss kann man über die Proxmox WebGUI, die OVS Bridge für das Interne 
 ![Proxmox_Networks.png](../img/setup/proxmox/Proxmox_Networks.png?raw=true){: loading=lazy }
 
 Anschließend werden die Virtuellen Maschienen angelegt. Virtuelle Maschienen und Container, welche im Internen Netzwerk sein sollen, werden auf das Netzwerkinterface `vmbr1` mit einer entsprechenden VLAN ID konfiguriert.
+![Proxmox_VM_Network.png](../img/setup/proxmox/Proxmox_VM_Network.png?raw=true){: loading=lazy }
 ![Proxmox_LXC_Network.png](../img/setup/proxmox/Proxmox_LXC_Network.png?raw=true){: loading=lazy }
 
 ### OPNsense VM anlegen
@@ -42,15 +43,30 @@ net1: virtio=FF:EE:DD:CC:BB:AA,bridge=vmbr1,firewall=1,queues=8,trunks=1-4095
 ```
 
 Die Konfiguration der OPNsense wird in einem eigenen Kapitel erläutert.  
-Die zusätzliche gebuchten IPv4 Adressen / Subnetze - die sich außerhalb des Netzwerkes der Haupt IPv4 Adressen befinden - müssen über den Host Adapter geroutet werden, dafür wird die WAN Bridge in `/etc/network/interfaces` wie folgt erweitert. Außerdem wird die default Route für das IPv6 Gateway (`fe80::1`) über `vmbr0` hinzugefügt, da Pakete zum Gateway sonst über `vmbr1` gerouted wird:
-```bash
-# ...
+
+Zusätzlich gebuchte Subnetze sowie einzel IPv4 Adressen die sich außerhalb des Subnetzes der Haupt IPv4 befinden, müssen über den Host Adapter gerouted werden. 
+Dafür wird die `vmbr0` Bridge in `/etc/network/interfaces` wie folgt erweitert.
+```shell
+auto lo
+iface lo inet loopback
+
+iface enp41s0 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+        address 88.99.59.89/26
+        gateway 88.99.59.65
+        bridge-ports enp41s0
+        bridge-stp off
+        bridge-fd 0
+    
+	# AB HIER
 	up ip route add 176.9.198.64/29 dev vmbr0
-
-        up ip -6 route add default via fe80::1 dev vmbr0
-
 	up sysctl -w net.ipv4.ip_forward=1
-	up sysctl -w net.ipv6.conf.all.forwarding=1
-# ...
+	# BIS HIER
+
+allow-ovs vmbr1
+iface vmbr1 inet manual
+        ovs_type OVSBridge
+
 ```
-Da sich die zusätzlich gebuchte IPv4 Adresse für die Firewall im gleichen Subnetz wie die Haupt IPv4-Adresse befindet, muss hier nur das Subnetz gerouted werden.

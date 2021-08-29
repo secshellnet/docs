@@ -30,6 +30,7 @@ After that you can use the Proxmox WebGUI to create the OVS bridge for the inter
 ![Proxmox_Networks.png](../img/setup/proxmox/Proxmox_Networks.png?raw=true){: loading=lazy }
 
 Then the virtual machines are created. Virtual machines and containers that should be behind the OPNsense are configured to the network interface vmbr1 with a corresponding VLAN ID.
+![Proxmox_VM_Network.png](../img/setup/proxmox/Proxmox_VM_Network.png?raw=true){: loading=lazy }
 ![Proxmox_LXC_Network.png](../img/setup/proxmox/Proxmox_LXC_Network.png?raw=true){: loading=lazy }
 
 ### Create OPNsense VM
@@ -41,17 +42,31 @@ net1: virtio=FF:EE:DD:CC:BB:AA,bridge=vmbr1,firewall=1,queues=8,trunks=1-4095
 # ...
 ```
 
-The configuration of the OPNsense is explained in a separate chapter.  
-The additional booked IPv4 addresses / subnets - which are outside the network of the main IPv4 addresses - must be routed via the host adapter, for this the WAN bridge in `/etc/network/interfaces` is extended as follows.
-Also you need to configure the route to the ipv6 gateway (`fe80::1`) using the device `vmbr0` to prevent that packages to the gateway would be send to fe80::1 using the device `vmbr1`.
-```bash
-# ...
-	up ip route add 176.9.198.64/29 dev vmbr0
+The configuration of the OPNsense is explained in a separate chapter.
 
-    up ip -6 route add default via fe80::1 dev vmbr0
+Additionally booked subnets as well as single IPv4 addresses which are outside the subnet of the main IPv4 must be routed via the host adapter.
+For this, the `vmbr0` bridge in `/etc/network/interfaces` is extended as follows.
+```shell
+auto lo
+iface lo inet loopback
 
-	up sysctl -w net.ipv4.ip_forward=1
-	up sysctl -w net.ipv6.conf.all.forwarding=1
-# ...
+iface enp41s0 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+        address 88.99.59.89/26
+        gateway 88.99.59.65
+        bridge-ports enp41s0
+        bridge-stp off
+        bridge-fd 0
+    
+        # ADD FROM HERE
+        up ip route add 176.9.198.64/29 dev vmbr0
+        up sysctl -w net.ipv4.ip_forward=1
+        # TO HERE
+
+allow-ovs vmbr1
+iface vmbr1 inet manual
+        ovs_type OVSBridge
+
 ```
-Since the additionally booked IPv4 address for the firewall is in the same subnet as the main IPv4 address, only the subnet must be routed here.

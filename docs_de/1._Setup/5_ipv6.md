@@ -15,11 +15,14 @@ iface vmbr0 inet static
 	bridge-ports enp41s0
 	bridge-stp off
 	bridge-fd 0
+
+        up ip route add 176.9.198.64/29 dev vmbr0
+        up sysctl -w net.ipv4.ip_forward=1
     
-    # AB HIER
-    up ip -6 route add default via fe80::1 dev vmbr0
+	# AB HIER
+	up ip -6 route add default via fe80::1 dev vmbr0
 	up sysctl -w net.ipv6.conf.all.forwarding=1
-    # BIS HIER
+	# BIS HIER
 
 allow-ovs vmbr1
 iface vmbr1 inet manual

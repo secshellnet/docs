@@ -42,7 +42,7 @@ fi
 echo > /etc/motd
 
 # install keycloak
-apk add --update --no-cache openjdk11-jre nginx acme.sh socat xmlstarlet
+apk add --update --no-cache openjdk11-jre nginx acme.sh socat
 wget -O- https://github.com/keycloak/keycloak/releases/download/${VERSION}/keycloak-${VERSION}.tar.gz | tar xzC /opt/
 cd /opt/keycloak-${VERSION}
 
