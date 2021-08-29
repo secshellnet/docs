@@ -1,6 +1,4 @@
 # vSwitch
-Die von Hetzner angebotenen vSwitches können zum Verbinden von mehreren Servern verwendet werden. Die Einrichtung eines vSwitches welcher nur für Dedicated Server gedacht ist kann der [Hetzner Dokumentation](https://docs.hetzner.com/de/robot/dedicated-server/network/vswitch/) entnommen werden. Im folgenden erläutern wir die Einrichtung eines vSwitch mit einem Hetzner Cloud Netzwerk. Wir verwenden ein 24er Netzwerk, außerhalb des Netzwerkes 10.0.0.0/8 um keine Konflikte mit den Internen Netzwerken zu erhalten.
-
 The vSwitches offered by Hetzner can be used to connect multiple servers. The setup of a vSwitch which is only intended for dedicated servers can be found in the [Hetzner documentation](https://docs.hetzner.com/de/robot/dedicated-server/network/vswitch/). In the following we will explain the setup process of a vSwitch with a Hetzner Cloud network. We use a /24 network, outside the network 10.0.0.0/8 to avoid conflicts with the internal networks.
 
 ## Setup of the cloud network, vSwitches and cloud server
