@@ -6,12 +6,13 @@ Die von Hetzner angebotenen vSwitches können zum Verbinden von mehreren Servern
 ![Hetzner Cloud: Netzwerk erstellen](../img/setup/vswitch/vswitch_create2.png?raw=true){: loading=lazy }
 ![Hetzner Robot: vSwitch Menü](../img/setup/vswitch/vswitch_create3.png?raw=true){: loading=lazy }
 ![Hetzner Robot: vSwitch erstellen](../img/setup/vswitch/vswitch_create4.png?raw=true){: loading=lazy }
-![Hetzner Cloud: Subnetz hinzufügen](../img/setup/vswitch/vswitch_create5.png?raw=true){: loading=lazy }
-![Hetzner Cloud: Subnetz Konfigurationshinweis](../img/setup/vswitch/vswitch_create6.png?raw=true){: loading=lazy }
+![Hetzner Robot: Dedicated Server zu vSwitch hinzufügen](../img/setup/vswitch/vswitch_create5.png?raw=true){: loading=lazy }
+![Hetzner Cloud: Subnetz hinzufügen](../img/setup/vswitch/vswitch_create6.png?raw=true){: loading=lazy }
+![Hetzner Cloud: Subnetz Konfigurationshinweis](../img/setup/vswitch/vswitch_create7.png?raw=true){: loading=lazy }
 
 Der Cloudserver kann schließlich im 28er Subnetz für Cloudserver hinzugefügt werden, die Konfiguration erfolgt automatisch:
-![Hetzner Cloud: Cloudserver hinzufügen](../img/setup/vswitch/vswitch_create7.png?raw=true){: loading=lazy }
-![Hetzner Cloud: Subnetzübersicht](../img/setup/vswitch/vswitch_create8.png?raw=true){: loading=lazy }
+![Hetzner Cloud: Cloudserver hinzufügen](../img/setup/vswitch/vswitch_create8.png?raw=true){: loading=lazy }
+![Hetzner Cloud: Subnetzübersicht](../img/setup/vswitch/vswitch_create9.png?raw=true){: loading=lazy }
 ![Hetzner Cloud: Netzwerkkonfiguration Cloudserver](../img/setup/vswitch/vswitch_cloudserver.png?raw=true){: loading=lazy }
 
 Falls die Firewall des Dedicated Servers aktiviert wurde, muss eine Firewall Regel erstellt werden, die Pakete in das erstellte Subnetz erlaubt. In diesem Fall wurde eine Firewall Regel erstellt, die das gesamte Private 16er Netzwerk abdeckt, sodass bei weiteren vSwitches in diesem Netzsegment (192.160.0.0/16) keine weitere Anpassung erforderlich ist: 

@@ -8,6 +8,7 @@ The vSwitches offered by Hetzner can be used to connect multiple servers. The se
 ![Hetzner Cloud: create network](../img/setup/vswitch/vswitch_create2.png?raw=true){: loading=lazy }
 ![Hetzner Robot: vSwitch menu](../img/setup/vswitch/vswitch_create3.png?raw=true){: loading=lazy }
 ![Hetzner Robot: create vSwitch](../img/setup/vswitch/vswitch_create4.png?raw=true){: loading=lazy }
+![Hetzner Robot: add dedicated server to vSwitch](../img/setup/vswitch/vswitch_create5.png?raw=true){: loading=lazy }
 ![Hetzner Cloud: add subnet](../img/setup/vswitch/vswitch_create5.png?raw=true){: loading=lazy }
 ![Hetzner Cloud: configuration information](../img/setup/vswitch/vswitch_create6.png?raw=true){: loading=lazy }
 
