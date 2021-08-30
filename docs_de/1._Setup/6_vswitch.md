@@ -22,6 +22,8 @@ Falls die Firewall des Dedicated Servers aktiviert wurde, muss eine Firewall Reg
 Zuerst muss das Netzwerkinterface `vmbr0` VLAN Fähig gemacht werden:
 ![VLAN Awareness in `vmbr0`](../img/setup/vswitch/vswitch_pve_vlan_aware.png?raw=true){: loading=lazy }
 
+
+### Einrichtung der OPNsense
 Nachdem der Host neugestartet wurde, kann das Interface in der OPNsense angelegt werden.
 ![VLAN anlegen](../img/setup/vswitch/vswitch_opnsense_interface1.png?raw=true){: loading=lazy }
 ![Interface erstellen](../img/setup/vswitch/vswitch_opnsense_interface2.png?raw=true){: loading=lazy }
@@ -33,3 +35,7 @@ Nachdem man die Firewall für dieses Interface konfiguriert hat, muss noch das G
 
 Schlussendlich muss das erstellte 24er Netzwerk noch über das Gateway des 28er Netzwerkes des vSwitch gerouted werden, dazu wird eine Statische Route in der OPNsense angelegt:
 ![Route: Konfiguration](../img/setup/vswitch/vswitch_opnsense_route.png?raw=true){: loading=lazy }
+
+### Einrichtung in einem LXC oder einer VM
+Desweiteren können LXC oder virtulle Maschinen direkt in das vSwitch Netzwerk hinzugefügt werden. Dazu muss beim erstellen lediglich das VLAN 4000 auf dem `vmbr0` Interface gewählt werden 
+und eine IPv4 Adresse aus dem entsprechenden Netzwer vergeben werden (z.B. 192.168.30.19).

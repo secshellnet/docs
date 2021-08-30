@@ -9,7 +9,7 @@ fi
 set -e
 
 # require environment variables
-if [[ -z ${DOMAIN} ]] || [[ -z ${CF_Token} ]] || \
+if [[ -z ${DOMAIN} ]] || [[ -z ${ADMIN_DOMAIN} ]] || [[ -z ${CF_Token} ]] || \
    [[ -z ${CHECK_DNS} ]] || [[ -z ${UPDATE_DNS} ]] || [[ -z ${CF_PROXIED} ]]; then
     echo "Missing environemnt variables, check docs!"
     exit 1
@@ -52,11 +52,13 @@ ln -s /usr/bin/acme.sh /root/.acme.sh/acme.sh
 acme.sh --install-cronjob
 acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-ca
 acme.sh --issue --dns dns_cf -d ${DOMAIN}
+acme.sh --issue --dns dns_cf -d ${ADMIN_DOMAIN}
 
 # configure nginx
-cat << EOF > /etc/nginx/conf.d/default.conf
+cat << EOF > /etc/nginx/conf.d/${DOMAIN}.conf
 # https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
 server {
+    server_name ${DOMAIN};
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
@@ -87,6 +89,59 @@ server {
             proxy_set_header X-Forwarded-Proto \$scheme;
             proxy_set_header Host \$host;
             proxy_cache_bypass \$http_upgrade;
+    }
+
+    # redirect to account login
+    location ~* ^(\/|\/auth\/)$ {
+        return 301 https://id.the-morpheus.de/auth/realms/themorpheustutorials/account/;
+    }
+
+    # do not allow keycloak admin from this domain
+    location ~* (\/auth\/admin\/|\/auth\/realms\/master\/) {
+        return 403;
+    }
+}
+EOF
+
+cat << EOF > /etc/nginx/conf.d/${ADMIN_DOMAIN}.conf
+# https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
+server {
+    server_name ${ADMIN_DOMAIN};
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    ssl_certificate /root/.acme.sh/${ADMIN_DOMAIN}/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/${ADMIN_DOMAIN}/${ADMIN_DOMAIN}.key;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
+    ssl_session_tickets off;
+
+    # modern configuration
+    ssl_protocols TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    # HSTS (ngx_http_headers_module is required) (63072000 seconds)
+    add_header Strict-Transport-Security "max-age=63072000" always;
+
+    # OCSP stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    location / {
+            proxy_pass http://127.0.0.1:8080/;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade \$http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header X-Real-IP \$proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto \$scheme;
+            proxy_set_header Host \$host;
+            proxy_cache_bypass \$http_upgrade;
+    }
+
+    # redirect to admin console
+    location ~* ^(\/|\/auth\/)$ {
+        return 301 https://keycloak.the-morpheus.org/auth/realms/master/console/;
     }
 }
 EOF

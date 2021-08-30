@@ -33,3 +33,7 @@ After configuring the firewall for this interface, the gateway must be created. 
 
 Finally, the created /24 network has to be routed via the gateway of the /28 network of the vSwitch by creating a static route in the OPNsense:
 ![Route: configuration](../img/setup/vswitch/vswitch_opnsense_route.png?raw=true){: loading=lazy }
+
+### Setup of a LXC or a VM
+You can also setup the vSwitch Network in a LXC or VM, simply create it on the network interface `vmbr0` with vlan tag 4000.
+Don't forget to configure a static ipv4 address from the network pool (e.g. 192.168.30.19)

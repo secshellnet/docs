@@ -57,6 +57,7 @@ certbot certonly \
 sed -i "s|;http_port.*|http_port = 443|g" /etc/grafana/grafana.ini
 sed -i "s|;protocol.*|protocol = https|g" /etc/grafana/grafana.ini
 sed -i "s|;domain.*|domain = ${DOMAIN}|g" /etc/grafana/grafana.ini
+sed -i "s|;root_url.*|root_url = https://${DOMAIN}/|g" /etc/grafana/grafana.ini
 sed -i "s|;cert_file.*|cert_file = /etc/letsencrypt/live/${DOMAIN}/cert.pem|g" /etc/grafana/grafana.ini
 sed -i "s|;cert_key.*|cert_key = /etc/letsencrypt/live/${DOMAIN}/privkey.pem|g" /etc/grafana/grafana.ini
 sed -i "s|;admin_password.*|admin_password = ${ADMIN_PASSWD}|g" /etc/grafana/grafana.ini
