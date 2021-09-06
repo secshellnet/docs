@@ -1,4 +1,4 @@
-# Setup
+# LXC / VM Setup
 ## LXC Einrichtung
 ![Netzwerkkonfiguration beim Erstellen eines LXC Containers](../img/faq/proxmox_lxc_network.png?raw=true){: loading=lazy }
 

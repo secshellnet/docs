@@ -1,4 +1,4 @@
-# Setup
+# LXC / VM Setup
 
 ## LXC Setup
 ![Network configuration while lxc creation](../img/faq/proxmox_lxc_network.png?raw=true){: loading=lazy }
