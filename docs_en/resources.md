@@ -26,17 +26,16 @@ The IPv4 network `10.1.0.0/16` has been split into two `/17` networks.
 
 | Use Case / Partner                |      ID     | IPv4 network                                 |
 |:----------------------------------|:-----------:|:---------------------------------------------|
-| DNS                               | 100         | 10.2.0.0/30                                  |
-| General usage                     | 101  -  109 | 10.2.0.4/30 - 10.2.0.252/30                  |
+| DNS                               | 200         | 10.2.0.0/30                                  |
+| General usage                     | 201  -  209 | 10.2.0.4/30 - 10.2.0.252/30                  |
 |                                   |             | 88.99.59.69/32 + 88.99.59.71/32              |
-| A                                 | 110  -  139 | 10.2.1.0/24                                  |
-| B                                 | 140  -  169 | 10.2.2.0/24                                  |
-| C                                 | 170  -  199 | 10.2.3.0/24                                  |
+| A                                 | 210  -  239 | 10.2.1.0/24                                  |
+| B                                 | 240  -  269 | 10.2.2.0/24                                  |
+| C                                 | 270  -  299 | 10.2.3.0/24                                  |
 | VPN                               |             | 10.2.128.0/17                                |
 
 The IPv4 address of the OPNsense (`88.99.59.71`) is available to each partner via port forwarding.
 For web protocols (`http`/`https`) the reverse proxy HAProxy is used.
 
-The Freenom domains `secshell.cf`, `secshell.ml`, `secshell.tk`, `secshell.gq` and `secshell.ga` can be used for testing. Since no certificates can be requested via the ACME DNS-01 challenge, it is mandatory to use the TLS-01 challenge for this purpose.  
-Apart from the subdomains `pve[0-9].secshell.net`, the domain `secshell.net` is mainly used internally.
+The Freenom domain `secshell.cf` can be used for testing. Apart from the subdomains `pve[0-9].secshell.net`, the domain `secshell.net` is mainly used internally.
 

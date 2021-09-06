@@ -127,6 +127,12 @@ server {
     ssl_stapling on;
     ssl_stapling_verify on;
 
+    # ACL
+    allow 10.0.0.0/8;
+    allow 192.168.0.0/16;
+    allow 172.16.0.0/12;
+    deny all;
+
     location / {
             proxy_pass http://127.0.0.1:8080/;
             proxy_http_version 1.1;

@@ -25,16 +25,15 @@ Da der Host `pve2` von mehreren Partnern genutzt wird, wurden die Netzresourcen 
 
 | Verwendung / Partner   |     ID's    | IPv4 Netzwerke                               |
 |:-----------------------|:-----------:|:---------------------------------------------|
-| DNS                    | 100         | 10.2.0.0/30                                  |
-| Allgemeine Verwendung  | 101  -  109 | 10.2.0.4/30 - 10.2.0.252/30                  |
+| DNS                    | 200         | 10.2.0.0/30                                  |
+| Allgemeine Verwendung  | 201  -  209 | 10.2.0.4/30 - 10.2.0.252/30                  |
 |                        |             | 88.99.59.69/32 + 88.99.59.71/32              |
-| A                      | 110  -  139 | 10.2.1.0/24                                  |
-| B                      | 140  -  169 | 10.2.2.0/24                                  |
-| C                      | 170  -  199 | 10.2.3.0/24                                  |
+| A                      | 210  -  239 | 10.2.1.0/24                                  |
+| B                      | 240  -  269 | 10.2.2.0/24                                  |
+| C                      | 270  -  299 | 10.2.3.0/24                                  |
 | VPN                    |             | 10.2.128.0/17                                |
 
 Die IPv4 Adresse der OPNsense (`88.99.59.71`) steht mittels Port Forwarding jedem Partner zur Verfügung.
 Für Web-Protokolle (`http`/`https`) kommt hierbei der Reverse Proxy HAProxy zum Einsatz.
 
-Die Freenom-Domains `secshell.cf`, `secshell.ml`, `secshell.tk`, `secshell.gq` und `secshell.ga` können für Tests verwendet werden. Da über die ACME DNS-01 Challenge keine Zertifikate angefordert werden können, muss hierfür zwingend die TLS-01 Challenge verwendet werden.  
-Die Domain `secshell.net` wird abgesehen, von den Subdomains `pve[0-9].secshell.net`, hauptsächlich Intern genutzt.
+Die Freenom-Domain `secshell.cf` kann frei verwendet werden. Die Domain `secshell.net` wird abgesehen, von den Subdomains `pve[0-9].secshell.net`, hauptsächlich Intern genutzt.
