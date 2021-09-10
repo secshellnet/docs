@@ -4,7 +4,7 @@
 apk add --update --no-cache curl
 
 export DOMAIN="netbox.secshell.net"
-export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"´
+export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 # DNS API Script
 export CHECK_DNS=1

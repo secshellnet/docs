@@ -16,17 +16,17 @@ You can get information about the ipv6 configuration in [General Information](ht
 ## OPNsense
 Regardless of what you set up (lxc or a virtual machine) the OPNsense will be set up:
 
-Interfaces --> Other Types --> VLAN --> +
+Interfaces --> Other Types --> VLAN --> `+`
 
-* Description: vlanID (in this case: vlan116)
 * Parent Interface: vtnet1
 * VLAN tag: Proxmox ID (in this case: 116)
+* Description: vlanID (in this case: vlan116)
 
 Interfaces --> Assignments
 
 * choose `vlan 116 on vtnet1`, and add using `+`
 
-Interfaces --> OPTx
+Interfaces --> vlan116
 
 * Check Enable interface
 * Check Prevent interface removal.

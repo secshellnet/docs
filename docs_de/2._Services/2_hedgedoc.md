@@ -8,7 +8,7 @@ Sie benötigen mindestens 2 GB Ram um HedgeDoc zu installieren, nach der Install
 apk add --update --no-cache curl
 
 export DOMAIN="md.secshell.net"
-export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"´
+export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 # DNS API Script
 export CHECK_DNS=1

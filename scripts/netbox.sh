@@ -47,8 +47,7 @@ sed -i "/^ALLOWED_HOSTS.* /s/\[\]/\['*'\]/" /opt/netbox/netbox/netbox/configurat
 sed -i "/^SECRET_KEY.* /s/''/'${SECRET_KEY}'/" /opt/netbox/netbox/netbox/configuration.py
 
 # TODO configure database (sed block search and replace)
-read -p "Please configure the database manually! (Press Enter to open vi): "
-vi /opt/netbox/netbox/netbox/configuration.py
+sed -i "/'USER':.* /s/''/'postgres'/" /opt/netbox/netbox/netbox/configuration.py
 
 # run database migrations
 python3 /opt/netbox/netbox/manage.py migrate
@@ -106,7 +105,7 @@ cat <<EOF > /etc/init.d/netbox
 #!/sbin/openrc-run
 
 function start {
-    gunicorn --pid /var/tmp/netbox.pid --pythonpath /opt/netbox/netbox --config /opt/netbox/gunicorn.py netbox.wsgi > /dev/null 2>&1
+    gunicorn --pid /var/tmp/netbox.pid --pythonpath /opt/netbox/netbox --config /opt/netbox/gunicorn.py netbox.wsgi --daemon > /dev/null 2>&1
 }
 
 function stop {

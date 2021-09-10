@@ -48,12 +48,48 @@ dpkg-reconfigure --frontend noninteractive tzdata
 ### Debian
 ```shell
 VLAN_ID=101
-sudo -s
-cat <<EOF >> /etc/network/interfaces
+
+# generate a random address
+v=$(cat /dev/urandom | tr -dc a-f0-9 | fold -w12 | head -n1)
+addr=$(echo ${v:0:4}:${v:4:4}:${v:8})
+
+
+# adjust config entry
+cat <<EOF | sudo tee -a /etc/network/interfaces
 
 iface ens18 inet6 static
-    address 2a01:4f8:10a:b88:${VLAN_ID}::2
+    address 2a01:4f8:10a:b88:${VLAN_ID}:${addr}
     network 80
     gateway 2a01:4f8:10a:b88:${VLAN_ID}::1
 EOF
+
+sudo reboot
+```
+
+### Ubuntu 20.04 (netplan)
+```shell
+VLAN_ID=101
+
+# generate a random address
+v=$(cat /dev/urandom | tr -dc a-f0-9 | fold -w12 | head -n1)
+addr=$(echo ${v:0:4}:${v:4:4}:${v:8})
+
+# adjust config entry
+cat <<EOF | tee /etc/netplan/00-installer-config.yaml
+network:
+    version: 2
+    ethernets:
+        ens18:
+            dhcp4: true
+            dhcp6: false
+            addresses:
+              - 2a01:4f8:10a:b88:${VLAN_ID}:${addr}/80
+            gateway6: 2a01:4f8:10a:b88:${VLAN_ID}::1 
+            routes:
+              - to: 2a01:4f8:10a:b88:${VLAN_ID}::1
+                scope: link
+EOF
+sudo netplan apply
+
+sudo reboot
 ```
