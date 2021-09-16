@@ -38,4 +38,4 @@ Schlussendlich muss das erstellte 24er Netzwerk noch über das Gateway des 28er 
 
 ### Einrichtung in einem LXC oder einer VM
 Desweiteren können LXC oder virtulle Maschinen direkt in das vSwitch Netzwerk hinzugefügt werden. Dazu muss beim erstellen lediglich das VLAN 4000 auf dem `vmbr0` Interface gewählt werden 
-und eine IPv4 Adresse aus dem entsprechenden Netzwer vergeben werden (z.B. 192.168.30.19).
+und eine IPv4 Adresse aus dem entsprechenden Netzwerk vergeben werden (z.B. 192.168.30.19).
