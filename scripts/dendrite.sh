@@ -55,8 +55,8 @@ mkdir /root/.acme.sh
 ln -s /usr/bin/acme.sh /root/.acme.sh/acme.sh
 acme.sh --install-cronjob
 acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-ca
-acme.sh --issue --dns dns_cf -d ${DENDRITE_DOMAIN}
-acme.sh --issue --dns dns_cf -d ${MATRIX_DOMAIN}
+acme.sh --issue --keylength ec-384 --dns dns_cf -d ${DENDRITE_DOMAIN}
+acme.sh --issue --keylength ec-384 --dns dns_cf -d ${MATRIX_DOMAIN}
 
 # adjust configuration
 sed -i "/server_name.* /{
@@ -90,8 +90,8 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
-    ssl_certificate /root/.acme.sh/${MATRIX_DOMAIN}/fullchain.cer;
-    ssl_certificate_key /root/.acme.sh/${MATRIX_DOMAIN}/${MATRIX_DOMAIN}.key;
+    ssl_certificate /root/.acme.sh/${MATRIX_DOMAIN}_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/${MATRIX_DOMAIN}_ecc/${MATRIX_DOMAIN}.key;
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;
@@ -131,8 +131,8 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
-    ssl_certificate /root/.acme.sh/${DENDRITE_DOMAIN}/fullchain.cer;
-    ssl_certificate_key /root/.acme.sh/${DENDRITE_DOMAIN}/${DENDRITE_DOMAIN}.key;
+    ssl_certificate /root/.acme.sh/${DENDRITE_DOMAIN}_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/${DENDRITE_DOMAIN}_ecc/${DENDRITE_DOMAIN}.key;
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;

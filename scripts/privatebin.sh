@@ -67,7 +67,7 @@ mkdir /root/.acme.sh
 ln -s /usr/bin/acme.sh /root/.acme.sh/acme.sh
 acme.sh --install-cronjob
 acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-ca
-acme.sh --issue --dns dns_cf -d ${DOMAIN}
+acme.sh --issue --keylength ec-384 --dns dns_cf -d ${DOMAIN}
 
 # configure nginx
 cat <<EOF > /etc/nginx/conf.d/default.conf
@@ -76,8 +76,8 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
-    ssl_certificate /root/.acme.sh/${DOMAIN}/fullchain.cer;
-    ssl_certificate_key /root/.acme.sh/${DOMAIN}/${DOMAIN}.key;
+    ssl_certificate /root/.acme.sh/${DOMAIN}_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.key;
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;

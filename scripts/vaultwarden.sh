@@ -50,7 +50,7 @@ mkdir /root/.acme.sh
 ln -s /usr/bin/acme.sh /root/.acme.sh/acme.sh
 acme.sh --install-cronjob
 acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-ca
-acme.sh --issue --dns dns_cf -d ${DOMAIN}
+acme.sh --issue --keylength ec-384 --dns dns_cf -d ${DOMAIN}
 
 # create vaultwarden environment file
 cat <<EOF > /opt/vaultwarden/.env
@@ -58,7 +58,7 @@ DOMAIN=https://${DOMAIN}
 
 ROCKET_ADDRESS=::
 ROCKET_PORT=443
-ROCKET_TLS={certs="/root/.acme.sh/${DOMAIN}/fullchain.cer",key="/root/.acme.sh/${DOMAIN}/${DOMAIN}.key"}
+ROCKET_TLS={certs="/root/.acme.sh/${DOMAIN}_ecc/fullchain.cer",key="/root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.key"}
 IP_HEADER=CF-Connecting-IP
 
 WEB_VAULT_FOLDER=web-vault/
