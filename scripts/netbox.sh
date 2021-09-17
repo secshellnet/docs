@@ -15,6 +15,17 @@ if [[ -z ${DOMAIN} ]] || [[ -z ${CF_Token} ]] || \
     exit 1
 fi
 
+# optional environment variables
+if [[ -z ${PG_PORT} ]]; then
+    PG_PORT=5432
+fi
+if [[ -z ${PG_DBNAME} ]]; then
+    PG_DBNAME='netbox'
+fi
+if [[ -z ${PG_USER} ]]; then
+    PG_USER='netbox'
+fi
+
 if [[ -z ${CF_Account_ID} ]] || [[ -z ${CF_Zone_ID} ]]; then
     apk add --no-cache --update curl jq
 
@@ -46,8 +57,17 @@ SECRET_KEY=$(openssl rand -hex 64)
 sed -i "/^ALLOWED_HOSTS.* /s/\[\]/\['*'\]/" /opt/netbox/netbox/netbox/configuration.py
 sed -i "/^SECRET_KEY.* /s/''/'${SECRET_KEY}'/" /opt/netbox/netbox/netbox/configuration.py
 
-# TODO configure database (sed block search and replace)
-sed -i "/'USER':.* /s/''/'postgres'/" /opt/netbox/netbox/netbox/configuration.py
+# append database config to configuration file - TODO improve it by editing the existing DATABASE block using sed
+cat <<EOF >> /opt/netbox/netbox/netbox/configuration.py
+DATABASE = {
+    'NAME': '${PG_DBNAME}',
+    'USER': '${PG_USER}',
+    'PASSWORD': '${PG_PASS}',
+    'HOST': '${PG_HOST}',
+    'PORT': '${PG_PORT}',
+    'CONN_MAX_AGE': 300,
+}
+EOF
 
 # run database migrations
 python3 /opt/netbox/netbox/manage.py migrate
