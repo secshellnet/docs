@@ -45,7 +45,7 @@ mv ./output/web-vault .
 rm -r output docker-image-extract
 
 # get certificate using acme dns-01 challenge
-apk add --no-cache --update acme.sh socat
+apk add --no-cache --update acme.sh socat nginx
 mkdir /root/.acme.sh
 ln -s /usr/bin/acme.sh /root/.acme.sh/acme.sh
 acme.sh --install-cronjob
@@ -55,19 +55,47 @@ acme.sh --issue --keylength ec-384 --dns dns_cf -d ${DOMAIN}
 # create vaultwarden environment file
 cat <<EOF > /opt/vaultwarden/.env
 DOMAIN=https://${DOMAIN}
-
-ROCKET_ADDRESS=::
-ROCKET_PORT=443
-ROCKET_TLS={certs="/root/.acme.sh/${DOMAIN}_ecc/fullchain.cer",key="/root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.key"}
-IP_HEADER=CF-Connecting-IP
-
+ROCKET_ADDRESS=127.0.0.1
 WEB_VAULT_FOLDER=web-vault/
 WEB_VAULT_ENABLED=true
-
 # LOG_LEVEL=debug
 EOF
 
 mkdir ./data
+
+# adjust nginx config
+cat <<EOF > /etc/nginx/conf.d/default.conf
+# https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    ssl_certificate /root/.acme.sh/${DOMAIN}_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.key;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
+    ssl_session_tickets off;
+
+    # modern configuration
+    ssl_protocols TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    # HSTS (ngx_http_headers_module is required) (63072000 seconds)
+    add_header Strict-Transport-Security "max-age=63072000" always;
+
+    # OCSP stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+}
+EOF
 
 # create vaultwarden service
 cat <<EOF > /etc/init.d/vaultwarden
@@ -86,7 +114,9 @@ EOF
 chmod +x /etc/init.d/vaultwarden
 
 # configure autostart
+rc-update add nginx
 rc-update add vaultwarden
+rc-service nginx start
 rc-service vaultwarden start
 
 # check dns
