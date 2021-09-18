@@ -7,8 +7,7 @@ apt-get install -y curl sudo
 sudo -s
 
 export DOMAIN="grafana.secshell.net"
-export EMAIL="certificates@secshell.net"
-export CF_API_TOKEN="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+export CF_Token="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 export ADMIN_PASSWD=$(cat /dev/urandom | tr -dc A-Za-z0-9 | fold -w24 | head -n1)
 
 # DNS API Script
