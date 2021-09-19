@@ -46,22 +46,6 @@ Zuletzt muss das erste Interface konfiguriert werden (Enabled, Description: `vla
 !!! info ""  
     Firewall Rules konfigurieren!
 
-## WAN IP über OPNsense auf VM mappen
-Nun ist es möglich eine Interne Adresse auf eine Externe Adresse zu mappen. Anfragen an diese Adresse, werden über die OPNsense geleitet, durchlaufen die Firewall, werden "genatted" (1:1 NAT) und gehen zum Host.  
-Dazu muss die gewünschte WAN IP Adresse auf dem Host gerouted werden (siehe Serverdokumentation des Dedizierten Servers).
-
-Die WAN IP's welche Intern verwendet werden sollen, werden als Virtuelle IP Adresse in der OPNsense eingetragen (System -> Virtual IPs). Solange das 1:1 NAT für diese IP noch nicht konfiguriert wurde, sollte diese IP Adresse jetzt direkt auf die Firewall zeigen.  
-![OPNsense_VirtualIPs.png](../img/setup/opnsense/OPNsense_VirtualIPs.png?raw=true){: loading=lazy }
-
-Anschließend kann die IP Adresse gemapped werden (Firewall -> NAT -> One-to-One).  
-![OPNsense_1-1_NAT.png](../img/setup/opnsense/OPNsense_1-1_NAT.png?raw=true){: loading=lazy }
-Zuletzt müssen die Firewall Rules bei WAN gesetzt werden. Hierbei ist zu beachten, dass als Zieladresse die Interne IP verwendet wird.
-
-!!! warning ""  
-    Die gesetzte Firewall Regel erlaubt alles und sollte entsprechend angepasst werden.
-
-![OPNsense_1-1_NAT_Rules.png](../img/setup/opnsense/OPNsense_1-1_NAT_Rules.png?raw=true){: loading=lazy }
-
 ## OpenVPN
 Der OpenVPN Server wird über den Wizard eingerichtet.
 

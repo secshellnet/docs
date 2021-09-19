@@ -46,22 +46,6 @@ Finally the first interface has to be configured (Enabled, Description: `vlanX` 
 !!! info ""  
     Configure Firewall Rules!
 
-## Map WAN IP via OPNsense to VM
-Now it is possible to map an internal address to an external address. Requests to this address are routed through the OPNsense, pass the firewall, are "gated" (1:1 NAT) and go to the host.  
-For this, the desired WAN IP address must be routed on the host (see server documentation of the dedicated server).
-
-The WAN IP's which should be used internally are entered as Virtual IP address in the OPNsense (System -> Virtual IPs). As long as the 1:1 NAT for this IP has not been configured yet, this IP address should now point directly to the firewall.  
-![OPNsense_VirtualIPs.png](../img/setup/opnsense/OPNsense_VirtualIPs.png?raw=true){: loading=lazy }
-
-Afterwards the IP address can be mapped (Firewall -> NAT -> One-to-One).  
-![OPNsense_1-1_NAT.png](../img/setup/opnsense/OPNsense_1-1_NAT.png?raw=true){: loading=lazy }
-Finally the firewall rules have to be set for WAN. Please note that the internal IP is used as destination address.
-
-!!! warning ""  
-    The set firewall rule allows everything and should be adjusted accordingly.
-
-![OPNsense_1-1_NAT_Rules.png](../img/setup/opnsense/OPNsense_1-1_NAT_Rules.png?raw=true){: loading=lazy }
-
 ## OpenVPN
 The OpenVPN server is set up using the wizard.
 

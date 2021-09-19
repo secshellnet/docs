@@ -41,32 +41,3 @@ net0: virtio=AA:BB:CC:DD:EE:FF,bridge=vmbr0,firewall=1
 net1: virtio=FF:EE:DD:CC:BB:AA,bridge=vmbr1,firewall=1,queues=8,trunks=1-4095
 # ...
 ```
-
-Die Konfiguration der OPNsense wird in einem eigenen Kapitel erläutert.  
-
-Zusätzlich gebuchte Subnetze sowie einzel IPv4 Adressen die sich außerhalb des Subnetzes der Haupt IPv4 befinden, müssen über den Host Adapter gerouted werden. 
-Dafür wird die `vmbr0` Bridge in `/etc/network/interfaces` wie folgt erweitert.
-```shell
-auto lo
-iface lo inet loopback
-
-iface enp41s0 inet manual
-
-auto vmbr0
-iface vmbr0 inet static
-        address 88.99.59.89/26
-        gateway 88.99.59.65
-        bridge-ports enp41s0
-        bridge-stp off
-        bridge-fd 0
-    
-	# AB HIER
-	up ip route add 176.9.198.64/29 dev vmbr0
-	up sysctl -w net.ipv4.ip_forward=1
-	# BIS HIER
-
-allow-ovs vmbr1
-iface vmbr1 inet manual
-        ovs_type OVSBridge
-
-```

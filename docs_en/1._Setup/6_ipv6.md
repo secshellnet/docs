@@ -1,7 +1,7 @@
 # IPv6
 The IPv6 setup is quiet simple, just follow the following [german guide](https://dominicpratt.de/hetzner-und-proxmox-ipv6-mit-router-vm-nutzen/).
 
-First change the network configuration (`/etc/network/interfaces`) of the proxmox host (add a route to fe80::1 and enable  ipv6 forwarding):
+First change the network configuration (`/etc/network/interfaces`) of the proxmox host (add a route to fe80::1 and enable ipv6 forwarding):
 ```shell
 auto lo
 iface lo inet loopback
@@ -16,8 +16,8 @@ iface vmbr0 inet static
 	bridge-stp off
 	bridge-fd 0
 
-        up ip route add 176.9.198.64/29 dev vmbr0
-        up sysctl -w net.ipv4.ip_forward=1
+    up ip route add 176.9.198.64/29 dev vmbr0
+    up sysctl -w net.ipv4.ip_forward=1
 
 	# ADD FROM HERE
 	up ip -6 route add default via fe80::1 dev vmbr0
@@ -27,7 +27,6 @@ iface vmbr0 inet static
 allow-ovs vmbr1
 iface vmbr1 inet manual
 	ovs_type OVSBridge
-
 ```
 
 Afterwards you may configure the wan interface of the opnsense using dhcpv6, you'll get a local link ipv6 address for this interface.  
