@@ -26,6 +26,8 @@ apt upgrade -y
 apt install -y openvswitch-switch
 ```
 
+More information about the configuration of zfs can be found [here](https://www.dlford.io/memory-tuning-proxmox-zfs/)
+
 After that you can use the Proxmox WebGUI to create the OVS bridge for the internal network (leave default values).
 ![Proxmox_Networks.png](../img/setup/proxmox/Proxmox_Networks.png?raw=true){: loading=lazy }
 
