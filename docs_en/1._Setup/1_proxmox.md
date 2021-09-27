@@ -24,6 +24,9 @@ curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rickycode
 apt update
 apt upgrade -y
 apt install -y openvswitch-switch
+
+# enable time sync (ntp)
+systemctl enable --now systemd-timesyncd
 ```
 
 More information about the configuration of zfs can be found [here](https://www.dlford.io/memory-tuning-proxmox-zfs/)
