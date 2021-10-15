@@ -10,9 +10,9 @@
 ```shell
 # enable hetzner apt repositories
 function add {
-    sed -i '1 i\deb http://mirror.hetzner.de/debian/packages ${1} main contrib non-free' /etc/apt/sources.list
-    sed -i '2 i\deb http://mirror.hetzner.de/debian/security ${1}/updates main contrib non-free' /etc/apt/sources.list
-    sed -i '3 i\deb http://mirror.hetzner.de/debian/packages ${1}-updates main contrib non-free' /etc/apt/sources.list
+    sed -i "1 i\deb http://mirror.hetzner.de/debian/packages ${1} main contrib non-free" /etc/apt/sources.list
+    sed -i "2 i\deb http://mirror.hetzner.de/debian/security ${1}/updates main contrib non-free" /etc/apt/sources.list
+    sed -i "3 i\deb http://mirror.hetzner.de/debian/packages ${1}-updates main contrib non-free" /etc/apt/sources.list
 }
 source /etc/os-release  
 test $VERSION_ID = "7" && add wheezy
@@ -26,9 +26,9 @@ test $VERSION_ID = "11" && add bullseye
 ```shell
 # enable hetzner apt repositories
 function add {
-    sed -i '1 i\deb http://mirror.hetzner.com/ubuntu/packages ${1} main restricted universe multiverse' /etc/apt/sources.list
-    sed -i '2 i\deb http://mirror.hetzner.com/ubuntu/packages ${1}-updates main restricted universe multiverse' /etc/apt/sources.list
-    sed -i '3 i\deb http://mirror.hetzner.com/ubuntu/packages ${1}-security main restricted universe multiverse' /etc/apt/sources.list
+    sed -i "1 i\deb http://mirror.hetzner.com/ubuntu/packages ${1} main restricted universe multiverse" /etc/apt/sources.list
+    sed -i "2 i\deb http://mirror.hetzner.com/ubuntu/packages ${1}-updates main restricted universe multiverse" /etc/apt/sources.list
+    sed -i "3 i\deb http://mirror.hetzner.com/ubuntu/packages ${1}-security main restricted universe multiverse" /etc/apt/sources.list
 }
 source /etc/lsb-release
 test $DISTRIB_RELEASE = "20.04" && add focal
