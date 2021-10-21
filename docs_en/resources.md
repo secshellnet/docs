@@ -9,6 +9,9 @@ The first host gets the id `0` so the FQDN for this host is `pve0.secshell.net`,
 The remaining subnets, which were not intended for the hosts during planning, can be requested and freely used if the request is being approved.
 The request only serves to check whether the desired subnet is already in use.
 
+The range `192.168.0.0/16` should not be used, to prevent problems with tunnels (e.g. to home networks).
+The range `172.16.0.0/12` may be used inside vm's (e.g. for docker).
+
 ## Hosts
 `pve0` is only for testing purpose, `pve1` and `pve2` are rental servers from Hetzner Online GmbH.
 

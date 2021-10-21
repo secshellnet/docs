@@ -8,6 +8,9 @@ Für den ersten Host entsteht somit der FQDN `pve0.secshell.net`, für den die I
 Die verbleibenden Subnetze, die während der Planung nicht für die Hosts vorgesehen wurden, können beantragt und bei Zustimmung frei verwendet werden.
 Die Beantragung dient lediglich zur Prüfung ob das gewünschte Subnetz bereits verwendet wird.
 
+Der Netzwerkbereich `192.168.0.0/16` sollte nicht verwendet werden, um Probleme mit Tunneln in Heimnetze zu vermeiden.
+Der Netzwerkbereich `172.16.0.0/12` kann innerhalb von Virtuellen Maschinen z.B. für Docker frei verwendet werden.
+
 ## Hosts
 Der Proxmox VE Host `pve0` dient zu Testzwecken und wird daher nicht weiter ausgeführt.  
 `pve1` und `pve2` sind Dedicated Server aus der AX-Reihe der Hetzner Online GmbH.  
