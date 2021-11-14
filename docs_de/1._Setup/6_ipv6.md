@@ -31,7 +31,7 @@ iface vmbr1 inet manual
 ```
 
 Anschließend wird das WAN Interface der OPNsense per DHCPv6 konfiguriert, dadurch erhält man eine Local Link Adresse auf diesem Interface.  
-![WAN Interface IPv6 Configuration](../img/setup/ipv6/OPNsense_IPv6_Interfaces.png?raw=true){: loading=lazy }
+![WAN Interface IPv6 Configuration](../img/setup/ipv6/OPNsense_IPv6_WAN.png?raw=true){: loading=lazy }
 
 Die ersten vier Blöcke der IPv6 Adresse werden bei einem 64er IPv6 Netzwerk durch den Hoster vorgegeben, in den fünften Block wird die ID der Proxmox VM bzw des LXC Containers eingetragen, die letzten drei Block der IPv6 Adresse werden dem Host zugewiesen. In den vlan Interfaces der OPNsense wird die Static IPv6 `XXXX:XXXX:XXXX:XXXX:ID::1/80` eingetragen.
 

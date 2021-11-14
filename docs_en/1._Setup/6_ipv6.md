@@ -30,7 +30,7 @@ iface vmbr1 inet manual
 ```
 
 Afterwards you may configure the wan interface of the opnsense using dhcpv6, you'll get a local link ipv6 address for this interface.  
-![WAN Interface IPv6 Configuration](../img/setup/ipv6/OPNsense_IPv6_Interfaces.png?raw=true){: loading=lazy }
+![WAN Interface IPv6 Configuration](../img/setup/ipv6/OPNsense_IPv6_WAN.png?raw=true){: loading=lazy }
 
 The first four blocks of the ipv6 address are being assigned by your hoster, the fifth block is - at least in our setup - reserved for the id of the proxmox vm / lxc. The last three blocks can be used by the host. You have to configure the static ipv6 address `XXXX:XXXX:XXXX:XXXX:ID::1/80` for the vlan interfaces.
 
