@@ -93,3 +93,25 @@ sudo netplan apply
 
 sudo reboot
 ```
+
+### Fedora 35 Server (Network Manager)
+```shell
+VLAN_ID=101
+
+# generate a random address
+v=$(cat /dev/urandom | tr -dc a-f0-9 | fold -w12 | head -n1)
+addr=$(echo ${v:0:4}:${v:4:4}:${v:8})
+
+# adjust config entry
+cat <<EOF | sudo tee -a /etc/NetworkManager/system-connections/ens18.nmconnection
+[ipv6]
+addr-gen-mode=eui64
+address1=2a01:4f8:10a:b88:{VLAN_ID}:{addr}/80,2a01:4f8:10a:b88:{VLAN_ID}::1
+dns=2a01:4f8:10a:b88:{VLAN_ID}::1;
+dns-search=
+method=manual
+EOF
+sudo nmcli connection reload
+
+sudo reboot
+```
