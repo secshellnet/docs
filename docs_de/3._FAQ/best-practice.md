@@ -46,10 +46,10 @@ acme.sh --issue --keylength ec-384 --dns dns_cf -d keycloak.the-morpheus.org
 ```
 
 ## Verwendung von `nginx` als Reverse Proxy auf dem Host
-Der Webserver `nginx` wird direkt auf dem Host installiert (`apt install nginx`), dieser agiert als Reverse Proxy und leitet die Requests an die Web Applications, die innerhalb der Docker Container laufen.
+Der Webserver `nginx` wird direkt auf dem Host installiert (`apt install nginx`), dieser agiert als Reverse Proxy und leitet die Requests an die Web Applications, die innerhalb der Docker Container laufen. Die Konfiguration dieser kann größtensteils von [ssl-config.mozilla.org](https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6) übernommen werden.
 
 
-# Beispiel: Keycloak mit Public und interner Admin Domain 
+## Beispiel: Keycloak mit Public und interner Admin Domain 
 Zuletzt möchte ich hier an einem Beispiel das Deployment von Keycloak erläutern.
 
 ```
