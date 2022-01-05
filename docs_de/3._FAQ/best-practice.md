@@ -48,6 +48,11 @@ acme.sh --issue --keylength ec-384 --dns dns_cf -d keycloak.the-morpheus.org
 ## Verwendung von `nginx` als Reverse Proxy auf dem Host
 Der Webserver `nginx` wird direkt auf dem Host installiert (`apt install nginx`), dieser agiert als Reverse Proxy und leitet die Requests an die Web Applications, die innerhalb der Docker Container laufen. Die Konfiguration dieser kann größtensteils von [ssl-config.mozilla.org](https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6) übernommen werden.
 
+Sollte es vorkommen, das der nginx beim Neustart des Servers nicht startet, weil die IPv6 Adresse (die als listener konfiguriert wurde) noch nicht mit hinzugefügt wurde, kann der Startprozess des nginx wie [hier](https://docs.ispsystem.com/ispmanager-business/troubleshooting-guide/if-nginx-does-not-start-after-rebooting-the-server) beschrieben verzögert werden. Dazu wird die Datei `/lib/systemd/system/nginx.service` in der Kategorie Service wie folgt erweitert:
+```s
+# make sure the ipv6 addresses (which have been added with post-up) are there (only required for enabled nginx service on system boot)
+ExecStartPre=/bin/sleep 5
+```
 
 ## Beispiel: Keycloak mit Public und interner Admin Domain 
 Zuletzt möchte ich hier an einem Beispiel das Deployment von Keycloak erläutern.
