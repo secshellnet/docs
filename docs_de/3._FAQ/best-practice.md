@@ -5,7 +5,7 @@ Da die Services lediglich auf einer öffentliche IPv6 Adresse bereitgestellt wer
 
 Ein Cloudflare Origin Server Certificate wird verwendet, wenn ein Dienst direkt aus dem Internet über https erreichbar sein soll. Browser vertrauen diesem Zertifikat nicht, weshalb die Nutzung des Cloudflare Proxies notwendig ist, durch diesen wird auch die IPv4-Erreichbarkeit sichergestellt.
 
-Wird ein Dienst lediglich Intern benötigt (z. B. `keycloak.the-morpheus.org`) wird mithilfe der Software `acme.sh` (ACME DNS-01 Challenge) ein Let's Encrypt Zertifikat angefordert.
+Wird ein Dienst lediglich Intern benötigt (z. B. ein AdminWebPanel) wird mithilfe der Software `acme.sh` über die ACME DNS-01 Challenge ein Let's Encrypt Zertifikat angefordert.
 
 ```
                                   |--- Privates Netzwerk (VPN) -------------------------------------|
@@ -22,17 +22,17 @@ Cloudflare Proxy <-- https mit Origin Server Certificate --> nginx <-- http --> 
 ```
 
 ## Verwendung von `acme.sh` zwecks Erstellung der Let's Encrypt Zertifikat
-Die Software `acme.sh` stellt eine minimimale Implementierung von ACME in Bash da. Wir verwenden die ACME DNS-01-Challenge mit der Cloudflare DNS API um die Zertifikate zu erhalten.
+Die Software `acme.sh` stellt eine minimimale Implementierung von [ACME](https://datatracker.ietf.org/doc/html/rfc8555) in Bash da. Wir verwenden die ACME DNS-01-Challenge mit der Cloudflare DNS API um die Zertifikate zu erhalten.
 
 Die Installation gestaltet sich unter den meisten Betriebsystemen sehr einfach, hier als Beispiel für Debian 11:
 ```bash
 # mit root-Rechten ausführen!
-curl https://get.acme.sh | sh -s email=infrastructure@the-morpheus.de
+curl https://get.acme.sh | sh -s email=infrastructure@secshell.net
 sudo ln -s /root/.acme.sh/acme.sh /usr/bin/acme.sh
 acme.sh --install-cronjob
 ```
 
-Anschließend werden Environment Variablen für die Cloudflare DNS API gesetzt und das Let's Encrypt ACME backend genutzt:
+Anschließend werden Environment Variablen für die Cloudflare DNS API gesetzt und das Let's Encrypt ACME Backend genutzt:
 ```bash
 export CF_Token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 export CF_Account_ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -42,7 +42,7 @@ acme.sh --server "https://acme-v02.api.letsencrypt.org/directory" --set-default-
 
 Zuletzt wird ein ECC Zertifikat angefordert:
 ```bash
-acme.sh --issue --keylength ec-384 --dns dns_cf -d keycloak.the-morpheus.org
+acme.sh --issue --keylength ec-384 --dns dns_cf -d keycloak.pve2.secshell.net
 ```
 
 ## Verwendung von `nginx` als Reverse Proxy auf dem Host
@@ -58,17 +58,17 @@ ExecStartPre=/bin/sleep 5
 Zuletzt möchte ich hier an einem Beispiel das Deployment von Keycloak erläutern.
 
 ```
-                         |--- Privates Netzwerk (VPN) -------------------------------------|
-                         |                                                                 |
-Cloudflare Proxy <-- https://id.the-morpheus.de --> nginx <-- http --> Keycloak            |
-                         |                            ^                                    |
-                         |                            |                                    |
-                         |           https://keycloak.the-morpheus.org                     |
-                         |                            |                                    |
-                         |                            |                                    |
-                         |                          Admin                                  |
-                         |                                                                 |
-                         |-----------------------------------------------------------------|
+                      |--- Privates Netzwerk (VPN) -------------------------------------|
+                      |                                                                 |
+Cloudflare Proxy <-- https://id.secshell.net --> nginx <-- http --> Keycloak            |
+                      |                            ^                                    |
+                      |                            |                                    |
+                      |           https://keycloak.pve2.secshell.net                    |
+                      |                            |                                    |
+                      |                            |                                    |
+                      |                          Admin                                  |
+                      |                                                                 |
+                      |-----------------------------------------------------------------|
 ```
 
 In der `docker-compose.yml` wird für den Keycloak Service eine Portweiterleitung auf einen Local-Loopback (`[::1]` ist IPv6 für `127.0.0.1` aka `localhost`) Port gesetzt, der vom `nginx` angesprochen werden kann: 
@@ -83,15 +83,15 @@ services:
       - "[::1]:8080:8080"
 ```
 
-In der Konfiguration des internen nginx V-Hosts (`/etc/nginx/sites-available/keycloak.the-morpheus.org`) wird nur ein IPv4 Listener (der nur Intern verwendet wird) erstellt, außerdem werden mittels deny all alle Verbindungen aus dem Internet blockiert. 
+In der Konfiguration des internen nginx V-Hosts (`/etc/nginx/sites-available/keycloak.pve2.secshell.net`) wird nur ein IPv4 Listener (der nur Intern verwendet wird) erstellt, außerdem werden mittels deny all alle Verbindungen aus dem Internet blockiert. 
 ```nginx
 # https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
 server {
-    server_name keycloak.the-morpheus.org;
+    server_name keycloak.pve2.secshell.net;
     listen 443 ssl http2;
 
-    ssl_certificate /root/.acme.sh/keycloak.the-morpheus.org_ecc/fullchain.cer;
-    ssl_certificate_key /root/.acme.sh/keycloak.the-morpheus.org_ecc/keycloak.the-morpheus.org.key;
+    ssl_certificate /root/.acme.sh/keycloak.pve2.secshell.net_ecc/fullchain.cer;
+    ssl_certificate_key /root/.acme.sh/keycloak.pve2.secshell.net_ecc/keycloak.pve2.secshell.net.key;
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;
@@ -128,20 +128,20 @@ server {
     
     # redirect to admin console
     location ~* ^(\/|\/auth\/)$ {
-        return 301 https://keycloak.the-morpheus.org/auth/admin/master/console/;
+        return 301 https://keycloak.pve2.secshell.net/auth/admin/master/console/;
     }
 }
 ```
 
-Der öffentlichen V-Host (`/etc/nginx/sites-available/id.the-morpheus.de`) wird auf eine spezifische IPv6 Adresse gebinded, desweiteren wird der Zugriff auf die Keycloak Admin URL's denied. Das Cloudflare Origin Server Certificate wurde in `/etc/ssl/` abgelegt.
+Der öffentlichen V-Host (`/etc/nginx/sites-available/id.secshell.net`) wird auf eine spezifische IPv6 Adresse gebinded, desweiteren wird der Zugriff auf die Keycloak Admin URL's denied. Das Cloudflare Origin Server Certificate wurde in `/etc/ssl/` abgelegt.
 ```nginx
 # https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
 server {
-    server_name id.the-morpheus.de;
+    server_name id.secshell.net;
     listen [2001:db8::fdfd:dead:beef:affe]:443 ssl http2;
 
-    ssl_certificate /etc/ssl/id.the-morpheus.de.crt;
-    ssl_certificate_key /etc/ssl/id.the-morpheus.de.key;
+    ssl_certificate /etc/ssl/id.secshell.net.crt;
+    ssl_certificate_key /etc/ssl/id.secshell.net.key;
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
     ssl_session_tickets off;
