@@ -2,8 +2,6 @@
 
 The Proxmox VE hosts are identified using a unique id (`0-9`). They also get the FQDN `pveID.secshell.net` and the internal IPv4 range `10.ID.0.0/16` which can be used for vm networks.
 
-Specifying the IP range prevents later problems, for example with the IPsec tunnels.
-
 The first host gets the id `0` so the FQDN for this host is `pve0.secshell.net`, the internal IPv4 range is 10.0.0.0/16.
 
 The remaining subnets, which were not intended for the hosts during planning, can be requested and freely used if the request is being approved.
@@ -40,7 +38,3 @@ The IPv4 network `10.1.0.0/16` has been split into two `/17` networks.
 | VPN                               |             | 10.2.128.0/17                                |
 
 The IPv4 address of the OPNsense (`88.99.59.71`) is available to each partner via port forwarding.
-For web protocols (`http`/`https`) the reverse proxy HAProxy is used.
-
-The Freenom domain `secshell.cf` can be used for testing. Apart from the subdomains `pve[0-9].secshell.net`, the domain `secshell.net` is mainly used internally.
-

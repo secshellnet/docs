@@ -1,7 +1,6 @@
 # Ressourcenverteilung
 
 Jeder Proxmox VE Host erhält eine Identifikationsnummer (`0-9`), einen FQDN (`pveID.secshell.net`) und eine Interne IP Range (`10.ID.0.0/16`), die für diesen Host frei verwendet werden kann.
-Durch das Vorgeben der IP Range werden spätere Probleme z. B. bei den IPsec Tunneln verhindert.  
 
 Für den ersten Host entsteht somit der FQDN `pve0.secshell.net`, für den die Interne IP Range 10.0.0.0/16 verwendet wird.
 
@@ -39,6 +38,3 @@ Da der Host `pve2` von mehreren Partnern genutzt wird, wurden die Netzresourcen 
 | VPN                    |             | 10.2.128.0/17                                |
 
 Die IPv4 Adresse der OPNsense (`88.99.59.71`) steht mittels Port Forwarding jedem Partner zur Verfügung.
-Für Web-Protokolle (`http`/`https`) kommt hierbei der Reverse Proxy HAProxy zum Einsatz.
-
-Die Freenom-Domain `secshell.cf` kann frei verwendet werden. Die Domain `secshell.net` wird abgesehen, von den Subdomains `pve[0-9].secshell.net`, hauptsächlich Intern genutzt.
