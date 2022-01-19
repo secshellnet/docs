@@ -5,7 +5,7 @@ Grundsätzlich stelle ich webbasierte Anwendungen nur noch über IPv6 zur Verfü
 
 Cloudflare verbindet sich per IPv6 mit der webbasierten Anwendung auf meinem Server. Mittels [Origin Server Certificates](https://developers.cloudflare.com/ssl/origin-configuration/origin-ca) wird die Verbindung verschlüsselt. Lediglich der Cloudflare Proxy vertraut diesen Origin Server Certificates, daher sollten diese nur hinter diesem verwendet werden.
 
-Um sicherzustellen, dass die WAF / Page Rules nicht umgangen werden können, erwartet mein Webserver ein TLS Client Zertifikat von der Cloudflare Origin Pull CA [die Einrichtung bei Cloudflare wird hier beschrieben](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up).
+Um sicherzustellen, dass die WAF / Page Rules nicht umgangen werden können, erwartet mein Webserver ein TLS Client Zertifikat von der Cloudflare Origin Pull CA, [die Einrichtung bei Cloudflare wird hier beschrieben](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up).
 
 Wenn mehr als eine webbasierte Anwendung auf einem Server installiert werden, weise ich mir für jeden Dienst eine eigene IPv6 Adresse zu. Dies macht zum einen das Sperren eines einzelnen Dienst in der Firewall, als auch das Debuggen einfacher. Unter Debian wird dafür die Netzwerkkonfiguration in der Datei `/etc/network/interfaces` wie folgt erweitert:
 ```sh
