@@ -1,28 +1,101 @@
 # VM Setup: Best Practice
 Dieses Dokument beschreibt das derzeit von mir bevorzugte Verfahren eine virtuelle Maschine mit Web-Anwendungen hinter dem Cloudflare Proxy erreichbar zu machen.
 
-Da die Services lediglich auf einer öffentliche IPv6 Adresse bereitgestellt werden, ist die Verwendung des Cloudflare Proxies obligatorisch um die IPv4 Erreichbarkeit sicherzustellen. 
+Grundsätzlich stelle ich webbasierte Anwendungen nur noch über IPv6 zur Verfügung. Um die IPv4 Erreichbarkeit abzusichern, und gegebenenfalls eine [Web Application Firewall](https://www.cloudflare.com/waf/) oder [Page Rules](https://www.cloudflare.com/features-page-rules/) schalten zu können, wird der Cloudflare Proxy verwendet.
 
-Ein Cloudflare Origin Server Certificate wird verwendet, wenn ein Dienst direkt aus dem Internet über https erreichbar sein soll. Browser vertrauen diesem Zertifikat nicht, weshalb die Nutzung des Cloudflare Proxies notwendig ist, durch diesen wird auch die IPv4-Erreichbarkeit sichergestellt.
+Cloudflare verbindet sich per IPv6 mit der webbasierten Anwendung auf meinem Server. Mittels [Origin Server Certificates](https://developers.cloudflare.com/ssl/origin-configuration/origin-ca) wird die Verbindung verschlüsselt. Lediglich der Cloudflare Proxy vertraut diesen Origin Server Certificates, daher sollten diese nur hinter diesem verwendet werden.
 
-Wird ein Dienst lediglich Intern benötigt (z. B. ein AdminWebPanel) wird mithilfe der Software `acme.sh` über die ACME DNS-01 Challenge ein Let's Encrypt Zertifikat angefordert.
+Um sicherzustellen, dass die WAF / Page Rules nicht umgangen werden können, erwartet mein Webserver ein TLS Client Zertifikat von der Cloudflare Origin Pull CA [die Einrichtung bei Cloudflare wird hier beschrieben](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up).
+
+Wenn mehr als eine webbasierte Anwendung auf einem Server installiert werden, weise ich mir für jeden Dienst eine eigene IPv6 Adresse zu. Dies macht zum einen das Sperren eines einzelnen Dienst in der Firewall, als auch das Debuggen einfacher. Unter Debian wird dafür die Netzwerkkonfiguration in der Datei `/etc/network/interfaces` wie folgt erweitert:
+```sh
+allow-hotplug ens18
+iface ens18 inet dhcp
+
+iface ens18 inet6 static
+    # service 1 
+    address 2001:db8::fdfd:dead:beef:affe/64
+    gateway 2001:db8::1
+    # service 2
+    post-up ip -6 a add 2001:db8::fefe:dead:beef:affe/64 dev ens18    # <---- this line
+    # service 3
+    post-up ip -6 a add 2001:db8::ffff:dead:beef:affe/64 dev ens18    # <---- this line
+```
+
+In meinem Setup existiert ein Internes Netzwerk, worüber Administrative Dienste verfügbar gemacht werden können (z.B. Admin Panel). Für diese Seiten, wird mithilfe der Software `acme.sh` über die ACME DNS-01 Challenge ein Let's Encrypt Zertifikat angefordert.
 
 ```
-                                  |--- Privates Netzwerk (VPN) -------------------------------------|
-                                  |                                                                 |
-Cloudflare Proxy <-- https mit Origin Server Certificate --> nginx <-- http --> Docker Container    |
-                                  |                            ^                                    |
-                                  |                            |                                    |
-                                  |          https mit Let's Encrypt Zertifikat                     |
-                                  |                            |                                    |
-                                  |                            |                                    |
-                                  |                         Browser                                 |
-                                  |                                                                 |
-                                  |-----------------------------------------------------------------|
+               |--- Privates Netzwerk (VPN) ----------------------------|
+               |                                                        |
+CF-Proxy <-- https mit OS-Cert --> nginx <-- http --> Docker Container  |
+   ^           |                     ^                                  |
+   |           |                     |                                  |
+   |           |              https mit LE-Cert                         |
+   |           |                     |                                  |
+Browser        |                  Browser                               |
+               |                                                        |
+               |--------------------------------------------------------|
+Legende:
+Cloudflare Proxy:           CF-Proxy
+Origin-Server Certificate:  OS-Cert
+Let's Encrypt Certificate:  LE-Cert
+```
+
+## `nginx` setup
+Für die webbasierten Anwendungen auf meinem Server verwende ich meist den Webserver `nginx`. Die Konfiguration kann größtensteils von [ssl-config.mozilla.org](https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6) übernommen werden. Lediglich einige Einstellungen bezüglich der Cloudflare Origin-Server / Pull-Client Certificates müssen angepasst werden:
+
+Das Cloudflare Origin Pull CA Zertifikat muss auf dem System abgelegt sein, damit `nginx` die TLS Client Zertifikate überprüfen kann. Ich lege dieses unter dem Pfad `/etc/ssl/cloudflare_ca.crt` ab.
+```pem
+-----BEGIN CERTIFICATE-----
+MIIGCjCCA/KgAwIBAgIIV5G6lVbCLmEwDQYJKoZIhvcNAQENBQAwgZAxCzAJBgNV
+BAYTAlVTMRkwFwYDVQQKExBDbG91ZEZsYXJlLCBJbmMuMRQwEgYDVQQLEwtPcmln
+aW4gUHVsbDEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzETMBEGA1UECBMKQ2FsaWZv
+cm5pYTEjMCEGA1UEAxMab3JpZ2luLXB1bGwuY2xvdWRmbGFyZS5uZXQwHhcNMTkx
+MDEwMTg0NTAwWhcNMjkxMTAxMTcwMDAwWjCBkDELMAkGA1UEBhMCVVMxGTAXBgNV
+BAoTEENsb3VkRmxhcmUsIEluYy4xFDASBgNVBAsTC09yaWdpbiBQdWxsMRYwFAYD
+VQQHEw1TYW4gRnJhbmNpc2NvMRMwEQYDVQQIEwpDYWxpZm9ybmlhMSMwIQYDVQQD
+ExpvcmlnaW4tcHVsbC5jbG91ZGZsYXJlLm5ldDCCAiIwDQYJKoZIhvcNAQEBBQAD
+ggIPADCCAgoCggIBAN2y2zojYfl0bKfhp0AJBFeV+jQqbCw3sHmvEPwLmqDLqynI
+42tZXR5y914ZB9ZrwbL/K5O46exd/LujJnV2b3dzcx5rtiQzso0xzljqbnbQT20e
+ihx/WrF4OkZKydZzsdaJsWAPuplDH5P7J82q3re88jQdgE5hqjqFZ3clCG7lxoBw
+hLaazm3NJJlUfzdk97ouRvnFGAuXd5cQVx8jYOOeU60sWqmMe4QHdOvpqB91bJoY
+QSKVFjUgHeTpN8tNpKJfb9LIn3pun3bC9NKNHtRKMNX3Kl/sAPq7q/AlndvA2Kw3
+Dkum2mHQUGdzVHqcOgea9BGjLK2h7SuX93zTWL02u799dr6Xkrad/WShHchfjjRn
+aL35niJUDr02YJtPgxWObsrfOU63B8juLUphW/4BOjjJyAG5l9j1//aUGEi/sEe5
+lqVv0P78QrxoxR+MMXiJwQab5FB8TG/ac6mRHgF9CmkX90uaRh+OC07XjTdfSKGR
+PpM9hB2ZhLol/nf8qmoLdoD5HvODZuKu2+muKeVHXgw2/A6wM7OwrinxZiyBk5Hh
+CvaADH7PZpU6z/zv5NU5HSvXiKtCzFuDu4/Zfi34RfHXeCUfHAb4KfNRXJwMsxUa
++4ZpSAX2G6RnGU5meuXpU5/V+DQJp/e69XyyY6RXDoMywaEFlIlXBqjRRA2pAgMB
+AAGjZjBkMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgECMB0GA1Ud
+DgQWBBRDWUsraYuA4REzalfNVzjann3F6zAfBgNVHSMEGDAWgBRDWUsraYuA4REz
+alfNVzjann3F6zANBgkqhkiG9w0BAQ0FAAOCAgEAkQ+T9nqcSlAuW/90DeYmQOW1
+QhqOor5psBEGvxbNGV2hdLJY8h6QUq48BCevcMChg/L1CkznBNI40i3/6heDn3IS
+zVEwXKf34pPFCACWVMZxbQjkNRTiH8iRur9EsaNQ5oXCPJkhwg2+IFyoPAAYURoX
+VcI9SCDUa45clmYHJ/XYwV1icGVI8/9b2JUqklnOTa5tugwIUi5sTfipNcJXHhgz
+6BKYDl0/UP0lLKbsUETXeTGDiDpxZYIgbcFrRDDkHC6BSvdWVEiH5b9mH2BON60z
+0O0j8EEKTwi9jnafVtZQXP/D8yoVowdFDjXcKkOPF/1gIh9qrFR6GdoPVgB3SkLc
+5ulBqZaCHm563jsvWb/kXJnlFxW+1bsO9BDD6DweBcGdNurgmH625wBXksSdD7y/
+fakk8DagjbjKShYlPEFOAqEcliwjF45eabL0t27MJV61O/jHzHL3dknXeE4BDa2j
+bA+JbyJeUMtU7KMsxvx82RmhqBEJJDBCJ3scVptvhDMRrtqDBW5JShxoAOcpFQGm
+iYWicn46nPDjgTU0bX1ZPpTpryXbvciVL5RkVBuyX2ntcOLDPlZWgxZCBp96x07F
+AnOzKgZk4RzZPNAxCXERVxajn/FLcOhglVAKo5H0ac+AitlQ0ip55D2/mf8o72tM
+fVQ6VpyjEXdiIXWUq/o=
+-----END CERTIFICATE-----
+```
+
+```nginx
+```
+
+
+### Service startet nicht
+Sollte es vorkommen, das der nginx beim Neustart des Servers nicht startet, weil die IPv6 Adresse (die als listener konfiguriert wurde) noch nicht zum Interface hinzugefügt wurde, kann der Startprozess des nginx wie [hier](https://docs.ispsystem.com/ispmanager-business/troubleshooting-guide/if-nginx-does-not-start-after-rebooting-the-server) beschrieben verzögert werden. Dazu wird die Datei `/lib/systemd/system/nginx.service` in der Kategorie Service wie folgt erweitert:
+```s
+# make sure the ipv6 addresses (which have been added with post-up) are there (only required for enabled nginx service on system boot)
+ExecStartPre=/bin/sleep 5
 ```
 
 ## Verwendung von `acme.sh` zwecks Erstellung der Let's Encrypt Zertifikat
-Die Software `acme.sh` stellt eine minimimale Implementierung von [ACME](https://datatracker.ietf.org/doc/html/rfc8555) in Bash da. Wir verwenden die ACME DNS-01-Challenge mit der Cloudflare DNS API um die Zertifikate zu erhalten.
+Die Software `acme.sh` stellt eine minimimale Implementierung von [ACME](https://datatracker.ietf.org/doc/html/rfc8555) in Bash da. Wir verwenden die ACME DNS-01-Challenge mit der Cloudflare DNS API um die intern Verwendeten Zertifikate zu erhalten.
 
 Die Installation gestaltet sich unter den meisten Betriebsystemen sehr einfach, hier als Beispiel für Debian 11:
 ```bash
@@ -45,30 +118,20 @@ Zuletzt wird ein ECC Zertifikat angefordert:
 acme.sh --issue --keylength ec-384 --dns dns_cf -d keycloak.pve2.secshell.net
 ```
 
-## Verwendung von `nginx` als Reverse Proxy auf dem Host
-Der Webserver `nginx` wird direkt auf dem Host installiert (`apt install nginx`), dieser agiert als Reverse Proxy und leitet die Requests an die Web Applications, die innerhalb der Docker Container laufen. Die Konfiguration dieser kann größtensteils von [ssl-config.mozilla.org](https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6) übernommen werden.
-
-Sollte es vorkommen, das der nginx beim Neustart des Servers nicht startet, weil die IPv6 Adresse (die als listener konfiguriert wurde) noch nicht mit hinzugefügt wurde, kann der Startprozess des nginx wie [hier](https://docs.ispsystem.com/ispmanager-business/troubleshooting-guide/if-nginx-does-not-start-after-rebooting-the-server) beschrieben verzögert werden. Dazu wird die Datei `/lib/systemd/system/nginx.service` in der Kategorie Service wie folgt erweitert:
-```s
-# make sure the ipv6 addresses (which have been added with post-up) are there (only required for enabled nginx service on system boot)
-ExecStartPre=/bin/sleep 5
-```
-
 ## Beispiel: Keycloak mit Public und interner Admin Domain 
 Zuletzt möchte ich hier an einem Beispiel das Deployment von Keycloak erläutern.
 
 ```
-                      |--- Privates Netzwerk (VPN) -------------------------------------|
-                      |                                                                 |
-Cloudflare Proxy <-- https://id.secshell.net --> nginx <-- http --> Keycloak            |
-                      |                            ^                                    |
-                      |                            |                                    |
-                      |           https://keycloak.pve2.secshell.net                    |
-                      |                            |                                    |
-                      |                            |                                    |
-                      |                          Admin                                  |
-                      |                                                                 |
-                      |-----------------------------------------------------------------|
+                 |--- Privates Netzwerk (VPN) -----------------------|
+                 |                                                   |
+CF-Proxy <-- https://id.secshell.net --> nginx <-- http --> Keycloak |
+   ^             |                         ^                         |
+   |             |                         |                         |
+   |             |         https://keycloak.pve2.secshell.net        |
+   |             |                         |                         |
+   |             |                         |                         |
+Browser          |                       Admin                       |
+                 |---------------------------------------------------|
 ```
 
 In der `docker-compose.yml` wird für den Keycloak Service eine Portweiterleitung auf einen Local-Loopback (`[::1]` ist IPv6 für `127.0.0.1` aka `localhost`) Port gesetzt, der vom `nginx` angesprochen werden kann: 
@@ -150,6 +213,10 @@ server {
     ssl_protocols TLSv1.3;
     ssl_prefer_server_ciphers off;
 
+    # only allow cloudflare to connect to your nginx
+    ssl_client_certificate /etc/ssl/cloudflare_ca.crt;
+    ssl_verify_client on;
+
     # HSTS (ngx_http_headers_module is required) (63072000 seconds)
     add_header Strict-Transport-Security "max-age=63072000" always;
 
@@ -175,21 +242,4 @@ server {
         return 403;
     }
 }
-```
-
-Wenn weitere IPv6 Adressen benötigt werden (für jeden Service eine Adresse!) können diese in der `/etc/network/interfaces` wie folgt hinzugefügt werden:
-```sh
-allow-hotplug ens18
-iface ens18 inet static
-    address 10.25.36.3/31
-    gateway 10.25.36.2
-
-iface ens18 inet6 static
-    # keycloak
-    address 2001:db8::fdfd:dead:beef:affe/64
-    gateway 2001:db8::1
-    # service 2
-    post-up ip -6 a add 2001:db8::fefe:dead:beef:affe/64 dev ens18
-    # service 3
-    post-up ip -6 a add 2001:db8::ffff:dead:beef:affe/64 dev ens18
 ```
