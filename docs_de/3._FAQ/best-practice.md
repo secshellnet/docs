@@ -7,7 +7,7 @@ Cloudflare verbindet sich per IPv6 mit der webbasierten Anwendung auf meinem Ser
 
 Um sicherzustellen, dass die WAF / Page Rules nicht umgangen werden können, erwartet mein Webserver ein TLS Client Zertifikat von der Cloudflare Origin Pull CA, [die Einrichtung bei Cloudflare wird hier beschrieben](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up).
 
-Wenn mehr als eine webbasierte Anwendung auf einem Server installiert werden, weise ich mir für jeden Dienst eine eigene IPv6 Adresse zu. Dies macht zum einen das Sperren eines einzelnen Dienst in der Firewall, als auch das Debuggen einfacher. Unter Debian wird dafür die Netzwerkkonfiguration in der Datei `/etc/network/interfaces` wie folgt erweitert:
+Wenn mehr als eine webbasierte Anwendung auf einem Server installiert werden, weise ich mir für jeden Dienst eine eigene IPv6 Adresse zu. Dies macht zum einen das Sperren eines einzelnen Dienstes in der Firewall, als auch das Debuggen einfacher. Unter Debian wird dafür die Netzwerkkonfiguration in der Datei `/etc/network/interfaces` wie folgt erweitert:
 ```sh
 allow-hotplug ens18
 iface ens18 inet dhcp
