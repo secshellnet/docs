@@ -3,7 +3,7 @@ Dieses Dokument beschreibt das derzeit von mir bevorzugte Verfahren eine virtuel
 
 Grundsätzlich stelle ich webbasierte Anwendungen nur noch über IPv6 zur Verfügung. Um die IPv4 Erreichbarkeit abzusichern, und gegebenenfalls eine [Web Application Firewall](https://www.cloudflare.com/waf/) oder [Page Rules](https://www.cloudflare.com/features-page-rules/) schalten zu können, wird der Cloudflare Proxy verwendet.
 
-Cloudflare verbindet sich per IPv6 mit der webbasierten Anwendung auf meinem Server. Mittels [Origin Server Certificates](https://developers.cloudflare.com/ssl/origin-configuration/origin-ca) wird die Verbindung verschlüsselt. Lediglich der Cloudflare Proxy vertraut diesen Origin Server Certificates, daher sollten diese nur hinter diesem verwendet werden.
+Cloudflare verbindet sich per IPv6 mit der webbasierten Anwendung auf meinem Server. Mittels [Origin Server Certificates](https://developers.cloudflare.com/ssl/origin-configuration/origin-ca) wird die Verbindung verschlüsselt.
 
 Um sicherzustellen, dass die WAF / Page Rules nicht umgangen werden können, erwartet mein Webserver ein TLS Client Zertifikat von der Cloudflare Origin Pull CA, [die Einrichtung bei Cloudflare wird hier beschrieben](https://developers.cloudflare.com/ssl/origin-configuration/authenticated-origin-pull/set-up).
 
@@ -22,7 +22,7 @@ iface ens18 inet6 static
     post-up ip -6 a add 2001:db8::ffff:dead:beef:affe/64 dev ens18    # <---- this line
 ```
 
-In meinem Setup existiert ein Internes Netzwerk, worüber Administrative Dienste verfügbar gemacht werden können (z.B. Admin Panel). Für diese Seiten, wird mithilfe der Software `acme.sh` über die ACME DNS-01 Challenge ein Let's Encrypt Zertifikat angefordert.
+In meinem Setup existiert ein internes Netzwerk, worüber administrative Dienste verfügbar gemacht werden können (z. B. Admin Panel). Für diese Seiten wird mithilfe der Software `acme.sh` über die ACME DNS-01 Challenge ein Let's Encrypt Zertifikat angefordert.
 
 ```
                |--- Privates Netzwerk (VPN) ----------------------------|
@@ -42,7 +42,7 @@ Let's Encrypt Certificate:  LE-Cert
 ```
 
 ## `nginx` setup
-Für die webbasierten Anwendungen auf meinem Server verwende ich meist den Webserver `nginx`. Die Konfiguration kann größtensteils von [ssl-config.mozilla.org](https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6) übernommen werden. Lediglich einige Einstellungen bezüglich der Cloudflare Origin-Server / Pull-Client Certificates müssen angepasst werden:
+Für die webbasierten Anwendungen auf meinem Server verwende ich meist den Webserver `nginx`. Die Konfiguration kann größtenteils von [ssl-config.mozilla.org](https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6) übernommen werden. Lediglich einige Einstellungen bezüglich der Cloudflare Origin-Server / Pull-Client Certificates müssen angepasst werden:
 
 Das Cloudflare Origin Pull CA Zertifikat muss auf dem System abgelegt sein, damit `nginx` die TLS Client Zertifikate überprüfen kann. Ich lege dieses unter dem Pfad `/etc/ssl/cloudflare_ca.crt` ab.
 ```pem
@@ -88,7 +88,7 @@ fVQ6VpyjEXdiIXWUq/o=
 
 
 ### Service startet nicht
-Sollte es vorkommen, das der nginx beim Neustart des Servers nicht startet, weil die IPv6 Adresse (die als listener konfiguriert wurde) noch nicht zum Interface hinzugefügt wurde, kann der Startprozess des nginx wie [hier](https://docs.ispsystem.com/ispmanager-business/troubleshooting-guide/if-nginx-does-not-start-after-rebooting-the-server) beschrieben verzögert werden. Dazu wird die Datei `/lib/systemd/system/nginx.service` in der Kategorie Service wie folgt erweitert:
+Sollte es vorkommen, dass der nginx beim Neustart des Servers nicht startet, weil die IPv6 Adresse (die als listener konfiguriert wurde) noch nicht zum Interface hinzugefügt wurde, kann der Startprozess des nginx wie [hier](https://docs.ispsystem.com/ispmanager-business/troubleshooting-guide/if-nginx-does-not-start-after-rebooting-the-server) beschrieben verzögert werden. Dazu wird die Datei `/lib/systemd/system/nginx.service` in der Kategorie Service wie folgt erweitert:
 ```s
 # make sure the ipv6 addresses (which have been added with post-up) are there (only required for enabled nginx service on system boot)
 ExecStartPre=/bin/sleep 5
@@ -146,7 +146,7 @@ services:
       - "[::1]:8080:8080"
 ```
 
-In der Konfiguration des internen nginx V-Hosts (`/etc/nginx/sites-available/keycloak.pve2.secshell.net`) wird nur ein IPv4 Listener (der nur Intern verwendet wird) erstellt, außerdem werden mittels deny all alle Verbindungen aus dem Internet blockiert. 
+In der Konfiguration des internen nginx V-Hosts (`/etc/nginx/sites-available/keycloak.pve2.secshell.net`) wird nur ein IPv4 Listener (der nur intern verwendet wird) erstellt, außerdem werden mittels deny all alle Verbindungen aus dem Internet blockiert. 
 ```nginx
 # https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
 server {
