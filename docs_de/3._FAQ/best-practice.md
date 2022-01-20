@@ -1,7 +1,7 @@
 # VM Setup: Best Practice
 Dieses Dokument beschreibt das derzeit von mir bevorzugte Verfahren eine virtuelle Maschine mit Web-Anwendungen hinter dem Cloudflare Proxy erreichbar zu machen.
 
-Grundsätzlich stelle ich webbasierte Anwendungen nur noch über IPv6 zur Verfügung. Um die IPv4 Erreichbarkeit abzusichern, und gegebenenfalls eine [Web Application Firewall](https://www.cloudflare.com/waf/) oder [Page Rules](https://www.cloudflare.com/features-page-rules/) schalten zu können, wird der Cloudflare Proxy verwendet.
+Grundsätzlich stelle ich webbasierte Anwendungen nur noch über IPv6 zur Verfügung. Um die IPv4 Erreichbarkeit zu sichern, und gegebenenfalls eine [Web Application Firewall](https://www.cloudflare.com/waf/) oder [Page Rules](https://www.cloudflare.com/features-page-rules/) schalten zu können, wird der Cloudflare Proxy verwendet.
 
 Cloudflare verbindet sich per IPv6 mit der webbasierten Anwendung auf meinem Server. Mittels [Origin Server Certificates](https://developers.cloudflare.com/ssl/origin-configuration/origin-ca) wird die Verbindung verschlüsselt.
 
@@ -82,10 +82,6 @@ AnOzKgZk4RzZPNAxCXERVxajn/FLcOhglVAKo5H0ac+AitlQ0ip55D2/mf8o72tM
 fVQ6VpyjEXdiIXWUq/o=
 -----END CERTIFICATE-----
 ```
-
-```nginx
-```
-
 
 ### Service startet nicht
 Sollte es vorkommen, dass der nginx beim Neustart des Servers nicht startet, weil die IPv6 Adresse (die als listener konfiguriert wurde) noch nicht zum Interface hinzugefügt wurde, kann der Startprozess des nginx wie [hier](https://docs.ispsystem.com/ispmanager-business/troubleshooting-guide/if-nginx-does-not-start-after-rebooting-the-server) beschrieben verzögert werden. Dazu wird die Datei `/lib/systemd/system/nginx.service` in der Kategorie Service wie folgt erweitert:
