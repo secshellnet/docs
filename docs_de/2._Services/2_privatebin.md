@@ -1,5 +1,9 @@
 # PrivateBin (Alpine 3.13)
 
+!!! warning ""
+    Aufgrund von komplexen Aktualisierungsprozessen und daraus resultierenden Problemen deploye ich keine Applications mehr in LXC Container.
+    
+
 ```shell
 apk add --update --no-cache curl
 

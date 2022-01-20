@@ -1,5 +1,9 @@
 # Dendrite (Alpine 3.13)
 
+!!! warning ""
+    Aufgrund von komplexen Aktualisierungsprozessen und daraus resultierenden Problemen deploye ich keine Applications mehr in LXC Container.
+    
+
 ## PostgreSQL Databank vorbereiten:
 Falls Sie eine PostgreSQL Datenbank verwenden möchten, sollten sie diese direkt bei der Installation konfigurieren:
 ```shell

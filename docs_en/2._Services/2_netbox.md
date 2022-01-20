@@ -1,5 +1,8 @@
 # NetBox (Alpine 3.13)
 
+!!! warning ""
+    I no longer deploy applications in lxc containers, due to complex updates which results in errors.
+
 First we need to create a new user and a database on the postgresql server.
 ```shell
 psql --user=postgres --no-password <<EOF

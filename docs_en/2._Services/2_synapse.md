@@ -1,5 +1,8 @@
 # Synapse (Debian 11)
 
+!!! warning ""
+    I no longer deploy applications in lxc containers, due to complex updates which results in errors.
+
 ```shell
 apt-get update
 apt-get -y install curl sudo

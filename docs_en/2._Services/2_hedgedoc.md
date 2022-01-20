@@ -1,5 +1,8 @@
 # HedgeDoc (Alpine 3.13)
 
+!!! warning ""
+    I no longer deploy applications in lxc containers, due to complex updates which results in errors.
+
 ![](../img/services/hedgedoc.png?raw=true){: loading=lazy }
 
 You need at least 2 gb of ram to install hedgedoc, for productive usage 512 mb are sufficient.

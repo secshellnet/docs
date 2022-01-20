@@ -1,5 +1,9 @@
 # Bookstack (Ubuntu 21.04)
 
+!!! warning ""
+    Aufgrund von komplexen Aktualisierungsprozessen und daraus resultierenden Problemen deploye ich keine Applications mehr in LXC Container.
+    
+
 ```shell
 apt-get update
 apt-get -y install curl sudo

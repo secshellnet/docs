@@ -1,5 +1,8 @@
 # Dendrite (Alpine 3.13)
 
+!!! warning ""
+    I no longer deploy applications in lxc containers, due to complex updates which results in errors.
+
 ## Prepare PostgreSQL database:
 If you prefere to use a postgresql database, you should configure it directly:
 ```shell

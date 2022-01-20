@@ -1,5 +1,9 @@
 # NetBox (Alpine 3.13)
 
+!!! warning ""
+    Aufgrund von komplexen Aktualisierungsprozessen und daraus resultierenden Problemen deploye ich keine Applications mehr in LXC Container.
+    
+
 Zuerst wird ein neuer Nutzer auf dem PostgreSQL Server angelegt, dieser erhält Zugriff auf eine Datenbank.
 ```shell
 psql --user=postgres --no-password <<EOF
