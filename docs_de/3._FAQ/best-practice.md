@@ -147,7 +147,7 @@ In der Konfiguration des internen nginx V-Hosts (`/etc/nginx/sites-available/key
 # https://ssl-config.mozilla.org/#server=nginx&version=1.17.7&config=modern&openssl=1.1.1d&guideline=5.6
 server {
     server_name keycloak.pve2.secshell.net;
-    listen 443 ssl http2;
+    listen 0.0.0.0:443 ssl http2;
 
     ssl_certificate /root/.acme.sh/keycloak.pve2.secshell.net_ecc/fullchain.cer;
     ssl_certificate_key /root/.acme.sh/keycloak.pve2.secshell.net_ecc/keycloak.pve2.secshell.net.key;
@@ -165,13 +165,6 @@ server {
     # OCSP stapling
     ssl_stapling on;
     ssl_stapling_verify on;
-
-    # ACL
-    allow 10.0.0.0/8;
-    allow 192.168.0.0/16;
-    allow 172.16.0.0/12;
-    allow 2a01:4f8:201:72cb::/64;
-    deny all;
 
     location / {
             proxy_pass http://[::1]:8080/;
