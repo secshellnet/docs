@@ -17,16 +17,13 @@ sed -i -e 's/^/#/g' /etc/apt/sources.list.d/pve-enterprise.list
 echo "deb http://download.proxmox.com/debian/pve buster pve-no-subscription" >> /etc/apt/sources.list.d/pve-no-subscription.list
 
 # disable 'no valid subscription' warning on login
-# https://github.com/rickycodes/pve-no-subscription
-curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/rickycodes/pve-no-subscription/main/no-subscription-warning.sh | sh
+# https://johnscs.com/remove-proxmox51-subscription-notice/
+#sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/\1/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js && systemctl restart pveproxy.service
 
 # install ovs (required for internal vlans)
 apt update
 apt upgrade -y
 apt install -y openvswitch-switch
-
-# enable time sync (ntp)
-systemctl enable --now systemd-timesyncd
 ```
 
 More information about the configuration of zfs can be found [here](https://www.dlford.io/memory-tuning-proxmox-zfs/)
