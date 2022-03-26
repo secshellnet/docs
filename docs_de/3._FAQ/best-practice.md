@@ -135,7 +135,7 @@ In der `docker-compose.yml` wird für den Keycloak Service eine Portweiterleitun
 version: '3.9'
 services:
   keycloak:
-    image: jboss/keycloak:16.1.0
+    image: ghcr.io/secshellnet/keycloak
     restart: always
     env_file: .keycloak.env
     ports:
@@ -179,8 +179,8 @@ server {
     }
     
     # redirect to admin console
-    location ~* ^(\/|\/auth\/)$ {
-        return 301 https://keycloak.pve2.secshell.net/auth/admin/master/console/;
+    location ~* ^(\/)$ {
+        return 301 https://keycloak.pve2.secshell.net/admin/master/console/;
     }
 }
 ```
@@ -222,12 +222,12 @@ server {
     }
 
     # redirect to account login
-    location ~* ^(\/|\/auth\/)$ {
-        return 301 https://id.secshell.net/auth/realms/themorpheustutorials/account/;
+    location ~* ^(\/)$ {
+        return 301 https://id.secshell.net/realms/main/account/;
     }
 
     # do not allow keycloak admin from this domain
-    location ~* (\/auth\/admin\/|\/auth\/realms\/master\/) {
+    location ~* (\/admin\/|\/realms\/master\/) {
         return 403;
     }
 }
