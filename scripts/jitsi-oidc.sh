@@ -19,7 +19,7 @@ fi
 
 # optional environment variables
 if [[ -z ${VERSION} ]]; then
-    VERSION="1.0.6"
+    VERSION="1.0.9"
 fi
 
 # install nodejs and jitsi-openid
