@@ -26,5 +26,5 @@ mount /media/bx10
 Anschließend wird der folgende cronjob hinzugefügt:
 ```shell
 # mount backup storage if mountpoint state is invalid
-0 0 * * * [[ ! -d /media/bx10 ]] && /usr/bin/mount /media/bx10
+0 0 * * * /bin/bash -c '[[ ! -d /media/bx10 ]] && /usr/bin/mount /media/bx10'
 ``` 
