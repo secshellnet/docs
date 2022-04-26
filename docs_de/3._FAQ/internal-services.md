@@ -20,16 +20,6 @@ Origin-Server Certificate:  OS-Cert
 Let's Encrypt Certificate:  LE-Cert
 ```
 
-## delay `nginx` start
-
-* -> move to admin guide
-
-Sollte es vorkommen, dass der nginx beim Neustart des Servers nicht startet, weil die IPv6 Adresse (die als listener konfiguriert wurde) noch nicht zum Interface hinzugefügt wurde, kann der Startprozess des nginx wie [hier](https://docs.ispsystem.com/ispmanager-business/troubleshooting-guide/if-nginx-does-not-start-after-rebooting-the-server) beschrieben verzögert werden. Dazu wird die Datei `/lib/systemd/system/nginx.service` in der Kategorie Service wie folgt erweitert:
-```s
-# make sure the ipv6 addresses (which have been added with post-up) are there (only required for enabled nginx service on system boot)
-ExecStartPre=/bin/sleep 5
-```
-
 ## Verwendung von `acme.sh` zwecks Erstellung der Let's Encrypt Zertifikat
 Die Software `acme.sh` stellt eine minimimale Implementierung von [ACME](https://datatracker.ietf.org/doc/html/rfc8555) in Bash da. Wir verwenden die ACME DNS-01-Challenge mit der Cloudflare DNS API um die intern Verwendeten Zertifikate zu erhalten.
 
