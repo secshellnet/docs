@@ -3,22 +3,7 @@ Dieses Dokument erweitert den [AdminGuide](https://adminguide.pages.dev/) und er
 
 In meinem Setup existiert ein internes Netzwerk, worüber administrative Dienste verfügbar gemacht werden können (z. B. Admin Panel). Für diese Seiten wird mithilfe der Software `acme.sh` über die ACME DNS-01 Challenge ein Let's Encrypt Zertifikat angefordert.
 
-```
-               |--- Privates Netzwerk (VPN) ----------------------------|
-               |                                                        |
-CF-Proxy <-- https mit OS-Cert --> nginx <-- http --> Docker Container  |
-   ^           |                     ^                                  |
-   |           |                     |                                  |
-   |           |              https mit LE-Cert                         |
-   |           |                     |                                  |
-Browser        |                  Browser                               |
-               |                                                        |
-               |--------------------------------------------------------|
-Legende:
-Cloudflare Proxy:           CF-Proxy
-Origin-Server Certificate:  OS-Cert
-Let's Encrypt Certificate:  LE-Cert
-```
+![Schaubild](../img/faq/internal-services.png?raw=true){: loading=lazy }
 
 ## Verwendung von `acme.sh` zwecks Erstellung der Let's Encrypt Zertifikat
 Die Software `acme.sh` stellt eine minimimale Implementierung von [ACME](https://datatracker.ietf.org/doc/html/rfc8555) in Bash da. Wir verwenden die ACME DNS-01-Challenge mit der Cloudflare DNS API um die intern Verwendeten Zertifikate zu erhalten.
