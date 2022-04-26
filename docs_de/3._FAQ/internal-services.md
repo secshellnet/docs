@@ -1,4 +1,4 @@
-# VM Setup: Best Practice
+# VM Setup: Internal Services
 Dieses Dokument erweitert den [AdminGuide](https://adminguide.pages.dev/) und erläutert die Bereitstellung von Services im Internen Netzwerk.
 
 In meinem Setup existiert ein internes Netzwerk, worüber administrative Dienste verfügbar gemacht werden können (z. B. Admin Panel). Für diese Seiten wird mithilfe der Software `acme.sh` über die ACME DNS-01 Challenge ein Let's Encrypt Zertifikat angefordert.
