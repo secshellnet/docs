@@ -19,16 +19,15 @@ fi
 
 # optional environment variables
 if [[ -z ${VERSION} ]]; then
-    VERSION="1.0.9"
+    VERSION="2.0.0"
 fi
 
-# install nodejs and jitsi-openid
-curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
-apt install -y nodejs
-curl -Lo /opt/jitsi-oidc/index.js --create-dirs https://github.com/MarcelCoding/jitsi-openid/releases/download/v${VERSION}/index.js
+# install jitsi-openid
+curl -Lo /opt/jitsi-oidc/jitsi-oidc --create-dirs https://github.com/MarcelCoding/jitsi-openid/releases/download/v${VERSION}/jitsi-openid_ubuntu
+chmod +x /opt/jitsi-oidc/jitsi-oidc
 
 # generate secret
-jitsi_secret=$(node -e "console.log(require('crypto').randomBytes(24).toString('base64'));")
+jitsi_secret=$(dd if=/dev/urandom bs=24 count=1 2> /dev/null | base64)
 
 # create systemd service
 cat <<EOF > /etc/systemd/system/jitsi-oidc.service
@@ -39,14 +38,14 @@ After=network.target
 [Service]
 Type=simple
 Restart=always
-ExecStart=/usr/bin/node /opt/jitsi-oidc/index.js
+ExecStart=/opt/jitsi-oidc/jitsi-oidc
 Environment="JITSI_SECRET=${jitsi_secret}"
 Environment="JITSI_URL=https://${DOMAIN}"
 Environment="JITSI_SUB=${DOMAIN}"
-Environment="ISSUER_BASE_URL=${ISSUER_BASE_URL}"
+Environment="ISSUER_URL=${ISSUER_BASE_URL}"
 Environment="BASE_URL=https://${AUTH_DOMAIN}"
 Environment="CLIENT_ID=${AUTH_DOMAIN}"
-Environment="SECRET=${CLIENT_SECRET}"
+Environment="CLIENT_SECRET=${CLIENT_SECRET}"
 
 [Install]
 WantedBy=multi-user.target
