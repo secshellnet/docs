@@ -26,15 +26,14 @@ The IPv4 network `10.1.0.0/16` has been split into two `/17` networks.
 
 | Use Case / Partner                |      ID     | IPv4 network                                 |
 |:----------------------------------|:-----------:|:---------------------------------------------|
-| DNS                               | 200         | 10.2.0.0/30                                  |
+| Gateway                           |             | 10.2.0.0/30                                  |
 | General usage                     | 201  -  209 | 10.2.0.4/30 - 10.2.0.252/30                  |
 |                                   |             | 88.99.59.69/32 + 88.99.59.71/32              |
-| A.1                               | 210  -  229 | 10.2.1.0/25                                  |
-| A.2                               | 230  -  239 | 10.2.1.128/25                                |
+| A                                 | 210  -  239 | 10.2.1.0/24                                  |
 | B                                 | 240  -  249 | 10.2.2.0/24                                  |
 | C                                 | 250  -  259 | 10.2.3.0/24                                  |
 | D                                 | 260  -  269 | 10.2.4.0/24                                  |
 | E                                 | 270  -  279 | 10.2.5.0/24                                  |
-| VPN                               |             | 10.2.128.0/17                                |
+| VPN                               |             | 10.2.248.0/22                                |
 
-The IPv4 address of the OPNsense (`88.99.59.71`) is available to each partner via port forwarding.
+The IPv4 address of the Gateway (`88.99.59.71`) is available to each partner via port forwarding.

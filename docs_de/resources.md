@@ -26,15 +26,14 @@ Da der Host `pve2` von mehreren Partnern genutzt wird, wurden die Netzresourcen 
 
 | Verwendung / Partner   |     ID's    | IPv4 Netzwerke                               |
 |:-----------------------|:-----------:|:---------------------------------------------|
-| DNS                    | 200         | 10.2.0.0/30                                  |
-| Allgemeine Verwendung  | 201  -  209 | 10.2.0.4/30 - 10.2.0.252/30                  |
+| Gateway                |             | 10.2.0.0/32                                  |
+| Allgemeine Verwendung  | 201  -  209 | 10.2.0.2/31 - 10.2.0.254/31                  |
 |                        |             | 88.99.59.69/32 + 88.99.59.71/32              |
-| A.1                    | 210  -  229 | 10.2.1.0/25                                  |
-| A.2                    | 230  -  239 | 10.2.1.128/25                                |
+| A                      | 210  -  239 | 10.2.1.0/24                                  |
 | B                      | 240  -  249 | 10.2.2.0/24                                  |
 | C                      | 250  -  259 | 10.2.3.0/24                                  |
 | D                      | 260  -  269 | 10.2.4.0/24                                  |
 | E                      | 270  -  279 | 10.2.5.0/24                                  |
-| VPN                    |             | 10.2.128.0/17                                |
+| VPN                    |             | 10.2.248.0/22                                |
 
-Die IPv4 Adresse der OPNsense (`88.99.59.71`) steht mittels Port Forwarding jedem Partner zur Verfügung.
+Die IPv4 Adresse des Gateways (`88.99.59.71`) steht mittels Port Forwarding jedem Partner zur Verfügung.
