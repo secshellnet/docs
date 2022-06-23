@@ -57,3 +57,31 @@ Da einem Interface nur ein Ruleset zugewiesen werden kann, müssen für die meis
 * 13: general.pve2.secshell.net:443 (debian pressed) (NOT EXPOSED YET!)
 
 * host specific firewall rules start at: rule 100
+
+## sFlow-rt
+```
+# enter privileged bash
+sudo bash
+
+# install java
+echo "deb http://deb.debian.org/debian buster main" >> /etc/apt/sources.list
+apt update
+apt install -y default-jre
+
+# install sflow-rt
+wget https://inmon.com/products/sFlow-RT/sflow-rt_3.0-1667.deb
+sudo dpkg -i sflow-rt_3.0-1667.deb
+rm sflow-rt_3.0-1667.deb
+
+mkdir /usr/local/sflow-rt/app
+cd /usr/local/sflow-rt/app
+
+sudo wget https://github.com/sflow-rt/prometheus/archive/refs/heads/master.zip
+sudo unzip master.zip
+sudo rm master.zip 
+
+# install sflow-rt prometheus plugin
+/usr/local/sflow-rt/get-app.sh sflow-rt prometheus
+
+sudo systemctl enable --now sflow-rt
+```
