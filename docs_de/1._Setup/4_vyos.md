@@ -41,8 +41,8 @@ Da einem Interface nur ein Ruleset zugewiesen werden kann, müssen für die meis
 
 * 10: keycloak.pve2.secshell.net for oidc auth
 * 11: pushgateway.monitoring.pve2.secshell.net
-* 12: general.pve2.secshell.net:80 (debian pressed)
-* 13: general.pve2.secshell.net:443 (debian pressed)
+* 12: general.pve2.secshell.net:80 (debian preseed)
+* 13: general.pve2.secshell.net:443 (debian preseed)
 
 * host specific firewall rules start at: rule 100
 
@@ -53,8 +53,8 @@ Da einem Interface nur ein Ruleset zugewiesen werden kann, müssen für die meis
 
 * 10: keycloak.pve2.secshell.net for oidc auth (NOT EXPOSED YET!)
 * 11: pushgateway.monitoring.pve2.secshell.net
-* 12: general.pve2.secshell.net:80 (debian pressed) (NOT EXPOSED YET!)
-* 13: general.pve2.secshell.net:443 (debian pressed) (NOT EXPOSED YET!)
+* 12: general.pve2.secshell.net:80 (debian preseed) (NOT EXPOSED YET!)
+* 13: general.pve2.secshell.net:443 (debian preseed) (NOT EXPOSED YET!)
 
 * host specific firewall rules start at: rule 100
 
